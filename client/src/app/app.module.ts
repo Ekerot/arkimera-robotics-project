@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
-
 import {MaterialModule} from '@angular/material';
 
 @NgModule({

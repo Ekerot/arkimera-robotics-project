@@ -1,6 +1,14 @@
-<app-nav-bar></app-nav-bar>
+<md-sidenav-container class="sidenav">
+  <md-toolbar class="nav-bar">
+    <button md-button (click)="start.toggle()"><md-icon>toc</md-icon></button>
+  </md-toolbar>
+  <md-sidenav #start opened mode="side">
+    <md-toolbar class="nav-bar">
+    <img id="arkimera-logo" src="src/resources/Logo-Arkimera-minimalistic-white.png" alt="Arkimera logo">
+    </md-toolbar>
+    <app-dashboard></app-dashboard>
+  </md-sidenav>
+  <main>
 
-    <div class="content-container">
-      <app-dashboard></app-dashboard>
-      <app-home></app-home>
-    </div>
+  </main>
+</md-sidenav-container>
