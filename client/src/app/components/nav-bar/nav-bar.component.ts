@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MdSidenav } from '@angular/material';
 
 @Component({
@@ -8,7 +8,7 @@ import { MdSidenav } from '@angular/material';
 })
 export class NavBarComponent implements OnInit {
 
-  @ViewChild('sidenav') sidenav: MdSidenav;
+  @Input() sidenav: MdSidenav;
 
   constructor() { }
 
