@@ -4,12 +4,6 @@ md-sidenav{
   length: 100%;
 }
 
-.nav-bar{
-  margin: 0%;
-  width: 100%;
-  background-color: #393a3d;
-}
-
 .sidenav{
   height: 100vh;
 }
