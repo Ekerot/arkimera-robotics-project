@@ -1,11 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body {
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+@import '~https://fonts.googleapis.com/icon?family=Material+Icons';
+@import '~https://fonts.googleapis.com/icon?family=Roboto';
+
+body {
   margin: 0;
+  min-height: 100vh;
+  font-family: Roboto;
 }
 
-.nav-bar{
-  margin: 0%;
-  width: 100%;
-  background-color: #393a3d;
+.spacer {
+    -webkit-box-flex: 1;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+}
+
+.mat-sidenav {
+  width: 165px;
+}
+
+.main-content {
+  padding-left: 20px;
+}
+
+.mat-sidenav .mat-toolbar {
+  padding: 0;
+}
+
+.logo {
+  width: 155px;
 }
