@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { NavBarComponent } from './components/nav-bar/nav-bar.component';
+import { ExpensesComponent } from 'app/components/expenses/expenses.component';
+import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -18,7 +18,11 @@ const routes: Routes = [
   },
   {
     path: 'expenses',
-    component: DashboardComponent,
+    component: ExpensesComponent,
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
   },
   {
     path: '**',

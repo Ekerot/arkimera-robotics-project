@@ -1,17 +1,15 @@
-<md-sidenav-container class="sidenav">
+<md-sidenav-container fullscreen>
 
-  <app-nav-bar [sidenav]=sidenav></app-nav-bar>
-
-  <md-sidenav #sidenav mode="side" opened="true">
-
-    <md-toolbar class="nav-bar">
-      <img id="arkimera-logo" src="src/resources/Logo-Arkimera-minimalistic-white.png" alt="Arkimera logo">
-    </md-toolbar>
-
+  <md-sidenav #sidenav opened="true" mode="side" class="sidenav">
     <app-sidenav></app-sidenav>
-
   </md-sidenav>
 
-  <router-outlet></router-outlet>
+  <header>
+    <app-navbar [sidenav]=sidenav></app-navbar>
+  </header>
+
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
 
 </md-sidenav-container>
