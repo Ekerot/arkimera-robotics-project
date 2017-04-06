@@ -8,14 +8,24 @@ Tomas Vaedelund
 Beppe Karlsson  
 Nicklas Björkendal  
 
+## Purpose
+
 ## Technical
 IDE: [Visual Studio Code](https://code.visualstudio.com/) called vs code below  
 Framework: [Angular](https://angular.io/)  
 Scaffolding: [Angular CLI](https://cli.angular.io/)  
-Styling: [Angular Material](https://material.angularjs.org/latest/)  
+Styling/GUI components: [Angular Material](https://material.angularjs.org/latest/)  
 
 ## Usage
 Clone or download [this](https://github.com/Ekerot/arkimera-robotics-project) project and open the subfolder **client** in vs code or any other editor/IDE.
+
+## Prerequisites
+[NodeJS](https://nodejs.org/en/)
+
+### Dependencies
+```
+npm install
+```
 
 ### Run
 ```
@@ -40,3 +50,9 @@ Test results will be opened in a new browser window.
 ng build --prod
 ```
 You can find the production code, ready for deployment, in the dist folder.
+
+## Deployment
+**WIP**
+
+## Documentation
+See our [wiki](https://github.com/Ekerot/arkimera-robotics-project/wiki)
