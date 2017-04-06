@@ -1,6 +1,6 @@
 # AzoraOne Demo Client
 
-**Primarily made by:**-  
+**Primarily made by:**  
 Daniel Ekerot  
 Tomas Vaedelund  
 
@@ -9,6 +9,7 @@ Beppe Karlsson
 Nicklas Björkendal  
 
 ## Purpose
+**WIP**
 
 ## Technical
 IDE: [Visual Studio Code](https://code.visualstudio.com/) called vs code below  
@@ -37,19 +38,19 @@ Then open up your browser and browse to [http://localhost:4200](http://localhost
 ```
 ng lint
 ```
-Linting results is displayed in the console.
+[Lint](https://github.com/angular/angular-cli/wiki/lint) results is displayed in the console.
 
 ### Test
 ```
 ng test
 ```
-Test results will be opened in a new browser window.
+[Test](https://github.com/angular/angular-cli/wiki/test) results will be opened in a new browser window.
 
 ### Build (for production)
 ```
 ng build --prod
 ```
-You can find the production code, ready for deployment, in the dist folder.
+[Building](https://github.com/angular/angular-cli/wiki/build) will create for deployment ready code in the dist folder.
 
 ## Deployment
 **WIP**
