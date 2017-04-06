@@ -8,8 +8,11 @@ import { Component, OnInit } from '@angular/core';
 export class PdfComponent implements OnInit {
 
   value = '0.5'; // Starting zoom value
-  pdfSrc = 'assets/pdf/kvitto.pdf'; // NB! Case sensitive filenames!
   page = 1; // Starting page
+
+  pdfOptions = {
+    data: ''
+  };
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
@@ -17,5 +20,15 @@ export class PdfComponent implements OnInit {
 
   ngOnInit() {
   }
-  
+
+  onFileChanged($event: Event): void {
+    const file = (<HTMLInputElement>$event.target).files[0];
+    const fileReader = new FileReader();
+
+    fileReader.onloadend = (e) => {
+      this.pdfOptions.data = fileReader.result;
+    };
+
+    fileReader.readAsBinaryString(file);
+  }
 }
