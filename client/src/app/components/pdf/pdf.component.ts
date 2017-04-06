@@ -7,12 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PdfComponent implements OnInit {
 
-  pdfSrc: string = 'assets/pdf/Faktura.pdf';
-  page: number = 1;
+  value = '0.5'; // Starting zoom value
+  pdfSrc = 'assets/pdf/kvitto.pdf'; // NB! Case sensitive filenames!
+  page = 1; // Starting page
+
+  // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
   constructor() { }
 
   ngOnInit() {
   }
-
+  
 }

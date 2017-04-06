@@ -1,3 +1,11 @@
 .pdf-viewer{
   right: 0%;
 }
+
+.ng2-pdf-viewer-container .ng2-pdf-viewer--zoom {
+  overflow-x: hidden;
+}
+
+.ng2-pdf-viewer--zoom[_ngcontent-c12] {
+  overflow-x: hidden !important;
+}
