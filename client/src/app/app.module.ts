@@ -15,6 +15,9 @@ import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ExpensesComponent } from './components/expenses/expenses.component';
+import { PdfComponent } from './components/pdf/pdf.component';
+
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,9 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
     HomeComponent,
     PageNotFoundComponent,
     SidenavComponent,
-    ExpensesComponent
+    ExpensesComponent,
+    PdfComponent,
+    PdfViewerComponent
   ],
   imports: [
     AppRoutingModule,
