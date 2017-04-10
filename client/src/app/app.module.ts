@@ -29,7 +29,7 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
     SidenavComponent,
     ExpensesComponent,
     PdfComponent,
-    PdfViewerComponent
+    PdfViewerComponent,
   ],
   imports: [
     AppRoutingModule,

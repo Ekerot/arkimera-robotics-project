@@ -1,3 +1,55 @@
-<p>
-  dashboard works!
-</p>
+<md-grid-list cols="4" rowHeight="2:1" gutterSize="12px">
+
+  <md-grid-tile [colspan]="3" [rowspan]="1" id="overview" >
+    <md-grid-tile-header>
+      <h3>
+        Company
+      </h3>
+    </md-grid-tile-header>
+    <div>
+    </div>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="0.95" [rowspan]="4" id="activities">
+    <md-grid-tile-header>
+      <h3>
+        Statistics
+      </h3>
+    </md-grid-tile-header>
+
+    <md-list>
+      <h4>Recent</h4>
+      <md-divider></md-divider>
+      <md-list-item *ngFor="let recent of recents">
+        <md-icon md-list-icon>check_box</md-icon>
+        <h4 md-line>{{recent.name}}</h4>
+        <p md-line> {{recent.time}}ms {{recent.accuracy}}</p>
+      </md-list-item>
+    </md-list>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="3" [rowspan]="1" id="income">
+    <md-grid-tile-header>
+      <h3>
+        Income
+      </h3>
+    </md-grid-tile-header>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="3" [rowspan]="1" id="expenses">
+    <md-grid-tile-header>
+      <h3>
+        Expenses
+      </h3>
+    </md-grid-tile-header>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="3" [rowspan]="1" id="profit-loss">
+    <md-grid-tile-header>
+      <h3>
+        Profit and loss
+      </h3>
+    </md-grid-tile-header>
+  </md-grid-tile>
+
+</md-grid-list>
