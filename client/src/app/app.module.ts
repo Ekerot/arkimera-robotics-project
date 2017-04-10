@@ -2,7 +2,7 @@ import 'hammerjs';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 
@@ -18,6 +18,7 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
 import { PdfComponent } from './components/pdf/pdf.component';
 
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { AccountComponent } from './components/account/account.component';
 
 @NgModule({
   declarations: [
@@ -29,13 +30,16 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
     SidenavComponent,
     ExpensesComponent,
     PdfComponent,
-    PdfViewerComponent
+    PdfViewerComponent,
+    AccountComponent,
   ],
   imports: [
     AppRoutingModule,
     BrowserModule,
     FormsModule,
     HttpModule,
+    FormsModule,
+    ReactiveFormsModule,
     MaterialModule.forRoot()
   ],
   providers: [],
