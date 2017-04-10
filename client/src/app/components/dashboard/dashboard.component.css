@@ -1,10 +1,13 @@
 md-grid-tile{
   background-color: white;
-  margin: 4px;
   box-shadow: 0 1px 1px rgba(0,0,0,.24), 0 0 6px rgba(0,0,0,.12);
 }
-#overview span{
-  box-shadow: 0 1px 1px rgba(0,0,0,.24), 0 0 6px rgba(0,0,0,.12);
-  padding: 1em 1em 1em 1em;
+md-grid-list{
+  margin-top: 1em;
+}
+div{
+  height: 100%;
+  width: 95%;
+  text-align: left;
 }
 

@@ -7,11 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  recents = [ // Get statistics from the API
-    {name: 'info',
-      time: '2.82',
-      accuracy: '98%'
-    },
+  recents = [ // TODO Get statistics from the API and recent from web API or?
     {name: 'info',
       time: '2.82',
       accuracy: '98%'
@@ -25,7 +21,7 @@ export class DashboardComponent implements OnInit {
       accuracy: '98%'
     },
   ];
-  company: String = 'Arkimera Robotics AB';
+  company: String = 'Arkimera Robotics AB'; // TODO Get company from API and login component
   constructor() { }
 
   ngOnInit() {
