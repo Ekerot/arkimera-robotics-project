@@ -1,0 +1,9 @@
+<md-list>
+  <md-list-item>
+    <h4 md-line>Total expenses</h4>
+    <p md-line> {{totalExpense | currency: 'SEK'}}</p>
+  </md-list-item>
+</md-list>
+<div class="chartContainer">
+  <canvas #expenseGraph></canvas>
+</div>

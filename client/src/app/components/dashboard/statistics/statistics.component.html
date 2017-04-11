@@ -1,0 +1,19 @@
+<h4>Recent</h4>
+<md-divider></md-divider>
+<md-list>
+  <md-list-item *ngFor="let recent of recents">
+    <md-icon md-list-icon>check_box</md-icon>
+    <h4 md-line>{{recent.name}}</h4>
+    <p md-line> {{recent.time}}ms {{recent.accuracy}}</p>
+  </md-list-item>
+</md-list>
+
+<h4>Statistics</h4>
+<md-divider></md-divider>
+<md-list>
+  <md-list-item *ngFor="let recent of recents">
+    <md-icon md-list-icon>check_box</md-icon>
+    <h4 md-line>{{recent.name}}</h4>
+    <p md-line> {{recent.time}}ms {{recent.accuracy}}</p>
+  </md-list-item>
+</md-list>

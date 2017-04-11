@@ -18,6 +18,11 @@ import { ExpensesComponent } from './components/expenses/expenses.component';
 import { PdfComponent } from './components/pdf/pdf.component';
 
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
+import { ProfitAndLossComponent } from './components/dashboard/profit-and-loss/profit-and-loss.component';
+import { StatisticsComponent } from './components/dashboard/statistics/statistics.component';
+import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
+import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
+import {CreateGraph} from './components/dashboard/create-graph';
 
 @NgModule({
   declarations: [
@@ -30,6 +35,10 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
     ExpensesComponent,
     PdfComponent,
     PdfViewerComponent,
+    ProfitAndLossComponent,
+    StatisticsComponent,
+    ExpensesDashboardComponent,
+    IncomeDashboardComponent,
   ],
   imports: [
     AppRoutingModule,
@@ -38,7 +47,7 @@ import { PdfViewerComponent } from 'ng2-pdf-viewer';
     HttpModule,
     MaterialModule.forRoot()
   ],
-  providers: [],
+  providers: [CreateGraph],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
