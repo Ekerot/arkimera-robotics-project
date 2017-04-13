@@ -1,3 +1,41 @@
-<p>
-  dashboard works!
-</p>
+<md-grid-list cols="4" rowHeight="2:1" gutterSize="12px">
+
+  <md-grid-tile [colspan]="3" [rowspan]="1" id="overview" >
+    <div class="container">
+      <h3>Welcome {{company}}</h3>
+      <md-divider></md-divider>
+      <p>This web application will demonstrate the interaction between a sample client application and the AzoraOne API services.</p>
+    </div>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="0.95" [rowspan]="3" id="statistics">
+    <div class="container">
+      <app-statistics></app-statistics>
+    </div>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="1" [rowspan]="2" id="income">
+    <div class="container">
+      <h4>Income</h4>
+      <md-divider></md-divider>
+      <app-income-dashboard></app-income-dashboard>
+    </div>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="1" [rowspan]="2" id="expenses">
+    <div class="container">
+      <h4>Expenses</h4>
+      <md-divider></md-divider>
+      <app-expenses-dashboard></app-expenses-dashboard>
+    </div>
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="1" [rowspan]="2" id="profit-loss">
+    <div class="container">
+      <h4>Profit and loss</h4>
+      <md-divider></md-divider>
+      <app-profit-and-loss></app-profit-and-loss>
+    </div>
+  </md-grid-tile>
+
+</md-grid-list>

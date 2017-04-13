@@ -2,7 +2,7 @@ import 'hammerjs';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 
@@ -19,6 +19,11 @@ import { PdfComponent } from './components/pdf/pdf.component';
 
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
 import { AccountComponent } from './components/account/account.component';
+import { ProfitAndLossComponent } from './components/dashboard/profit-and-loss/profit-and-loss.component';
+import { StatisticsComponent } from './components/dashboard/statistics/statistics.component';
+import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
+import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
+import { CreateGraph } from './components/dashboard/create-graph';
 
 @NgModule({
   declarations: [
@@ -32,6 +37,10 @@ import { AccountComponent } from './components/account/account.component';
     PdfComponent,
     PdfViewerComponent,
     AccountComponent,
+    ProfitAndLossComponent,
+    StatisticsComponent,
+    ExpensesDashboardComponent,
+    IncomeDashboardComponent
   ],
   imports: [
     AppRoutingModule,
@@ -42,7 +51,7 @@ import { AccountComponent } from './components/account/account.component';
     ReactiveFormsModule,
     MaterialModule.forRoot()
   ],
-  providers: [],
+  providers: [CreateGraph],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
