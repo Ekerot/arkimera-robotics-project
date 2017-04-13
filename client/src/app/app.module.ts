@@ -1,5 +1,6 @@
 import 'hammerjs';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -44,6 +45,7 @@ import { CreateGraph } from './components/dashboard/create-graph';
   ],
   imports: [
     AppRoutingModule,
+    BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpModule,
