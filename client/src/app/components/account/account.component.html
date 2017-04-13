@@ -1,0 +1,13 @@
+<input type="text" class="form-control" required [(ngModel)]="row.account" value="{{row.item_id}}" name="account" placeholder="Account">
+
+<form  name="inv" novalidate (ngSubmit)="save(myForm)">
+            <table class="table">
+                <tr *ngFor="let row of invoiceItemsData; let i = index">
+                    <td><input type="text" class="form-control" required [(ngModel)]="row.account" value="{{row.item_id}}" name="account" placeholder="Account"></td>
+                    <td><input type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}" name="description" placeholder="Description"></td>
+                    <td><input type="text" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount" placeholder="Amount"></td>
+                </tr>
+                <a class="btn btn-primary" (click)="addNewRow()">Add line</a>
+            </table>
+            
+</form>
