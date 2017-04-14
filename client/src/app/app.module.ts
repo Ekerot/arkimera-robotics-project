@@ -9,6 +9,8 @@ import { MaterialModule } from '@angular/material';
 
 import { AppRoutingModule } from 'app/app-routing.module';
 
+import { AuthenticationService } from 'app/_services/authentication.service';
+
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -25,6 +27,7 @@ import { StatisticsComponent } from './components/dashboard/statistics/statistic
 import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
 import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
 import { CreateGraph } from './components/dashboard/create-graph';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,11 @@ import { CreateGraph } from './components/dashboard/create-graph';
     ProfitAndLossComponent,
     StatisticsComponent,
     ExpensesDashboardComponent,
-    IncomeDashboardComponent
+    IncomeDashboardComponent,
+    LoginComponent
+  ],
+  entryComponents: [
+    LoginComponent
   ],
   imports: [
     AppRoutingModule,
@@ -53,7 +60,10 @@ import { CreateGraph } from './components/dashboard/create-graph';
     ReactiveFormsModule,
     MaterialModule.forRoot()
   ],
-  providers: [CreateGraph],
+  providers: [
+    CreateGraph,
+    AuthenticationService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
