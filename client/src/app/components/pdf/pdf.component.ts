@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PdfComponent implements OnInit {
 
-  value = '0.5'; // Starting zoom value
+  value = '0.8'; // Starting zoom value
   page = 1; // Starting page
 
   pdfOptions = {
