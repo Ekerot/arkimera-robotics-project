@@ -6,6 +6,8 @@
 }
 
 .account-container {
+    margin-top: 10%;
+    margin-left: 10%;
    display: -webkit-flex;
    display: flex;
    -webkit-flex-direction: column;
@@ -13,11 +15,12 @@
 }
 
 .pdf-container{
-  display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: column;
-   flex-direction: column;
-   -webkit-align-items: flex-end;
-   align-items: flex-end;
+    overflow: hidden;
+    height: 800px;
+  width: 40%;
+  margin-top: 3%;
+  margin-right: 3%;
+  padding: 3%;
+  align-content: center;
 }
 
