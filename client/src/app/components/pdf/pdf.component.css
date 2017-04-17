@@ -6,14 +6,14 @@
   overflow: hidden;
     height: 80%;
   width: 90%;
-  margin-top: 3%;
+  margin-top: 10%;
   margin-right: 3%;
   border-style: solid;
+  border-width: thin;
   border-color: black;
 }
 
 .input-pdf{
-  background-image: url(/Users/ekerot/Documents/arkimera-robotics-project/arkimera-robotics-project/client/src/assets/img/Logo-Arkimera-minimalistic-white.png);
     background-repeat: no-repeat;
     text-indent: 20px;
 }
