@@ -8,6 +8,7 @@ const api = express();
 const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
 const filesRoutes = require('./routes/files');
+const companiesRoutes = require('./routes/companies');
 
 api.use(bodyParser.urlencoded({extended: true}));
 api.use(bodyParser.json());
@@ -24,6 +25,7 @@ api.use(function(req, res, next) {
 api.use('/', pingRoutes);
 api.use('/', authRoutes);
 api.use('/', filesRoutes);
+api.use('/', companiesRoutes);
 
 const port = process.env.PORT || 8080;
 
