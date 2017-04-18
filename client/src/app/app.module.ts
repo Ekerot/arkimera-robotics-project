@@ -10,6 +10,7 @@ import { MaterialModule } from '@angular/material';
 import { AppRoutingModule } from 'app/app-routing.module';
 
 import { AuthenticationService } from 'app/_services/authentication.service';
+import { HttpService } from 'app/_services/http.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -61,8 +62,9 @@ import { LoginComponent } from './components/login/login.component';
     MaterialModule.forRoot()
   ],
   providers: [
+    AuthenticationService,
     CreateGraph,
-    AuthenticationService
+    HttpService
   ],
   bootstrap: [AppComponent]
 })
