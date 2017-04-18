@@ -8,12 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ArkimeraDemoAPI.Controllers
 {
+    [Route("companies")]
     public class CompaniesController : Controller
     {
-        // GET: /<controller>/
-        public IActionResult Index()
+        [HttpGet()]
+        public JsonResult Get()
         {
-            return View();
+            return new JsonResult(new
+            {
+            });
         }
     }
 }

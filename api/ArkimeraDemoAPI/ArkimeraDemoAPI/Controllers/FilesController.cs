@@ -8,7 +8,7 @@ using System.IO;
 
 namespace ArkimeraDemoAPI.Controllers
 {
-    [Route("companies/{companyID}/[controller]")]
+    [Route("companies/{companyID}/files")]
     public class FilesController : Controller
     {
         [HttpPost()]
