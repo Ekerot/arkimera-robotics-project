@@ -186,6 +186,28 @@
 				"description": "GET /companies"
 			},
 			"response": []
+		},
+		{
+			"name": "Bookkeep a receipt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies/1/files/2/receipts",
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"description": "PUT /companies/{companyID}/files/{fileID}/receipts"
+			},
+			"response": []
 		}
 	]
 }
