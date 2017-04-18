@@ -5,8 +5,9 @@ const bodyParser = require('body-parser');
 const api = express();
 
 // -- IMPORT ROUTES -- \\
-const pingRoute = require("./routes/ping");
-const authRoute = require("./routes/auth");
+const pingRoutes = require('./routes/ping');
+const authRoutes = require('./routes/auth');
+const filesRoutes = require('./routes/files');
 
 api.use(bodyParser.urlencoded({extended: true}));
 api.use(bodyParser.json());
@@ -20,8 +21,9 @@ api.use(function(req, res, next) {
 });
 
 //  -- ROUTING -- \\
-api.use('/', pingRoute);
-api.use('/', authRoute);
+api.use('/', pingRoutes);
+api.use('/', authRoutes);
+api.use('/', filesRoutes);
 
 const port = process.env.PORT || 8080;
 

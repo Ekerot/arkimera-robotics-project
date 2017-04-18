@@ -19,6 +19,7 @@ router.post('/users/auth', (req, res) => {
     }
 
     return res.status(401).send({status: "fail", message: "Unauthorized"});
+
 });
 
 module.exports = router;
