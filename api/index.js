@@ -6,13 +6,22 @@ const api = express();
 
 // -- IMPORT ROUTES -- \\
 const pingRoute = require("./routes/ping");
-// -- END IMPORT ROUTES --\\
+const authRoute = require("./routes/auth");
 
 api.use(bodyParser.urlencoded({extended: true}));
 api.use(bodyParser.json());
 
+// -- CORS -- \\
+api.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+
 //  -- ROUTING -- \\
 api.use('/', pingRoute);
+api.use('/', authRoute);
 
 const port = process.env.PORT || 8080;
 
