@@ -18,6 +18,11 @@ export class AuthenticationService {
 
     dialogRef.afterClosed().subscribe(result => {
       console.debug('RESULT:', result);
+
+      if (result) {
+        const user: User = <User>result;
+        // TODO: Check loggin via http service
+      }
     });
   }
 
