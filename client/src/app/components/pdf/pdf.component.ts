@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { HttpService } from 'app/_services/http.service';
+
 @Component({
   selector: 'app-pdf',
   templateUrl: './pdf.component.html',
@@ -7,28 +9,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PdfComponent implements OnInit {
 
-  value = '0.8'; // Starting zoom value
-  page = 1; // Starting page
-
-  pdfOptions = {
+  public value = '0.8'; // Starting zoom value
+  public page = 1; // Starting page
+  public pdfOptions = {
     data: ''
   };
+  public file: File;
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
-  constructor() { }
+  constructor(private httpService: HttpService) { }
 
   ngOnInit() {
   }
 
   onFileChanged($event: Event): void {
-    const file = (<HTMLInputElement>$event.target).files[0];
+    this.file = (<HTMLInputElement>$event.target).files[0];
     const fileReader = new FileReader();
 
     fileReader.onloadend = (e) => {
       this.pdfOptions.data = fileReader.result;
     };
 
-    fileReader.readAsBinaryString(file);
+    fileReader.readAsBinaryString(this.file);
+  }
+
+  onExtractData(): void {
+    this.httpService.uploadFile(this.file);
   }
 }
