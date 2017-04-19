@@ -1,6 +1,7 @@
 'use strict';
 
 const router = require('express').Router();
+const createToken = require('../jwtAuth').createToken;
 
 router.post('/users/auth', (req, res) => {
 
@@ -14,8 +15,8 @@ router.post('/users/auth', (req, res) => {
     }
 
     if (user.username === "admin" && user.password === "admin") {
-        var jwt = "random-string-as-jwt";
-        return res.json({status: "success", message: "Successfully logged in"});
+        var jwt = createToken(user.username);
+        return res.json({status: "success", message: "Successfully logged in", data: {token: jwt}});
     }
 
     return res.status(401).send({status: "fail", message: "Unauthorized"});

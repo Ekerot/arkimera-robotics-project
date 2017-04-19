@@ -1,7 +1,7 @@
 "use strict";
 
 const jwt = require("jsonwebtoken");
-const jwtSecret = require("secrets.js").jwtSecret;
+const jwtSecret = require("./secrets.js").jwtSecret;
 
 function checkAuth(req, res, next) {
     var token = req.body.token || req.query.token || req.headers["x-access-token"];
