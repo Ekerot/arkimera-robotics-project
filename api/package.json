@@ -1,0 +1,27 @@
+{
+  "name": "arkimera-demo-api-node",
+  "version": "1.0.0",
+  "description": "API for Arkimera Demo client written in Nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devs": "nodemon index.js"
+  },
+  "keywords": [
+    "node",
+    "api",
+    "js",
+    "javascript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "multer": "^1.3.0"
+  }
+}
