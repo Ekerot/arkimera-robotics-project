@@ -12,17 +12,17 @@ export class AccountComponent implements OnInit {
   public invoiceItemsData = [{}];
   public selectedValue: string;
 
-  constructor(private formBuilder: FormBuilder) { }
-  
-  accounts = [
+  public accounts = [
     { value: 'account1', viewValue: '1' },
     { value: 'account2', viewValue: '2' },
     { value: 'account3', viewValue: '3' }
   ];
 
+  constructor(private formBuilder: FormBuilder) { }
+
   ngOnInit() { }
 
   addNewRow() {
-    this.invoiceItemsData.push({})
+    this.invoiceItemsData.push({});
   }
 }
