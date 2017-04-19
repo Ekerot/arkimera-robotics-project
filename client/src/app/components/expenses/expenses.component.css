@@ -6,21 +6,36 @@
 }
 
 .account-container {
-    margin-top: 10%;
-    margin-left: 10%;
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: column;
-   flex-direction: column;
+  margin-top: 10%;
+  margin-left: 10%;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 }
 
-.pdf-container{
-    overflow: hidden;
-    height: 800px;
-  width: 40%;
-  margin-top: 3%;
-  margin-right: 3%;
+.pdf-container {
+  overflow: hidden;
+  height: 90%;
+  width: 80%;
+  margin-left: 10%;
   padding: 3%;
   align-content: center;
 }
+
+md-grid-tile {
+  background-color: white;
+  box-shadow: 0 1px 1px rgba(0,0,0,.24), 0 0 6px rgba(0,0,0,.12);
+}
+
+md-grid-list {
+  margin-top: 1em;
+}
+
+div {
+  height: 100%;
+  width: 95%;
+  text-align: left;
+}
+
 

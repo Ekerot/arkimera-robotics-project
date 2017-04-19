@@ -1,7 +1,7 @@
 <div class="container">
   <div class="choose-pdf-container">
-      <input *ngIf="pdfOptions.data==false" class="input-pdf" type="file" 
-    name="files" title="Load File" accept=".pdf" (change)="onFileChanged($event)"/>
+    <input *ngIf="pdfOptions.data==false" class="input-pdf" type="file" name="files" title="Load File" accept=".pdf" (change)="onFileChanged($event)"
+    />
   </div>
 
   <div class="inline-block">
@@ -9,6 +9,7 @@
       style="display: block;"></pdf-viewer>
   </div>
 </div>
+
 <div>
   <md-slider min="1" max="5" step="1" [(ngModel)]="page"></md-slider>
 </div>
