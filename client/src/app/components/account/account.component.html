@@ -3,6 +3,10 @@
     <tr *ngFor="let row of invoiceItemsData; let i = index">
 
       <td>
+        # {{i + 1}}
+      </td>
+
+      <td>
         <md-select placeholder="Accounts" [(ngModel)]="selectedValue" name="accounts">
           <md-option *ngFor="let accounts of accounts" [value]="accounts.value">
             {{accounts.viewValue}}
