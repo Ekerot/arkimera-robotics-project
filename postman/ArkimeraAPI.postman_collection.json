@@ -1,0 +1,213 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ArkimeraAPI",
+		"_postman_id": "4444dbd0-a418-232b-4b4f-185128ec54b7",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Ping",
+			"request": {
+				"url": "http://localhost:8080/ping",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"type": "file",
+							"enabled": true
+						}
+					]
+				},
+				"description": "GET /ping"
+			},
+			"response": []
+		},
+		{
+			"name": "Auth",
+			"request": {
+				"url": "http://localhost:8080/users/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "admin",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "apiKey",
+							"value": "test123",
+							"type": "text",
+							"enabled": false
+						}
+					]
+				},
+				"description": "POST /users/auth"
+			},
+			"response": []
+		},
+		{
+			"name": "Failed Auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 401;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/users/auth",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "password",
+							"value": "wrong",
+							"type": "text",
+							"enabled": true
+						},
+						{
+							"key": "apiKey",
+							"value": "test123",
+							"type": "text",
+							"enabled": false
+						}
+					]
+				},
+				"description": "POST /users/auth with wrong password"
+			},
+			"response": []
+		},
+		{
+			"name": "File Upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies/1/files",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"enabled": true,
+							"src": "ansokningsblankett-tillgodoraknande.pdf"
+						}
+					]
+				},
+				"description": "POST /companies/{companyID}/files - PDF upload"
+			},
+			"response": []
+		},
+		{
+			"name": "All Companies",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"type": "file",
+							"enabled": true
+						}
+					]
+				},
+				"description": "GET /companies"
+			},
+			"response": []
+		},
+		{
+			"name": "Bookkeep a receipt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies/1/files/2/receipts",
+				"method": "PUT",
+				"header": [],
+				"body": {},
+				"description": "PUT /companies/{companyID}/files/{fileID}/receipts"
+			},
+			"response": []
+		}
+	]
+}
