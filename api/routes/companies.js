@@ -12,11 +12,53 @@ router.get('/companies', (req, res) => {
         },
     };
 
+    //TODOS 
+    //Add logging the requests, 
+    //maybe change timestamp instead of just using what was received from AzoraOne???
     axios.get("student/api/companies", config).then(function(response) {
-        console.log(response);
-        res.status(200).send(response.data)
+        res.status(response.status).send(response.data);
     }).catch(function(error) {
-        console.log(error);
+        if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            console.log(error.response.data);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+            res.status(response.status).send(response.data);
+        } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            // http.ClientRequest in node.js
+            console.log(error.request);
+            res.status(500).send(
+                {
+                    "success": false,
+                    "data": [{
+                        "code": 0,
+                        "message": "No response from downstream API",
+                        "details": "",
+                        "element": "",
+                    }],
+                    "time": new Date().toUTCString()
+                }
+            );
+        } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+            res.status(500).send(
+                {
+                    "success": false,
+                    "data": [{
+                        "code": 0,
+                        "message": "Error setting upp request to downstream API",
+                        "details": "",
+                        "element": "",
+                    }],
+                    "time": new Date().toUTCString()
+                }
+            );
+        }
+        console.log(error.config);
     });
 });
 
