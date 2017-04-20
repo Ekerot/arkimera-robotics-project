@@ -11,7 +11,7 @@ import { ApiResponse } from 'app/_models/ApiResponse';
 @Injectable()
 export class HttpService {
 
-  private apiUrl = 'http:/localhost:5000/';
+  private apiUrl = 'http://localhost:8080/';
 
   constructor(private http: Http) { }
 
@@ -19,18 +19,17 @@ export class HttpService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this.apiUrl + 'user/auth', user, options)
+    return this.http.post(this.apiUrl + 'users/auth', user, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
 
   private extractData(res: Response) {
     const body = res.json();
-    return body.data || {};
+    return body || {};
   }
 
   private handleError(error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
     let errMsg: string;
 
     if (error instanceof Response) {

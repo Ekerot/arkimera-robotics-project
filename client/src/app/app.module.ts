@@ -8,8 +8,9 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 
 import { AppRoutingModule } from 'app/app-routing.module';
+import { AuthGuard } from 'app/_guards/auth.guard';
 
-import { AuthenticationService } from 'app/_services/authentication.service';
+import { AuthService } from 'app/_services/auth.service';
 import { HttpService } from 'app/_services/http.service';
 
 import { AppComponent } from './app.component';
@@ -48,9 +49,6 @@ import { LoginComponent } from './components/login/login.component';
     IncomeDashboardComponent,
     LoginComponent
   ],
-  entryComponents: [
-    LoginComponent
-  ],
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -62,7 +60,8 @@ import { LoginComponent } from './components/login/login.component';
     MaterialModule.forRoot()
   ],
   providers: [
-    AuthenticationService,
+    AuthGuard,
+    AuthService,
     CreateGraph,
     HttpService
   ],

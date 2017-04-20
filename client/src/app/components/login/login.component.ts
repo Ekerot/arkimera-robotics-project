@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { MdDialogRef } from '@angular/material';
+import { Router } from '@angular/router';
+
+import { AuthService } from 'app/_services/auth.service';
+
+import { User } from 'app/_models/user';
 
 @Component({
   selector: 'app-login',
@@ -9,11 +13,20 @@ import { MdDialogRef } from '@angular/material';
 })
 export class LoginComponent implements OnInit {
 
-  public model: any = {};
-  public loading: boolean = false;
+  public loading: boolean;
   public loginForm: FormGroup;
 
-  constructor(private dialog: MdDialogRef<LoginComponent>, private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private auth: AuthService,
+    private router: Router
+  ) {
+    this.loading = false;
+
+    if (this.auth.isLoggedIn) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -28,12 +41,16 @@ export class LoginComponent implements OnInit {
     // Disable formControls during pending login
     this.loginForm.disable();
 
-    // Close the dialog with form data
-    this.dialog.close(form.value);
+    const user: User = new User(
+      this.loginForm.get('username').value,
+      this.loginForm.get('password').value
+    );
+
+    this.auth.login(user);
   }
 
   onCancelLogin(): void {
-    this.dialog.close(false);
+    this.auth.logout();
   }
 
 }

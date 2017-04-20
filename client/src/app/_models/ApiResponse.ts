@@ -1,4 +1,8 @@
 export class ApiResponse {
-  public status: string;
-  public message: string;
+
+  constructor(
+    public status: string,
+    public message: string,
+    public data: string
+  ) { }
 }
