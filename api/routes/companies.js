@@ -4,7 +4,6 @@ const router = require('express').Router();
 const axios = require('axios');
 
 router.get('/companies', (req, res) => {
-
     let config = {
         baseURL: "https://azoraone.azure-api.net/",
         headers: {
