@@ -1,34 +1,24 @@
 'use strict';
 
 const router = require('express').Router();
+const axios = require('axios');
 
 router.get('/companies', (req, res) => {
-    res.status(200).send(
-        {
-            "success": true,
-            "data": {
-                "companies": [
-                {
-                    "companyID": "1",
-                    "companyName": "LargeCorp",
-                    "active": true,
-                    "corporateIdentityNumber": "556754-9273",
-                    "bankAccountNumber": "5677-6487",
-                    "iban": ""
-                },
-                {
-                    "companyID": "2",
-                    "companyName": "SmallCorp",
-                    "active": true,
-                    "corporateIdentityNumber": "",
-                    "bankAccountNumber": "",
-                    "iban": ""
-                }
-                ]
-            },
-            "time": "2017-03-28 11:41:02"
-        }
-    );
+
+    let config = {
+        baseURL: "https://azoraone.azure-api.net/",
+        headers: {
+            "Client-Key": "avGDtxkQNa08z7thX8WW+Q",
+            "Ocp-Apim-Subscription-Key": "353e8658d0144af6950771e48812cc58"
+        },
+    };
+
+    axios.get("student/api/companies", config).then(function(response) {
+        console.log(response);
+        res.status(200).send(response.data)
+    }).catch(function(error) {
+        console.log(error);
+    });
 });
 
 router.put('/companies/:companyID/files/:fileID/receipts', (req, res) => {
