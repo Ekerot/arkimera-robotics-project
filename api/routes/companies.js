@@ -2,6 +2,9 @@
 
 const router = require('express').Router();
 const axios = require('axios');
+const moment = require('moment');
+
+moment.locale("sv");
 
 router.get('/companies', (req, res) => {
     let config = {
@@ -39,7 +42,7 @@ router.get('/companies', (req, res) => {
                         "details": "",
                         "element": "",
                     }],
-                    "time": new Date().toUTCString()
+                    "time": moment().format("YYYY-MM-DD hh:mm:ss")
                 }
             );
         } else {
@@ -54,7 +57,7 @@ router.get('/companies', (req, res) => {
                         "details": "",
                         "element": "",
                     }],
-                    "time": new Date().toUTCString()
+                    "time": moment().format("YYYY-MM-DD hh:mm:ss")
                 }
             );
         }
