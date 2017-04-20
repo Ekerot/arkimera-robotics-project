@@ -16,8 +16,8 @@ export class HttpService {
 
   uploadFile(file: File): Promise<ExtractResponse> {
     const headers = new Headers({
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'x-access-token': 'jhasdkjhasdkjhd'
+      'enctype': 'multipart/form-data',
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDkyNjA5NTAzLCJleHAiOjE0OTI2OTU5MDN9.7Ddw7W7ojGdpuX604o_5GVppdJmNEP58HZsN791QsBE'
     });
 
     const formData: FormData = new FormData();
