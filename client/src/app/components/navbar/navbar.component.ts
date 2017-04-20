@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MdSidenav } from '@angular/material';
 
-import { AuthenticationService } from 'app/_services/authentication.service';
+import { AuthService } from 'app/_services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,13 +12,13 @@ export class NavbarComponent implements OnInit {
 
   @Input() sidenav: MdSidenav;
 
-  constructor(private auth: AuthenticationService) { }
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
   }
 
-  onLogin(): void {
-    this.auth.login();
+  onLogout(): void {
+    this.auth.logout();
   }
 
 }
