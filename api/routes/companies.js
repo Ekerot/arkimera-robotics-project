@@ -1,25 +1,14 @@
-
-
 const router = require('express').Router();
-const axios = require('axios');
+const a1axios = require('../azoraOneAxios');
 const moment = require('moment');
-const secrets = require('../secrets.js');
 
 moment.locale("sv");
 
 router.get('/companies', (req, res) => {
-    let config = {
-        baseURL: "https://azoraone.azure-api.net/",
-        headers: {
-            "Client-Key": secrets.azoraOneclientKeySecret,
-            "Ocp-Apim-Subscription-Key": secrets.azoraOneSubscriptionKeySecret
-        },
-    };
-
     //TODOS 
     //Add logging the requests, 
     //maybe change timestamp instead of just using what was received from AzoraOne???
-    axios.get("student/api/companies", config).then(function(response) {
+    a1axios.get("student/api/companies").then(function(response) {
         res.status(response.status).send(response.data);
     }).catch(function(error) {
         if (error.response) {
@@ -28,7 +17,7 @@ router.get('/companies', (req, res) => {
             console.log(error.response.data);
             console.log(error.response.status);
             console.log(error.response.headers);
-            res.status(response.status).send(response.data);
+            res.status(error.response.status).send(error.response.data);
         } else if (error.request) {
             // The request was made but no response was received
             // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
