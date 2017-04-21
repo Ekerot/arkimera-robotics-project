@@ -3,6 +3,7 @@
 const router = require('express').Router();
 const axios = require('axios');
 const moment = require('moment');
+const secrets = require('../secrets.js');
 
 moment.locale("sv");
 
@@ -10,8 +11,8 @@ router.get('/companies', (req, res) => {
     let config = {
         baseURL: "https://azoraone.azure-api.net/",
         headers: {
-            "Client-Key": "avGDtxkQNa08z7thX8WW+Q",
-            "Ocp-Apim-Subscription-Key": "353e8658d0144af6950771e48812cc58"
+            "Client-Key": secrets.azoraOneclientKeySecret,
+            "Ocp-Apim-Subscription-Key": secrets.azoraOneSubscriptionKeySecret
         },
     };
 
