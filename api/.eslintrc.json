@@ -28,7 +28,7 @@
         "browser": true,
         "node": true
     },
-    "extends": "airbnb",
+    "extends": "airbnb-base",
     "rules": {
         //"indent": [2, "tab"]
     }

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devs": "nodemon index.js"
+    "devs": "nodemon index.js --exec babel-node"
   },
   "keywords": [
     "node",
@@ -16,6 +16,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
