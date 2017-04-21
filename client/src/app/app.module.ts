@@ -25,6 +25,7 @@ import { StatisticsComponent } from './components/dashboard/statistics/statistic
 import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
 import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
 import { CreateGraph } from './components/dashboard/create-graph';
+import { HttpService } from 'app/_services/http.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,10 @@ import { CreateGraph } from './components/dashboard/create-graph';
     ReactiveFormsModule,
     MaterialModule.forRoot()
   ],
-  providers: [CreateGraph],
+  providers: [
+    CreateGraph,
+    HttpService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

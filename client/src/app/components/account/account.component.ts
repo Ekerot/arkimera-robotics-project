@@ -8,14 +8,21 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AccountComponent implements OnInit {
 
-   public myForm: FormGroup;
-       public invoiceItemsData = [{}] ;
+  public myForm: FormGroup;
+  public invoiceItemsData = [{}];
+  public selectedValue: string;
 
-       constructor(private formBuilder: FormBuilder) {}
+  public accounts = [
+    { value: 'account1', viewValue: '1' },
+    { value: 'account2', viewValue: '2' },
+    { value: 'account3', viewValue: '3' }
+  ];
 
-       ngOnInit() {}
+  constructor(private formBuilder: FormBuilder) { }
 
-        addNewRow(){
-          this.invoiceItemsData.push({})
-        }
+  ngOnInit() { }
+
+  addNewRow() {
+    this.invoiceItemsData.push({});
+  }
 }

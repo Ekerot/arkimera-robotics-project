@@ -1,7 +1,14 @@
-.pdf-viewer{
-  right: 0%;
-}
-
 .inline-block {
   display: inline-block;
+}
+
+.container {
+  overflow: hidden;
+  height: 80%;
+  width: 90%;
+  margin-top: 10%;
+  margin-right: 3%;
+  border-style: solid;
+  border-width: thin;
+  border-color: black;
 }
