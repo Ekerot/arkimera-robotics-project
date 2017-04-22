@@ -1,38 +1,36 @@
-<form name="inv" novalidate (ngSubmit)="save(myForm)">
-  <table class="table">
-    <tr *ngFor="let row of invoiceItemsData; let i = index">
+<div *ngFor="let row of invoiceItemsData; let i = index" class="table">
+  <div *ngIf="i<7" class="form-group">
+    <div id={{i}}>
 
-      <td>
-        # {{i + 1}}
-      </td>
+      <label>
+      # {{i + 1}}
+    </label>
 
-      <td>
-        <md-select placeholder="Accounts" [(ngModel)]="selectedValue" name="accounts">
-          <md-option *ngFor="let accounts of accounts" [value]="accounts.value">
-            {{accounts.viewValue}}
-          </md-option>
-        </md-select>
-      </td>
+      <md-select placeholder="Accounts" [(ngModel)]="selectedValue" name={{i}}>
+        <md-option *ngFor="let accounts of accounts" ngValue="accounts.value">
+          {{accounts.value + " : " + accounts.viewValue}}
+        </md-option>
+      </md-select>
 
-      <td>
-        <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}"
-            name="description" placeholder="Description"></md-input-container>
-      </td>
+      <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}"
+          name="description" placeholder="Description"></md-input-container>
 
-      <td>
-        <md-input-container><input mdInput type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount"
-            placeholder="Amount"></md-input-container>
+      <md-input-container><input mdInput type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount"
+          placeholder="Amount"></md-input-container>
 
-      </td>
-    </tr>
+      <a class="btn btn-primary" (click)="remove()">
+        <md-icon>delete</md-icon>
+      </a>
 
-    <a class="btn btn-primary" (click)="addNewRow()">Add line</a>
-
-  </table>
-
-  <div class="buttons-expenses">
-    <button md-button>Expand</button>
-    <button md-button>Account</button>
+    </div>
   </div>
+</div>
 
-</form>
+<a class="btn btn-primary" (click)="addNewRow()">Add line</a>
+
+<p> Total: {{amount}} kr </p>
+
+<div class="buttons-expenses">
+  <button md-button>Expand</button>
+  <button md-button>Account</button>
+</div>

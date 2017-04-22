@@ -1,39 +1,50 @@
 import { Injectable } from '@angular/core';
-import { RequestOptions, Headers, Http, RequestMethod } from '@angular/http';
+import { RequestOptions, Headers, Http, RequestMethod, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
-import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 
-import { ExtractResponse } from 'app/_models/ExtractResponse';
+import { ApiResponse } from 'app/_models/ApiResponse';
 
 @Injectable()
 export class HttpService {
 
-  private baseUrl: string;
+  private baseUrl: string = 'http://localhost:8080';
 
-  constructor(private http: Http) {
-    this.baseUrl = 'http://localhost:8080';
-  }
+  constructor(private http: Http) {}
 
-  uploadFile(file: File): Promise<ExtractResponse> {
+  public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
       'enctype': 'multipart/form-data',
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDkyNjA5NTAzLCJleHAiOjE0OTI2OTU5MDN9.7Ddw7W7ojGdpuX604o_5GVppdJmNEP58HZsN791QsBE'
+      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDkyNzE2MjU4LCJleHAiOjE0OTI4MDI2NTh9.b2U6yrX6L44VazGT6bUl_No6k80DNmm9yo8qVRKQl6s'
     });
+    const options = new RequestOptions({ headers: headers });
 
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-
-    const returnReponse = new Promise((resolve, reject) => {
-      this.http.post(this.baseUrl + '/companies/1/files', formData, { headers })
-      .toPromise()
-      .then(res => res.json() as ExtractResponse)
+    return this.http.post(this.baseUrl + '/companies/1/files', file, options)
+      .map(this.extractData)
       .catch(this.handleError);
-    });
-
-    return returnReponse;
   }
 
-  private handleError(error: Response | any): Promise<any> {
-    return Promise.reject(error.message || error);
+  private extractData(res: Response) {
+    let body = res.json();
+    console.log(body);
+    return body.data || {};
+  }
+
+  private handleError(error: Response | any) {
+    // In a real world app, we might use a remote logging infrastructure
+    let errMsg: string;
+
+    if (error instanceof Response) {
+      const body = error.json() || '';
+      const err = body.error || JSON.stringify(body);
+      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+    } else {
+      errMsg = error.message ? error.message : error.toString();
+    }
+
+    console.error(errMsg);
+    return Promise.reject(errMsg);
   }
 }
