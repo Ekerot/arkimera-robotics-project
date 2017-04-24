@@ -1,5 +1,5 @@
 <div *ngFor="let row of invoiceItemsData; let i = index" class="table">
-<<<<<<< HEAD
+
   <div *ngIf="i<6" class="form-group">
 
     <label>
@@ -15,17 +15,18 @@
     <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}" name="description"
         placeholder="Description"></md-input-container>
 
-    <md-input-container><input mdInput (change)="update()" type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount"
-        placeholder="Amount"></md-input-container>
+    <md-input-container><input mdInput (change)="update()" type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}"
+        name="amount" placeholder="Amount"></md-input-container>
 
-    <a class="btn btn-primary" (click)="deleteRow()"><md-icon>delete</md-icon></a>
-    
+    <a class="btn btn-primary" (click)="deleteRow()">
+      <md-icon>delete</md-icon>
+    </a>
+
   </div>
 </div>
 
 <a class="btn btn-primary" (click)="addNewRow()">Add line</a>
 
-<<<<<<< HEAD
 <p> Total: {{totalAmount}} kr </p>
 
 <div class="buttons-expenses">

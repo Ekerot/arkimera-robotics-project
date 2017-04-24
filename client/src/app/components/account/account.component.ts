@@ -14,7 +14,6 @@ export class AccountComponent implements OnInit {
   public oldValue: number = 0;
   public newValue: number;
 
-<<<<<<< HEAD
   public accounts = [
     { value: '', viewValue: '' },
     { value: '1910', viewValue: 'Kassa' },
