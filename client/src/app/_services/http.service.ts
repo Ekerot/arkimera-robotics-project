@@ -1,15 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, RequestOptions, Headers } from '@angular/http';
+
+import { RequestOptions, Headers, Http, RequestMethod, Response } from '@angular/http';
+
 import { Observable } from 'rxjs/Observable';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+
 import { User } from 'app/_models/User';
+
 import { ApiResponse } from 'app/_models/ApiResponse';
 
 @Injectable()
 export class HttpService {
+
+
+  private baseUrl: string = 'http://localhost:8080';
+
+  constructor(private http: Http) {}
+
+  public uploadFile(file: File): Observable<ApiResponse> {
+    const headers = new Headers({
+      'enctype': 'multipart/form-data',
+      'x-access-token': ''
+    });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this.baseUrl + '/companies/1/files', file, options)
 
   private apiUrl = 'http://localhost:8080/';
 
@@ -20,16 +38,20 @@ export class HttpService {
     const options = new RequestOptions({ headers: headers });
 
     return this.http.post(this.apiUrl + 'users/auth', user, options)
+
       .map(this.extractData)
       .catch(this.handleError);
   }
 
   private extractData(res: Response) {
-    const body = res.json();
-    return body || {};
-  }
 
+    let body = res.json();
+    console.log(body);
+    return body.data || {};
+  }
+  
   private handleError(error: Response | any) {
+
     let errMsg: string;
 
     if (error instanceof Response) {
@@ -43,5 +65,4 @@ export class HttpService {
     console.error(errMsg);
     return Promise.reject(errMsg);
   }
-
 }
