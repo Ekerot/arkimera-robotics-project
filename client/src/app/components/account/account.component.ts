@@ -14,6 +14,7 @@ export class AccountComponent implements OnInit {
   public oldValue: number = 0;
   public newValue: number;
 
+<<<<<<< HEAD
   public accounts = [
     { value: '', viewValue: '' },
     { value: '1910', viewValue: 'Kassa' },
@@ -21,7 +22,7 @@ export class AccountComponent implements OnInit {
     { value: '1930', viewValue: 'Bankkonto' },
     { value: '2641', viewValue: 'Ingående moms' },
     { value: '3740', viewValue: 'Öresutjämning' },
-    { value: '5611', viewValue: 'Drivmedel personbilar' },
+    { value: '5611', viewValue: 'Drivmedel personbilar'},
     { value: '5890', viewValue: 'Övriga resekostnader' },
     { value: '6071', viewValue: 'Representation, avdragsgill' },
     { value: '6072', viewValue: 'Representation, ej avdragsgill' },
