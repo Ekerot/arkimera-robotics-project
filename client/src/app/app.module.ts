@@ -29,7 +29,9 @@ import { StatisticsComponent } from './components/dashboard/statistics/statistic
 import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
 import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
 import { CreateGraph } from './components/dashboard/create-graph';
+
 import { LoginComponent } from './components/login/login.component';
+
 
 @NgModule({
   declarations: [
