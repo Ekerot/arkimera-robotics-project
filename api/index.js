@@ -24,7 +24,7 @@ api.set("x-powered-by", false); //set so api do not leak implementation details
 //  -- ROUTING -- \\
 api.use('/', pingRoutes);
 api.use('/', authRoutes);
-api.use('/', jwtAuth.requireAuth, filesRoutes);
+api.use('/', /*jwtAuth.requireAuth,*/ filesRoutes);
 api.use('/', jwtAuth.requireAuth, companiesRoutes);
 
 const port = process.env.PORT || 8080;
