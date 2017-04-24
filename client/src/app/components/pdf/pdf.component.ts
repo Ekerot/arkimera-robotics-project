@@ -35,6 +35,6 @@ export class PdfComponent implements OnInit {
   }
 
   onExtractData(): void {
-    this.httpService.uploadFile(this.file);
+    this.httpService.uploadFile(this.file).subscribe(data => console.log('response', data));
   }
 }
