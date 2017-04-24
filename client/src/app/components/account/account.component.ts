@@ -7,11 +7,12 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
+
   public selectedValue: string;
   public myForm: FormGroup;
   public invoiceItemsData: object[] = [{}];
-  public totalAmount: any = 0;
-  public oldValue: number = 0;
+  public totalAmount: any;
+  public oldValue: number;
   public newValue: number;
   public accounts = [
     { value: '', viewValue: '' },
@@ -20,7 +21,7 @@ export class AccountComponent implements OnInit {
     { value: '1930', viewValue: 'Bankkonto' },
     { value: '2641', viewValue: 'Ingående moms' },
     { value: '3740', viewValue: 'Öresutjämning' },
-    { value: '5611', viewValue: 'Drivmedel personbilar'},
+    { value: '5611', viewValue: 'Drivmedel personbilar' },
     { value: '5890', viewValue: 'Övriga resekostnader' },
     { value: '6071', viewValue: 'Representation, avdragsgill' },
     { value: '6072', viewValue: 'Representation, ej avdragsgill' },
@@ -37,33 +38,23 @@ export class AccountComponent implements OnInit {
 
   deleteRow() {
     console.log('Delete: ' + this.invoiceItemsData);
-    this.invoiceItemsData.find;
   }
 
-  callSelectedValue(value){
+  callSelectedValue(value) {
     console.log(value);
   }
 
   update() {
 
-    const val: number[] = [3740, 1910, 1920, 1930]
+    const val: number[] = [3740, 1910, 1920, 1930];
     this.totalAmount = 0;
 
-    for (let object of this.invoiceItemsData) {
-
-      console.debug(object);
-
-      if (object["amount"] != null) {
-
-        if (val.indexOf(parseInt(object["selectedValue"])) > -1) {
-
-          this.totalAmount -= object["amount"];
-
-        }
-        else {
-
-          this.totalAmount += object["amount"];
-
+    for (const item of this.invoiceItemsData) {
+      if (item['amount'] != null) {
+        if (val.indexOf(parseInt(item['selectedValue'], 10)) > -1) {
+          this.totalAmount -= item['amount'];
+        } else {
+          this.totalAmount += item['amount'];
         }
       }
     }

@@ -10,7 +10,7 @@ import {CreateGraph} from '../create-graph';
 export class IncomeDashboardComponent implements AfterViewInit  {
 
   @ViewChild('incomeGraph') incomeGraph: ElementRef;
-  private totalIncome: number;
+  public totalIncome: number;
   private income: number[];
   private otherData: {};
 

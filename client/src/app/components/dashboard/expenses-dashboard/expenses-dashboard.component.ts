@@ -12,7 +12,7 @@ import {CreateGraph} from '../create-graph';
 export class ExpensesDashboardComponent implements AfterViewInit {
 
   @ViewChild('expenseGraph') expensesGraph: ElementRef;
-  private totalExpense: number;
+  public totalExpense: number;
   private expenses: number[];
   private otherData: {};
 

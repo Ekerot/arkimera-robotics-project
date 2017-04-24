@@ -14,9 +14,9 @@ export class ProfitAndLossComponent implements AfterViewInit {
 
   private income: number;
   private expense: number;
-  private profit: number;
+  public profit: number;
 
-  constructor(private createGraph: CreateGraph) {
+  constructor(public createGraph: CreateGraph) {
     this.income = 68;    // TODO Test data, get data from statistics or database?
     this.expense = 98;
     this.profit = this.income - this.expense;

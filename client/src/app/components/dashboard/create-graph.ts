@@ -1,4 +1,4 @@
-import {ElementRef} from '@angular/core';
+import { ElementRef } from '@angular/core';
 import Chart from 'chart.js';
 
 export class CreateGraph {
@@ -71,8 +71,7 @@ export class CreateGraph {
           }
         }
       );
-    }
-    else {
+    } else {
       const doughnut = new Chart( // Not a good looking solution
         canvas,
         {

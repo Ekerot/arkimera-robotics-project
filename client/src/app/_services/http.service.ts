@@ -15,10 +15,9 @@ import { ApiResponse } from 'app/_models/ApiResponse';
 @Injectable()
 export class HttpService {
 
+  private apiUrl = 'http://localhost:8080/';
 
-  private baseUrl: string = 'http://localhost:8080';
-
-  constructor(private http: Http) {}
+  constructor(private http: Http) { }
 
   public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
@@ -27,31 +26,27 @@ export class HttpService {
     });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this.baseUrl + '/companies/1/files', file, options)
-
-  private apiUrl = 'http://localhost:8080/';
-
-  constructor(private http: Http) { }
+    return this.http.post(this.apiUrl + '/companies/1/files', file, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
 
   public authenticate(user: User): Observable<ApiResponse> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 
     return this.http.post(this.apiUrl + 'users/auth', user, options)
-
       .map(this.extractData)
       .catch(this.handleError);
   }
 
   private extractData(res: Response) {
-
-    let body = res.json();
+    const body = res.json();
     console.log(body);
-    return body.data || {};
+    return body || {};
   }
-  
-  private handleError(error: Response | any) {
 
+  private handleError(error: Response | any) {
     let errMsg: string;
 
     if (error instanceof Response) {
