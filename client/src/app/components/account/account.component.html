@@ -1,34 +1,30 @@
 <div *ngFor="let row of invoiceItemsData; let i = index" class="table">
-  <div *ngIf="i<7" class="form-group">
-    <div id={{i}}>
+  <div *ngIf="i<6" class="form-group">
 
-      <label>
+    <label>
       # {{i + 1}}
     </label>
 
-      <md-select placeholder="Accounts" [(ngModel)]="selectedValue" name={{i}}>
-        <md-option *ngFor="let accounts of accounts" ngValue="accounts.value">
-          {{accounts.value + " : " + accounts.viewValue}}
-        </md-option>
-      </md-select>
+    <md-select placeholder="Accounts" [(ngModel)]="row.selectedValue" name="selectedValue">
+      <md-option *ngFor="let accounts of accounts" ngValue="accounts.value">
+        {{accounts.value + " " + accounts.viewValue}}
+      </md-option>
+    </md-select>
 
-      <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}"
-          name="description" placeholder="Description"></md-input-container>
+    <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}" name="description"
+        placeholder="Description"></md-input-container>
 
-      <md-input-container><input mdInput type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount"
-          placeholder="Amount"></md-input-container>
+    <md-input-container><input mdInput (change)="update()" type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}" name="amount"
+        placeholder="Amount"></md-input-container>
 
-      <a class="btn btn-primary" (click)="remove()">
-        <md-icon>delete</md-icon>
-      </a>
-
-    </div>
+    <a class="btn btn-primary" (click)="deleteRow()"><md-icon>delete</md-icon></a>
+    
   </div>
 </div>
 
 <a class="btn btn-primary" (click)="addNewRow()">Add line</a>
 
-<p> Total: {{amount}} kr </p>
+<p> Total: {{totalAmount}} kr </p>
 
 <div class="buttons-expenses">
   <button md-button>Expand</button>
