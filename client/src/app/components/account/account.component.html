@@ -2,12 +2,12 @@
 
   <div *ngIf="i<6" class="form-group">
 
-    <label>
+    <label class="form-control">
       # {{i + 1}}
     </label>
 
-    <md-select placeholder="Accounts" [(ngModel)]="row.selectedValue" name="selectedValue">
-      <md-option *ngFor="let accounts of accounts" ngValue="accounts.value">
+    <md-select placeholder="Accounts" [(ngModel)]="row.selectedValue" class="form-control" name="selectedValue">
+      <md-option *ngFor="let accounts of accounts" [value]="accounts.value">
         {{accounts.value + " " + accounts.viewValue}}
       </md-option>
     </md-select>
@@ -30,6 +30,6 @@
 <p> Total: {{totalAmount}} kr </p>
 
 <div class="buttons-expenses">
-  <button md-button>Expand</button>
+  <button md-button>Extract</button>
   <button md-button>Account</button>
 </div>

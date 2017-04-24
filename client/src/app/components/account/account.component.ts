@@ -13,7 +13,6 @@ export class AccountComponent implements OnInit {
   public totalAmount: any = 0;
   public oldValue: number = 0;
   public newValue: number;
-
   public accounts = [
     { value: '', viewValue: '' },
     { value: '1910', viewValue: 'Kassa' },
@@ -41,8 +40,13 @@ export class AccountComponent implements OnInit {
     this.invoiceItemsData.find;
   }
 
+  callSelectedValue(value){
+    console.log(value);
+  }
+
   update() {
 
+    const val: number[] = [3740, 1910, 1920, 1930]
     this.totalAmount = 0;
 
     for (let object of this.invoiceItemsData) {
@@ -51,7 +55,7 @@ export class AccountComponent implements OnInit {
 
       if (object["amount"] != null) {
 
-        if (object["value"] === '3740' || '1910' || '1920') {
+        if (val.indexOf(parseInt(object["selectedValue"])) > -1) {
 
           this.totalAmount -= object["amount"];
 

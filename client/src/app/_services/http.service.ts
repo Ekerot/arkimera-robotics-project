@@ -17,7 +17,7 @@ export class HttpService {
   public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
       'enctype': 'multipart/form-data',
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDkyNzE2MjU4LCJleHAiOjE0OTI4MDI2NTh9.b2U6yrX6L44VazGT6bUl_No6k80DNmm9yo8qVRKQl6s'
+      'x-access-token': ''
     });
     const options = new RequestOptions({ headers: headers });
 
