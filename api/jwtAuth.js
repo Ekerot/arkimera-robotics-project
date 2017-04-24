@@ -21,6 +21,7 @@ function checkAuth(req, res, next) {
 };
 
 function requireAuth(req, res, next) {
+    //req.decoded = true; //REMOVE WHEN NOT TESTING!
     if (req.decoded) {
         next();
     } else {

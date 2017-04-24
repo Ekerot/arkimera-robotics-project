@@ -1,0 +1,23 @@
+<div class="flex-container">
+
+  <div>
+
+    <h2>Login</h2>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin(loginForm)" class="form-width">
+
+      <md-input-container class="full-width">
+        <input formControlName="username" mdInput placeholder="Username">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="password" mdInput placeholder="Password" type="password">
+      </md-input-container>
+
+      <button md-button type="submit" [disabled]="loading || loginForm.invalid">Login</button>
+
+    </form>
+
+  </div>
+
+</div>

@@ -8,6 +8,10 @@ import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 
 import { AppRoutingModule } from 'app/app-routing.module';
+import { AuthGuard } from 'app/_guards/auth.guard';
+
+import { AuthService } from 'app/_services/auth.service';
+import { HttpService } from 'app/_services/http.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -25,7 +29,9 @@ import { StatisticsComponent } from './components/dashboard/statistics/statistic
 import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
 import { IncomeDashboardComponent } from './components/dashboard/income-dashboard/income-dashboard.component';
 import { CreateGraph } from './components/dashboard/create-graph';
-import { HttpService } from 'app/_services/http.service';
+
+import { LoginComponent } from './components/login/login.component';
+
 
 @NgModule({
   declarations: [
@@ -42,7 +48,8 @@ import { HttpService } from 'app/_services/http.service';
     ProfitAndLossComponent,
     StatisticsComponent,
     ExpensesDashboardComponent,
-    IncomeDashboardComponent
+    IncomeDashboardComponent,
+    LoginComponent
   ],
   imports: [
     AppRoutingModule,
@@ -55,6 +62,8 @@ import { HttpService } from 'app/_services/http.service';
     MaterialModule.forRoot()
   ],
   providers: [
+    AuthGuard,
+    AuthService,
     CreateGraph,
     HttpService
   ],
