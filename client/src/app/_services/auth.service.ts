@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
 
 import { HttpService } from 'app/_services/http.service';
 
-import { User } from 'app/_models/user';
+import { ApiResponse, User } from 'app/_models';
 
 @Injectable()
 export class AuthService {
@@ -21,22 +22,15 @@ export class AuthService {
     }
   }
 
-  // TODO: Should probably make this observable and move router logic to component that asks for login
-  login(user: User): void {
-    this.http.authenticate(user)
-      .subscribe(
-      result => {
-        localStorage.setItem('token', (<any>result.data).token);
+  login(user: User): Observable<ApiResponse> {
+    return this.http.authenticate(user)
+      .map(res => {
+        localStorage.setItem('token', res.data.token);
         this.isLoggedIn = true;
-        this.router.navigate(['/dashboard']);
-      },
-      error => {
-        console.error('LOGIN ERROR: ', error);
-      }
-      );
+        return res;
+      });
   }
 
-  // TODO: Should probably make this observable and move router logic to component that asks for logout
   logout(): void {
     localStorage.removeItem('token');
     this.isLoggedIn = false;
