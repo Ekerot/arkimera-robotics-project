@@ -2,9 +2,9 @@ const fs = require('fs');
 const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
+const moment = require('moment');
 const headers = require('../common/headers');
 const a1axios = require('../azoraOneAxios');
-const moment = require('moment');
 
 moment.locale('sv');
 
@@ -79,36 +79,42 @@ router.get('/companies', (req, res) => {
 });
 
 /**
- * POST /companies/:companyId/files
+ * POST /companies/:companyID/files
  *
  * Upload files to AzoraOne API for analysis.
  * Uses multer upload to extract file uploaded from form data.
  */
-router.post(
-  '/companies/:companyId/files',
-  upload.single('File'),
-  (req, res) => {
-    const file = req.file;
-    const data = {
-      FileID: Date.now(),
-      File: fs.createReadStream(file.path),
-    };
-    const companyId = req.params.companyId;
-    const url = `https://azoraone.azure-api.net/student/api/companies/${companyId}/files`;
+router.post('/companies/:companyID/files', upload.single('File'), (req, res) => {
+  const file = req.file;
+  const data = {
+    FileID: Date.now(),
+    File: fs.createReadStream(file.path),
+  };
+  const companyID = req.params.companyID;
+  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  request.post({ url, formData: data, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err);
+    }
+    console.log(response);
+    // Doesn't match forwardToClient
+    return res.status(response.statusCode).send(JSON.parse(body));
+  });
+});
 
-    request.post({ url, formData: data, headers }, (err, response, body) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
-      console.log(response);
-      return res.status(response.statusCode).send(JSON.parse(body));
-    });
-  },
-);
+router.get('/companies/:companyID/files/:fileID/receipts', (req, res) => {
+  const fileID = req.params.fileID;
+  const companyID = req.params.companyID;
+  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-router.get('/companies/:companyId/files/:fileId/receipts', (req, res) => {
-
+  request.get({ url, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err);
+    }
+    console.log(response);
+    console.log(body);
+    return res.status(response.statusCode).send(JSON.parse(body));
+  });
 });
 
 router.put('/companies/:companyID/files/:fileID/receipts', (req, res) => {
