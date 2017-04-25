@@ -1,8 +1,23 @@
+const fs = require('fs');
 const router = require('express').Router();
+const multer = require('multer');
+const request = require('request');
+const headers = require('../common/headers');
 const a1axios = require('../azoraOneAxios');
 const moment = require('moment');
 
 moment.locale('sv');
+
+// CONFIG disk storage for mutler file upload
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'tmp');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}.pdf`);
+  },
+});
+const upload = multer({ storage });
 
 function forwardToClient(res, response) {
   res.status(response.status).send(response.data);
@@ -61,6 +76,39 @@ router.get('/companies', (req, res) => {
   }).catch((error) => {
     standardErrorHandling(res, error);
   });
+});
+
+/**
+ * POST /companies/:companyId/files
+ *
+ * Upload files to AzoraOne API for analysis.
+ * Uses multer upload to extract file uploaded from form data.
+ */
+router.post(
+  '/companies/:companyId/files',
+  upload.single('File'),
+  (req, res) => {
+    const file = req.file;
+    const data = {
+      FileID: Date.now(),
+      File: fs.createReadStream(file.path),
+    };
+    const companyId = req.params.companyId;
+    const url = `https://azoraone.azure-api.net/student/api/companies/${companyId}/files`;
+
+    request.post({ url, formData: data, headers }, (err, response, body) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+      console.log(response);
+      return res.status(response.statusCode).send(JSON.parse(body));
+    });
+  },
+);
+
+router.get('/companies/:companyId/files/:fileId/receipts', (req, res) => {
+
 });
 
 router.put('/companies/:companyID/files/:fileID/receipts', (req, res) => {
