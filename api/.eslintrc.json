@@ -31,5 +31,6 @@
     "extends": "airbnb-base",
     "rules": {
         //"indent": [2, "tab"]
+        "linebreak-style": "off"
     }
 }
