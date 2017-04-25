@@ -2,8 +2,7 @@ const fs = require('fs');
 const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
-const secrets = require('../secrets');
-const headers = require("../common/headers");
+const headers = require('../common/headers');
 
 // CONFIG disk storage for mutler file upload
 const storage = multer.diskStorage({
