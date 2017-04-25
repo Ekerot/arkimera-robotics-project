@@ -24,15 +24,7 @@ router.post('/companies/:companyId/files', upload.single('File'), (req, res) => 
     let companyId = req.params.companyId;
 
     let url = `https://azoraone.azure-api.net/student/api/companies/${companyId}/files`;
-    // let url = "http://localhost:8080/test";
 
-    // let data = new FormData();
-
-    // data.append('FileID', '112');
-    // data.append('File', fs.createReadStream(file.path));
-    // data.append('Client-Key', secrets.azoraOneclientKeySecret);
-    // data.append('Ocp-Apim-Subscription-Key', secrets.azoraOneSubscriptionKeySecret);
-    // console.log(url);
     let data = {
         'FileID': Date.now(),
         'File': fs.createReadStream(file.path)
@@ -51,13 +43,6 @@ router.post('/companies/:companyId/files', upload.single('File'), (req, res) => 
         console.log(response);
         return res.status(response.statusCode).send(JSON.parse(body));
     });
-});
-
-router.post("/test", upload.single('File'), (req, res) => {
-    console.log("vad vår endpoint har skickat");
-    console.log(req.body);
-    console.log("filen");
-    console.log(req.file);
 });
 
 module.exports = router;
