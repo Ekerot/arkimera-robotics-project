@@ -90,7 +90,6 @@ router.post('/companies/:companyID/files', upload.single('File'), (req, res) => 
     if (err) {
       return standardErrorHandling(res, err);
     }
-    console.log(response);
     // Doesn't match forwardToClient
     return res.status(response.statusCode).send(JSON.parse(body));
   });
@@ -110,8 +109,6 @@ router.get('/companies/:companyID/files/:fileID/receipts', (req, res) => {
     if (err) {
       return standardErrorHandling(res, err);
     }
-    console.log(response);
-    console.log(body);
     return res.status(response.statusCode).send(JSON.parse(body));
   });
 });
