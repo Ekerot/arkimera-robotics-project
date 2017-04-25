@@ -3,6 +3,7 @@ const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
 const secrets = require('../secrets');
+const headers = require("../common/headers");
 
 // CONFIG disk storage for mutler file upload
 const storage = multer.diskStorage({
@@ -31,11 +32,6 @@ router.post(
     const data = {
       FileID: Date.now(),
       File: fs.createReadStream(file.path),
-    };
-
-    const headers = {
-      'Client-Key': secrets.azoraOneclientKeySecret,
-      'Ocp-Apim-Subscription-Key': secrets.azoraOneSubscriptionKeySecret,
     };
 
     request.post({ url, formData: data, headers }, (err, response, body) => {
