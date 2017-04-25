@@ -4,19 +4,13 @@ const multer = require('multer');
 const request = require('request');
 const moment = require('moment');
 const headers = require('../common/headers');
+const diskStorage = require('../common/diskStorage');
 const a1axios = require('../azoraOneAxios');
 
 moment.locale('sv');
 
 // CONFIG disk storage for mutler file upload
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'tmp');
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}.pdf`);
-  },
-});
+const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
 
 function forwardToClient(res, response) {
@@ -102,6 +96,11 @@ router.post('/companies/:companyID/files', upload.single('File'), (req, res) => 
   });
 });
 
+/**
+ * GET /companies/{companyID}/files/{fileID}/receipts
+ *
+ * Extract data from uploaded receipt
+ */
 router.get('/companies/:companyID/files/:fileID/receipts', (req, res) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
