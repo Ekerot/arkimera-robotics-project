@@ -34,7 +34,7 @@ router.post('/companies/:companyId/files', upload.single('File'), (req, res) => 
     // data.append('Ocp-Apim-Subscription-Key', secrets.azoraOneSubscriptionKeySecret);
     // console.log(url);
     let data = {
-        'FileID': '112',
+        'FileID': Date.now(),
         'File': fs.createReadStream(file.path)
     };
 
@@ -45,34 +45,12 @@ router.post('/companies/:companyId/files', upload.single('File'), (req, res) => 
 
     request.post({ url, formData: data, headers }, (err, response, body) => {
         if (err) {
-            return console.error(err);
-            res.status(500).send(err);
+            console.error(err);
+            return res.status(500).send(err);
         }
         console.log(response);
-        console.log(body);
+        return res.status(response.statusCode).send(JSON.parse(body));
     });
-
-    // data.submit(url, (err, result) => {
-    //     if (err) {
-    //         console.log(err.statusCode);
-    //         console.log(err.url);
-    //         return res.status(err.statusCode).send(err.statusMessage);
-    //     }
-    //     console.log(result.statusMessage);
-    //     console.log(result.socket);
-    //     console.log(result.method);
-    //     return res.status(result.statusCode).send(result.statusMessage);
-    // });
-
-    // axios.post(url, data)
-    //     .then((result) => {
-    //         console.log(result.data);
-    //         res.status(result.status).send(result.data);
-    //     })
-    //     .catch((error) => {
-    //         console.log(error.response.data);
-    //         res.status(error.response.status).send(error.response.data);
-    //     });
 });
 
 router.post("/test", upload.single('File'), (req, res) => {
