@@ -43,10 +43,6 @@ export class AccountComponent implements OnInit {
     }        
 }
 
-  callSelectedValue(value) {
-    console.log(value);
-  }
-
   update() {
 
     const val: number[] = [3740, 1910, 1920, 1930, 3740];
