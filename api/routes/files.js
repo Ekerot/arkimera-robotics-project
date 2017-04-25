@@ -5,9 +5,7 @@ const router = require('express').Router();
 const multer = require("multer");
 const FormData = require("form-data");
 const request = require("request");
-// const axios = require("axios");
 const secrets = require("../secrets");
-// const axios = require('../azoraOneAxios');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
