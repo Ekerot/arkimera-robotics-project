@@ -8,28 +8,31 @@ const secrets = require("../secrets");
 const axios = require('../azoraOneAxios');
 const upload = multer();
 
-router.post('/companies/:companyId/files', upload.single('file'), (req, res) => {
+router.post('/companies/:companyId/files', upload.single('File'), (req, res) => {
+    console.log("Från vår endpoint");
+    console.log(req.body);
+    console.log("filen");
+    console.log(req.file);
     let file = req.file;
     let companyId = req.params.companyId;
     let filePath = `files/${file.originalname}`;
 
-    fs.writeFileSync(filePath, (err) => {
-        if (err) {
-            console.log(err);
-        }
-    });
+    // fs.writeFileSync(filePath, (err) => {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    // });
 
-    let url = `https://azoraone.azure-api.net/student/api/companies/${companyId}/files`;
-    // let url = "http://localhost:8080/test";
+    // let url = `https://azoraone.azure-api.net/student/api/companies/${companyId}/files`;
+    let url = "http://localhost:8080/test";
 
     let body = {
-        'Content-Disposition': `form-data; name="100" filename=${file.originalname}`,
-        'Content-Type': 'application/pdf',
+        'FileID': '101',
         // file: fs.readFileSync(filePath)
-        file
+        // 'File': file
     };
 
-    axios.post(url, body, {'Content-type': 'multipart/form-data; boundary=---------------------------41184676334'})
+    axios.post(url, body, file)
         .then((result) => {
             console.log(result);
             res.status(result.status).send(result);
@@ -40,8 +43,11 @@ router.post('/companies/:companyId/files', upload.single('file'), (req, res) => 
         });
 });
 
-router.post("/test", (req, res) => {
+router.post("/test", upload.single('File'), (req, res) => {
+    console.log("vad vår endpoint har skickat");
     console.log(req.body);
+    console.log("filen");
+    console.log(req.file);
 });
 
 module.exports = router;
