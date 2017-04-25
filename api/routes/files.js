@@ -3,7 +3,6 @@
 const fs = require("fs");
 const router = require('express').Router();
 const multer = require("multer");
-const FormData = require("form-data");
 const request = require("request");
 const secrets = require("../secrets");
 
