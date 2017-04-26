@@ -49,7 +49,7 @@ router.get('/', (req, res, next) => {
  * Upload files to AzoraOne API for analysis.
  * Uses multer upload to extract file uploaded from form data.
  */
-router.post('/:companyID/files', upload.single('File'), (req, res) => {
+router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const file = req.file;
   const data = {
     FileID: Date.now(),
@@ -59,7 +59,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res) => {
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err);
+      return standardErrorHandling(res, err, next);
     }
     // Doesn't match forwardToClient
     return res.status(response.statusCode).send(JSON.parse(body));
@@ -71,14 +71,14 @@ router.post('/:companyID/files', upload.single('File'), (req, res) => {
  *
  * Extract data from uploaded receipt
  */
-router.get('/:companyID/files/:fileID/receipts', (req, res) => {
+router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err);
+      return standardErrorHandling(res, err, next);
     }
     return res.status(response.statusCode).send(JSON.parse(body));
   });
