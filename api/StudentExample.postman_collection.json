@@ -1,0 +1,46 @@
+{
+	"id": "a0f89088-77d2-bb0a-7bae-d20147bef436",
+	"name": "Student Example",
+	"description": "",
+	"order": [
+		"218c5b79-3e8c-cb64-cefd-9bf79378d19d"
+	],
+	"folders": [],
+	"timestamp": 1493098957487,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "218c5b79-3e8c-cb64-cefd-9bf79378d19d",
+			"headers": "Ocp-Apim-Subscription-Key: {ENTER KEY}\nClient-Key: {ENTER KEY}\n",
+			"url": "https://azoraone.azure-api.net/student/api/companies/{ENTER COMPANY}/files",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "POST",
+			"data": [
+				{
+					"key": "File",
+					"value": "",
+					"type": "file",
+					"enabled": true
+				},
+				{
+					"key": "FileID",
+					"value": "{ENTER ID AND PICK FILE ABOVE}",
+					"type": "text",
+					"enabled": true
+				}
+			],
+			"dataMode": "params",
+			"version": 2,
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1493098937094,
+			"name": "Example",
+			"description": "",
+			"collectionId": "a0f89088-77d2-bb0a-7bae-d20147bef436",
+			"responses": []
+		}
+	]
+}

@@ -1,9 +1,18 @@
+const fs = require('fs');
 const router = require('express').Router();
-const a1axios = require('../azoraOneAxios');
+const multer = require('multer');
+const request = require('request');
 const moment = require('moment');
+const headers = require('../common/headers');
+const diskStorage = require('../common/diskStorage');
+const a1axios = require('../azoraOneAxios');
 const createError = require('http-errors');
 
 moment.locale('sv');
+
+// CONFIG disk storage for mutler file upload
+const storage = multer.diskStorage(diskStorage);
+const upload = multer({ storage });
 
 function forwardToClient(res, response) {
   res.status(response.status).send(response.data);
@@ -31,6 +40,47 @@ router.get('/', (req, res, next) => {
     forwardToClient(res, response);
   }).catch((error) => {
     standardErrorHandling(res, error, next);
+  });
+});
+
+/**
+ * POST /companies/:companyID/files
+ *
+ * Upload files to AzoraOne API for analysis.
+ * Uses multer upload to extract file uploaded from form data.
+ */
+router.post('/companies/:companyID/files', upload.single('File'), (req, res) => {
+  const file = req.file;
+  const data = {
+    FileID: Date.now(),
+    File: fs.createReadStream(file.path),
+  };
+  const companyID = req.params.companyID;
+  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  request.post({ url, formData: data, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err);
+    }
+    // Doesn't match forwardToClient
+    return res.status(response.statusCode).send(JSON.parse(body));
+  });
+});
+
+/**
+ * GET /companies/{companyID}/files/{fileID}/receipts
+ *
+ * Extract data from uploaded receipt
+ */
+router.get('/companies/:companyID/files/:fileID/receipts', (req, res) => {
+  const fileID = req.params.fileID;
+  const companyID = req.params.companyID;
+  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+
+  request.get({ url, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err);
+    }
+    return res.status(response.statusCode).send(JSON.parse(body));
   });
 });
 

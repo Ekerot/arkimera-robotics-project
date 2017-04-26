@@ -1,16 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const jwtAuth = require('./jwtAuth');
 const moment = require('moment');
 
 const api = express();
-const cors = require('cors');
-
-const jwtAuth = require('./jwtAuth');
 
 // -- IMPORT ROUTES -- \\
 const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
-const filesRoutes = require('./routes/files');
 const companiesRoutes = require('./routes/companies');
 
 // -- MIDDLEWARE -- \\
@@ -24,7 +22,6 @@ api.set('x-powered-by', false); // set so api do not leak implementation details
 //  -- ROUTING -- \\
 api.use('/', pingRoutes);
 api.use('/', authRoutes);
-api.use('/companies', jwtAuth.requireAuth, filesRoutes);
 api.use('/companies', jwtAuth.requireAuth, companiesRoutes);
 
 // General 404 error is not specified in AzoraOne API documentation,
