@@ -49,7 +49,7 @@ router.get('/', (req, res, next) => {
  * Upload files to AzoraOne API for analysis.
  * Uses multer upload to extract file uploaded from form data.
  */
-router.post('/companies/:companyID/files', upload.single('File'), (req, res) => {
+router.post('/:companyID/files', upload.single('File'), (req, res) => {
   const file = req.file;
   const data = {
     FileID: Date.now(),
@@ -71,7 +71,7 @@ router.post('/companies/:companyID/files', upload.single('File'), (req, res) => 
  *
  * Extract data from uploaded receipt
  */
-router.get('/companies/:companyID/files/:fileID/receipts', (req, res) => {
+router.get('/:companyID/files/:fileID/receipts', (req, res) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
