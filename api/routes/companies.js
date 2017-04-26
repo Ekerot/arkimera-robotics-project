@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const a1axios = require('../azoraOneAxios');
 const moment = require('moment');
+const createError = require('http-errors');
 
 moment.locale('sv');
 
@@ -8,62 +9,32 @@ function forwardToClient(res, response) {
   res.status(response.status).send(response.data);
 }
 
-function standardErrorHandling(res, error) {
+function standardErrorHandling(res, error, next) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    console.log(error.response.data);
-    console.log(error.response.status);
-    console.log(error.response.headers);
-    res.status(error.response.status).send(error.response.data);
+    next(createError(error.response.status, { payload: error.response.data }));
   } else if (error.request) {
     // The request was made but no response was received
-    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-    // http.ClientRequest in node.js
-    console.log(error.request);
-    res.status(500).send(
-      {
-        success: false,
-        data: [{
-          code: 0,
-          message: 'No response from downstream API',
-          details: '',
-          element: '',
-        }],
-        time: moment().format('YYYY-MM-DD hh:mm:ss'),
-      },
-    );
+    next(createError(500, 'No response from downstream API'));
   } else {
     // Something happened in setting up the request that triggered an Error
-    console.log('Error', error.message);
-    res.status(500).send(
-      {
-        success: false,
-        data: [{
-          code: 0,
-          message: 'Error setting upp request to downstream API',
-          details: '',
-          element: '',
-        }],
-        time: moment().format('YYYY-MM-DD hh:mm:ss'),
-      },
-    );
+    next(createError(500, 'Error setting upp request to downstream API'));
   }
-  console.log(error.config);
 }
 
-router.get('/companies', (req, res) => {
+router.get('/', (req, res, next) => {
   // TODOS
   // Add logging the requests,
   // maybe change timestamp instead of just using what was received from AzoraOne???
   a1axios.get('student/api/companies').then((response) => {
     forwardToClient(res, response);
   }).catch((error) => {
-    standardErrorHandling(res, error);
+    standardErrorHandling(res, error, next);
   });
 });
 
-router.put('/companies/:companyID/files/:fileID/receipts', (req, res) => {
+router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
   const body = req.body;
@@ -73,7 +44,7 @@ router.put('/companies/:companyID/files/:fileID/receipts', (req, res) => {
   a1axios.put(url, body).then((response) => {
     forwardToClient(res, response);
   }).catch((error) => {
-    standardErrorHandling(res, error);
+    standardErrorHandling(res, error, next);
   });
 });
 
