@@ -1,5 +1,3 @@
-
-
 const router = require('express').Router();
 const createToken = require('../jwtAuth').createToken;
 
@@ -9,8 +7,8 @@ router.post('/users/auth', (req, res) => {
     password: req.body.password,
   };
 
-  if (user.username === '' || user.password === '') {
-    return res.json({ success: false, message: 'Missing username and/or password' });
+  if (!user.username || !user.password) {
+    return res.status(401).json({ success: false, message: 'Missing username and/or password' });
   }
 
   if (user.username === 'admin' && user.password === 'admin') {

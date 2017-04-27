@@ -3,7 +3,7 @@ const app = require('../../index.js');
 
 const url = 'http://localhost:8081/ping';
 
-describe('testing ping route', () => {
+describe('testing /ping route', () => {
   let server;
 
   beforeEach(() => {
