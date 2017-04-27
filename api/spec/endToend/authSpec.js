@@ -13,6 +13,7 @@ describe('testing /users/auth route', () => {
     server.close();
   });
 
+  // Should this function be refactored, extraCheck is not very pretty??
   function doRequest(inputData, expectedResult, done, extraCheck) {
     const options = {
       url: 'http://localhost:8081/users/auth',
