@@ -1,20 +1,35 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PdfViewerComponent } from 'ng2-pdf-viewer';
 
-import { PdfViewerComponent } from './pdf-viewer.component';
+import { PdfComponent } from './pdf.component';
+import { HttpService } from 'app/_services/http.service';
 
-describe('PdfViewerComponent', () => {
-  let component: PdfViewerComponent;
-  let fixture: ComponentFixture<PdfViewerComponent>;
+describe('PdfComponent', () => {
+  let component: PdfComponent;
+  let fixture: ComponentFixture<PdfComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PdfViewerComponent ]
+      providers: [
+        { provide: HttpService, useValue: {} }
+      ],
+      declarations: [
+        PdfComponent,
+        PdfViewerComponent
+      ],
+      imports: [
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PdfViewerComponent);
+    fixture = TestBed.createComponent(PdfComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
