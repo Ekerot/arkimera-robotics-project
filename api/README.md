@@ -1,11 +1,11 @@
 # AzoraOne Demo API
-**Primarily made by:**
-Beppe Karlsson
-Nicklas Björkendal
+**Primarily made by:**  
+Beppe Karlsson  
+Nicklas Björkendal  
 
-**With great help from:**
-Daniel Ekerot
-Tomas Vaedelund
+**With great help from:**  
+Daniel Ekerot  
+Tomas Vaedelund  
 
 ## Purpose
 The API serves mainly as a communication point between the Demo client and the AzoraOne self learning bookkeeping API.
@@ -19,13 +19,17 @@ Database: *TBD*
 ## Usage
 Clone or download this project, navigate to the *api* subfolder in the terminal and run
 ```
+npm install
+```
+to install dependencies
+```
 npm run devs
 ```
-for the development server and
+for starting the server in development mode, alternatively:
 ```
 npm start
 ```
-for the production environment.
+for starting the server in production mode.
 
 ## Prerequisites
 [NodeJS](https://nodejs.org/en/)
@@ -42,7 +46,7 @@ npm run test
 ```
 Test results will be printed in the console.
 
-There is also a postman environment containing automatic tests in the api/test/postman folder. Import into postman and run.
+There is also a [Postman](https://www.getpostman.com/) suite containing automatic tests in the api/test/postman folder. Import into postman and run.
 
 ## Documentation
 See our [wiki](https://github.com/Ekerot/arkimera-robotics-project/wiki)
