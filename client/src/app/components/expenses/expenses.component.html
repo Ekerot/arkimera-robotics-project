@@ -1,27 +1,17 @@
-<md-grid-list cols="4" rowHeight="2:1" gutterSize="12px">
+<md-grid-list cols="2" rowHeight="2:1" gutterSize="12px">
 
-  <md-grid-tile [colspan]="2" [rowspan]="1" id="overview">
-    
-    <div class="container">
-      <h3>Expenses</h3>
-      <md-divider></md-divider>
-      
-    </div>
-
-  </md-grid-tile>
-
-  <md-grid-tile [colspan]="1.95" [rowspan]="4" id="pdf">
-
-    <div class="pdf-container ">
-      <app-pdf></app-pdf>
-    </div>
-
-  </md-grid-tile>
-
-  <md-grid-tile [colspan]="2" [rowspan]="3" id="accounts">
+  <md-grid-tile [colspan]="1" [rowspan]="2" id="accounts">
 
     <div class=" account-container ">
       <app-account></app-account>
+    </div>
+
+  </md-grid-tile>
+
+  <md-grid-tile [colspan]="0.90" [rowspan]="2" id="pdf">
+
+    <div class="pdf-container ">
+      <app-pdf></app-pdf>
     </div>
 
   </md-grid-tile>

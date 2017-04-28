@@ -11,9 +11,7 @@ export class AccountComponent implements OnInit {
   public selectedValue: string;
   public myForm: FormGroup;
   public invoiceItemsData: object[] = [{}];
-  public totalAmount: any;
-  public oldValue: number;
-  public newValue: number;
+  public totalAmount: number;
   public accounts = [
     { value: '', viewValue: '' },
     { value: '1910', viewValue: 'Kassa' },
@@ -36,20 +34,22 @@ export class AccountComponent implements OnInit {
     this.invoiceItemsData.push({});
   }
 
-  deleteRow() {
-    console.log('Delete: ' + this.invoiceItemsData);
-  }
+  deleteRow(value: number) {
 
-  callSelectedValue(value) {
-    console.log(value);
-  }
+    let index: number = value;
+
+    if (index !== -1) {
+        this.invoiceItemsData.splice(index, 1);
+    }        
+}
 
   update() {
 
-    const val: number[] = [3740, 1910, 1920, 1930];
+    const val: number[] = [3740, 1910, 1920, 1930, 3740];
     this.totalAmount = 0;
 
     for (const item of this.invoiceItemsData) {
+
       if (item['amount'] != null) {
         if (val.indexOf(parseInt(item['selectedValue'], 10)) > -1) {
           this.totalAmount -= item['amount'];
