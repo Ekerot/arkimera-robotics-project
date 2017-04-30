@@ -1,6 +1,8 @@
-const request = require('request');
-const app = require('../../index.js');
 const jwt = require('jsonwebtoken');
+
+const app = require('../../index.js');
+const setupRequestAndExpectsRunner = require('../helpers/e2eHelpers').setupRequestAndExpectsRunner;
+
 
 describe('testing /users/auth route', () => {
   let server;
@@ -13,31 +15,30 @@ describe('testing /users/auth route', () => {
     server.close();
   });
 
-  // Should this function be refactored, extraCheck is not very pretty??
-  function doRequest(inputData, expectedResult, done, extraCheck) {
-    const options = {
-      url: 'http://localhost:8081/users/auth',
-      method: 'POST',
-      json: true,
-      body: inputData,
-    };
+  const options = {
+    url: 'http://localhost:8081/users/auth',
+    method: 'POST',
+    json: true,
+  };
 
-    request(options, (err, res, body) => {
-      expect(err).toBe(null);
+  const requestAndExpectsRunner = setupRequestAndExpectsRunner(options);
+
+  function simpleExpects(expectedResult) {
+    return (res, body) => {
       expect(res.statusCode).toBe(expectedResult.statusCode);
-      expect(body.success).toBe(expectedResult.success);
-      expect(body.message).toBe(expectedResult.message);
-      if (extraCheck) extraCheck(body);
-      done();
-    });
+      expect(body).toEqual(expectedResult.body);
+    };
   }
 
   describe('Fail due to missing info ', () => {
     const expectedResult = {
       statusCode: 401,
-      success: false,
-      message: 'Missing username and/or password',
+      body: {
+        success: false,
+        message: 'Missing username and/or password',
+      },
     };
+    const missingInfoExpects = simpleExpects(expectedResult);
 
     it('empty username&pw = fail & missing info msg', (done) => {
       const data = {
@@ -45,7 +46,7 @@ describe('testing /users/auth route', () => {
         password: '',
       };
 
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
     it('empty pw = fail & missing info msg', (done) => {
@@ -53,7 +54,7 @@ describe('testing /users/auth route', () => {
         username: 'admin',
         password: '',
       };
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
     it('empty username = fail & missing info msg', (done) => {
@@ -61,30 +62,33 @@ describe('testing /users/auth route', () => {
         username: '',
         password: 'admin',
       };
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
     it('unset username&pw = fail & missing info msg', (done) => {
       const data = {
 
       };
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, missingInfoExpects);
     });
   });
 
   describe('Fail due to incorrect login info, Unauthorized', () => {
     const expectedResult = {
       statusCode: 401,
-      success: false,
-      message: 'Unauthorized',
+      body: {
+        success: false,
+        message: 'Unauthorized',
+      },
     };
+    const unauthorizedExpects = simpleExpects(expectedResult);
 
     it('incorrect username = fail', (done) => {
       const data = {
         username: 'wrong',
         password: 'admin',
       };
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, unauthorizedExpects);
     });
 
     it('incorrect password = fail', (done) => {
@@ -92,15 +96,17 @@ describe('testing /users/auth route', () => {
         username: 'admin',
         password: 'wrong',
       };
-      doRequest(data, expectedResult, done);
+      requestAndExpectsRunner(data, done, unauthorizedExpects);
     });
   });
 
   describe('Successfully logged in', () => {
     const expectedResult = {
       statusCode: 200,
-      success: true,
-      message: 'Successfully logged in',
+      body: {
+        success: true,
+        message: 'Successfully logged in',
+      },
     };
 
     it('correct username&pw = success  & jsonwebtoken', (done) => {
@@ -108,7 +114,9 @@ describe('testing /users/auth route', () => {
         username: 'admin',
         password: 'admin',
       };
-      doRequest(data, expectedResult, done, (body) => {
+      requestAndExpectsRunner(data, done, (res, body) => {
+        expect(res.statusCode).toBe(expectedResult.statusCode);
+        expect(body.message).toBe(expectedResult.body.message);
         expect(typeof body.data).toBe('object');
         expect(typeof body.data.token).toBe('string');
         const decoded = jwt.decode(body.data.token);
