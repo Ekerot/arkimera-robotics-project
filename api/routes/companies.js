@@ -51,16 +51,20 @@ router.get('/', (req, res, next) => {
  */
 router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const file = req.file;
+  const fileIDWithEncType = req.file.filename.split('-')[1];
+  const fileID = fileIDWithEncType.split('.')[0];
   const data = {
-    FileID: Date.now(),
+    FileID: fileID,
     File: fs.createReadStream(file.path),
   };
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
       return standardErrorHandling(res, err, next);
     }
+
     // Doesn't match forwardToClient
     return res.status(response.statusCode).send(JSON.parse(body));
   });
