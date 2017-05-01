@@ -22,7 +22,7 @@ export class HttpService {
   public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
       'enctype': 'multipart/form-data',
-      'x-access-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNDkzMDQ0MzI0LCJleHAiOjE0OTMxMzA3MjR9.0ZWKJc3wrZrPRqH4-BZx4kHUTqZjI1JZkVSduxX-3JA'
+      'x-access-token': localStorage.getItem('token') || ''
     });
     const options = new RequestOptions({ headers: headers });
 
@@ -32,7 +32,6 @@ export class HttpService {
     return this.http.post(this.apiUrl + 'companies/1/files', formData, options)
       .map(this.extractData)
       .catch(this.handleError);
-
   }
 
   public authenticate(user: User): Observable<ApiResponse> {
@@ -46,7 +45,7 @@ export class HttpService {
 
   private extractData(res: Response) {
     const body = res.json();
-    console.log(body);
+
     return body || {};
   }
 
@@ -62,6 +61,6 @@ export class HttpService {
     }
 
     console.error(errMsg);
-    return Promise.reject(errMsg);
+    return Observable.throw(errMsg);
   }
 }
