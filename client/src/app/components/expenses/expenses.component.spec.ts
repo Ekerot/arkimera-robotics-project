@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '@angular/material';
 
 import { ExpensesComponent } from './expenses.component';
+import { MockComponent } from '../../_helpers/mock-component';
 
 describe('ExpensesComponent', () => {
   let component: ExpensesComponent;
@@ -8,9 +10,16 @@ describe('ExpensesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExpensesComponent ]
+      declarations: [
+        ExpensesComponent,
+        MockComponent({ selector: 'app-pdf' }),
+        MockComponent({ selector: 'app-account' })
+      ],
+      imports: [
+        MaterialModule
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
