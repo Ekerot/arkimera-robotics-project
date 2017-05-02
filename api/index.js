@@ -4,6 +4,7 @@ const cors = require('cors');
 const moment = require('moment');
 const createError = require('http-errors');
 
+const mongoose = require('./config/mongoose');
 const jwtAuth = require('./jwtAuth');
 // -- IMPORT ROUTES -- \\
 const pingRoutes = require('./routes/ping');
@@ -11,6 +12,7 @@ const authRoutes = require('./routes/auth');
 const companiesRoutes = require('./routes/companies');
 
 const app = express();
+mongoose();
 
 // -- MIDDLEWARE -- \\
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,7 +23,11 @@ app.use(cors());
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
     // 'typeof x' will give object if null so we must check for it not being null as well
-    if (typeof success !== 'boolean' || typeof statusCode !== 'number' || (typeof data !== 'object' && data !== null)) {
+    if (
+      typeof success !== 'boolean' ||
+      typeof statusCode !== 'number' ||
+      (typeof data !== 'object' && data !== null)
+    ) {
       throw new TypeError('Incorrect usage of customSend');
     }
 
@@ -65,13 +71,14 @@ app.use((error, req, res, next) => {
   if (Object.prototype.hasOwnProperty.call(error, 'payload')) {
     payload = error.payload;
   } else {
-    payload =
-    [{
-      code: 0,
-      message: error.message,
-      details: '',
-      element: '',
-    }];
+    payload = [
+      {
+        code: 0,
+        message: error.message,
+        details: '',
+        element: '',
+      },
+    ];
   }
   res.customSend(false, error.statusCode, payload);
 });
