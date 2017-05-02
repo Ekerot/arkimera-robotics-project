@@ -53,6 +53,12 @@ router.get('/', (req, res, next) => {
  */
 router.get('/:compnayID/files', (req, res, next) => {
   const companyID = req.params.companyID;
+
+  if (req.query.statusID) {
+    const statusID = req.query.statusID;
+    console.log(statusID);
+  }
+
   return res.status(200).send({ status: 'success', files: [] });
 });
 
