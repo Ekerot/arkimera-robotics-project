@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jasmine",
-    "devs": "nodemon server.js --exec babel-node"
+    "devs": "nodemon -L server.js --exec babel-node"
   },
   "keywords": [
     "node",
