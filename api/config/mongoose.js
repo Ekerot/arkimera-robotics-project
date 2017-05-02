@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 function mongoDB() {
   const connectionString = 'mongodb://localhost/mongoDB';
   const db = mongoose.connect(connectionString);
+  mongoose.Promise = global.Promise;
 
   db.connection.on('connected', () => {
     console.log('mongoDB connection open.');
