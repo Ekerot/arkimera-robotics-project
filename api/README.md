@@ -22,7 +22,17 @@ Clone or download this project, navigate to the *api* subfolder in the terminal 
 ```
 npm install
 ```
-to install dependencies
+to install dependencies.
+
+To install and run vagrant with the mongoDB server use:
+```
+vagrant up
+```
+SSH into vagrant machine to run the project
+```
+vagrant ssh
+```
+Then run the npm command
 ```
 npm run devs
 ```
@@ -32,10 +42,6 @@ npm start
 ```
 for starting the server in production mode.
 
-To install and run vagrant with the mongoDB server use:
-```
-vagrant up
-```
 
 ## Prerequisites
 [NodeJS](https://nodejs.org/en/)
