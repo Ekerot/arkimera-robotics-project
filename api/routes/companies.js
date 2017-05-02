@@ -55,6 +55,7 @@ router.get('/', (req, res, next) => {
  */
 router.get('/:compnayID/files', (req, res, next) => {
   const companyID = req.params.companyID;
+  let data = {};
 
   if (req.query.statusID) {
     const statusID = req.query.statusID;
