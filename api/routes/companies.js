@@ -38,15 +38,34 @@ router.get('/', (req, res, next) => {
   // TODOS
   // Add logging the requests,
   // maybe change timestamp instead of just using what was received from AzoraOne???
-  a1axios.get('student/api/companies').then((response) => {
-    forwardToClient(res, response);
-  }).catch((error) => {
-    standardErrorHandling(res, error, next);
-  });
+  a1axios
+    .get('student/api/companies')
+    .then((response) => {
+      forwardToClient(res, response);
+    })
+    .catch((error) => {
+      standardErrorHandling(res, error, next);
+    });
 });
 
 /**
- * POST /companies/:companyID/files
+ * GET /companies/{companyID}/files
+ *
+ * Get list of files from DB
+ */
+router.get('/:compnayID/files', (req, res, next) => {
+  const companyID = req.params.companyID;
+
+  if (req.query.statusID) {
+    const statusID = req.query.statusID;
+    console.log(statusID);
+  }
+
+  return res.status(200).send({ status: 'success', files: [] });
+});
+
+/**
+ * POST /companies/{companyID}/files
  *
  * Upload files to AzoraOne API for analysis.
  * Uses multer upload to extract file uploaded from form data.
@@ -70,6 +89,26 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     const parsedBody = JSON.parse(body);
     return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
   });
+});
+
+/**
+ * GET /companies/{companyID}/files/{fileID}
+ *
+ * Gets a single file
+ */
+router.get('/:companyID/files/:fileID', (req, res, next) => {
+  const companyID = req.params.companyID;
+  return res.status(200).send({ status: 'success', file: {} });
+});
+
+/**
+ * DELETE /companies/{companyID}/files/{fileID}
+ *
+ * Deletes a single file
+ */
+router.delete('/:companyID/files/:fileID', (req, res, next) => {
+  const companyID = req.params.companyID;
+  return res.status(200).send({ status: 'success', file: {} });
 });
 
 /**
@@ -99,11 +138,14 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const url = `student/api/companies/${companyID}/files/${fileID}/receipts`;
 
   // TODO add validation?
-  a1axios.put(url, body).then((response) => {
-    forwardToClient(res, response);
-  }).catch((error) => {
-    standardErrorHandling(res, error, next);
-  });
+  a1axios
+    .put(url, body)
+    .then((response) => {
+      forwardToClient(res, response);
+    })
+    .catch((error) => {
+      standardErrorHandling(res, error, next);
+    });
 });
 
 module.exports = router;
