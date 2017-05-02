@@ -4,8 +4,8 @@
   "description": "API for Arkimera Demo client written in Nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "devs": "nodemon index.js --exec babel-node"
+    "test": "jasmine",
+    "devs": "nodemon server.js --exec babel-node"
   },
   "keywords": [
     "node",
@@ -21,6 +21,7 @@
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",
     "eslint-plugin-import": "^2.2.0",
+    "jasmine": "^2.6.0",
     "nodemon": "^1.11.0"
   },
   "dependencies": {

@@ -43,3 +43,6 @@ obj
 
 # tmp files
 api/tmp
+
+# vagrant
+.vagrant

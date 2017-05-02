@@ -3,10 +3,12 @@ const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
 const moment = require('moment');
+const createError = require('http-errors');
+
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const a1axios = require('../azoraOneAxios');
-const createError = require('http-errors');
+
 
 moment.locale('sv');
 
@@ -15,14 +17,14 @@ const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
 
 function forwardToClient(res, response) {
-  res.status(response.status).send(response.data);
+  res.customSend(response.data.success, response.status, response.data.data);
 }
 
 function standardErrorHandling(res, error, next) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    next(createError(error.response.status, { payload: error.response.data }));
+    next(createError(error.response.status, { payload: error.response.data.data }));
   } else if (error.request) {
     // The request was made but no response was received
     next(createError(500, 'No response from downstream API'));
@@ -84,8 +86,8 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-    // Doesn't match forwardToClient
-    return res.status(response.statusCode).send(JSON.parse(body));
+    const parsedBody = JSON.parse(body);
+    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
   });
 });
 
@@ -123,7 +125,9 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
     if (err) {
       return standardErrorHandling(res, err, next);
     }
-    return res.status(response.statusCode).send(JSON.parse(body));
+
+    const parsedBody = JSON.parse(body);
+    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
   });
 });
 

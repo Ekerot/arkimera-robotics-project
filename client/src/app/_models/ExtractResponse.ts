@@ -1,10 +1,17 @@
-import { ExtractData } from 'app/_models/ExtractData';
-
 export class ExtractResponse {
 
   constructor(
     public success: boolean,
-    public data: ExtractData,
+    public data: {
+      verificationSerie: string,
+      description: string,
+      receiptDate: Date,
+      accounts: {
+        account: number,
+        debit: number,
+        credit: number
+      }
+    },
     public time: string
   ) { }
 }

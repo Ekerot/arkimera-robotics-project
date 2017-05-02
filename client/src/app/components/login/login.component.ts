@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from 'app/_services/auth.service';
 
 import { User } from 'app/_models/user';
+import { MdSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    public snackBar: MdSnackBar
   ) {
     this.loading = false;
 
@@ -46,11 +48,23 @@ export class LoginComponent implements OnInit {
       this.loginForm.get('password').value
     );
 
-    this.auth.login(user);
+    this.auth.login(user)
+      .subscribe(res => {
+        this.loading = false;
+        this.router.navigate(['/dashboard']);
+      }, error => {
+        this.loading = false;
+        this.loginForm.enable();
+        this.loginForm.patchValue({ password: '' });
+
+        // TODO: Different messages depending on error type
+        this.openSnackBar('Wrong username or password!');
+      });
   }
 
-  onCancelLogin(): void {
-    this.auth.logout();
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
   }
-
 }
