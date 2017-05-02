@@ -20,7 +20,8 @@ app.use(cors());
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
-    if (typeof success !== 'boolean' || typeof statusCode !== 'number' || typeof data !== 'object') {
+    // 'typeof x' will give object if null so we must check for it not being null as well
+    if (typeof success !== 'boolean' || typeof statusCode !== 'number' || (typeof data !== 'object' && data !== null)) {
       throw new TypeError('Incorrect usage of customSend');
     }
 
