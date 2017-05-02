@@ -1,11 +1,11 @@
 # AzoraOne Demo API
-**Primarily made by:**  
-Beppe Karlsson  
-Nicklas Björkendal  
+**Primarily made by:**
+Beppe Karlsson
+Nicklas Björkendal
 
-**With great help from:**  
-Daniel Ekerot  
-Tomas Vaedelund  
+**With great help from:**
+Daniel Ekerot
+Tomas Vaedelund
 
 ## Purpose
 The API serves mainly as a communication point between the Demo client and the AzoraOne self learning bookkeeping API.
@@ -14,7 +14,8 @@ The API serves mainly as a communication point between the Demo client and the A
 Language: JavaScript
 Runtime Environment: NodeJS
 Framework: ExpressJS
-Database: *TBD*
+Database: MongoDB
+DevTools: Vagrant, Virtual Box
 
 ## Usage
 Clone or download this project, navigate to the *api* subfolder in the terminal and run
@@ -30,6 +31,11 @@ for starting the server in development mode, alternatively:
 npm start
 ```
 for starting the server in production mode.
+
+To install and run vagrant with the mongoDB server use:
+```
+vagrant up
+```
 
 ## Prerequisites
 [NodeJS](https://nodejs.org/en/)
