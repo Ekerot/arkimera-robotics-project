@@ -1,15 +1,16 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const jwtAuth = require('./jwtAuth');
 const moment = require('moment');
+const createError = require('http-errors');
 
-const app = express();
-
+const jwtAuth = require('./jwtAuth');
 // -- IMPORT ROUTES -- \\
 const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
 const companiesRoutes = require('./routes/companies');
+
+const app = express();
 
 // -- MIDDLEWARE -- \\
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -40,11 +41,8 @@ app.use('/companies', jwtAuth.requireAuth, companiesRoutes);
 
 // General 404 error is not specified in AzoraOne API documentation,
 // but this is their response
-app.use((req, res) => {
-  res.status(404).json({
-    statusCode: 404,
-    message: 'Resource not found',
-  });
+app.use((req, res, next) => {
+  next(createError(404, 'Resource not found'));
 });
 
 // Express error middleware must have 4 args,
@@ -54,18 +52,15 @@ app.use((error, req, res, next) => {
   if (Object.prototype.hasOwnProperty.call(error, 'payload')) {
     payload = error.payload;
   } else {
-    payload = {
-      success: false,
-      data: [{
-        code: 0,
-        message: error.message,
-        details: '',
-        element: '',
-      }],
-      time: moment().format('YYYY-MM-DD hh:mm:ss'),
-    };
+    payload =
+    [{
+      code: 0,
+      message: error.message,
+      details: '',
+      element: '',
+    }];
   }
-  res.status(error.status).json(payload);
+  res.customSend(false, error.statusCode, payload);
 });
 
 module.exports = app;
