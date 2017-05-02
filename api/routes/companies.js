@@ -8,7 +8,7 @@ const createError = require('http-errors');
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const a1axios = require('../azoraOneAxios');
-
+const File = require('../interfaces/File');
 
 moment.locale('sv');
 
@@ -24,7 +24,9 @@ function standardErrorHandling(res, error, next) {
   if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
-    next(createError(error.response.status, { payload: error.response.data.data }));
+    next(
+      createError(error.response.status, { payload: error.response.data.data }),
+    );
   } else if (error.request) {
     // The request was made but no response was received
     next(createError(500, 'No response from downstream API'));
@@ -82,14 +84,20 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
 
-  request.post({ url, formData: data, headers }, (err, response, body) => {
-    if (err) {
-      return standardErrorHandling(res, err, next);
-    }
+  File.save({ fileID, file });
 
-    const parsedBody = JSON.parse(body);
-    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
-  });
+  // request.post({ url, formData: data, headers }, (err, response, body) => {
+  //   if (err) {
+  //     return standardErrorHandling(res, err, next);
+  //   }
+
+  //   const parsedBody = JSON.parse(body);
+  //   return res.customSend(
+  //     parsedBody.success,
+  //     response.statusCode,
+  //     parsedBody.data,
+  //   );
+  // });
 });
 
 /**
@@ -128,7 +136,11 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
     }
 
     const parsedBody = JSON.parse(body);
-    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
   });
 });
 
