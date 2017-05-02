@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const FileSchema = new mongoose.Schema({
-  userName: {
+  username: {
     type: String,
     required: true,
   },
@@ -9,11 +9,11 @@ const FileSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  originalTitle: {
+  originalname: {
     type: String,
     required: true,
   },
-  fileName: {
+  filename: {
     type: String,
     required: true,
   },
@@ -22,7 +22,7 @@ const FileSchema = new mongoose.Schema({
     required: true,
   },
   FileID: {
-    type: Date,
+    type: Number,
     required: true,
   },
   companyID: {
@@ -31,4 +31,4 @@ const FileSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('File', FileSchema);
+module.exports = mongoose.model('Files', FileSchema);

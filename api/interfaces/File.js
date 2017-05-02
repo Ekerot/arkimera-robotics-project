@@ -1,12 +1,35 @@
-const file = require('../models/file');
+const File = require('../models/File');
 
-class File {
-  save(data) {
-    console.log(data.path);
-    console.log(data.fileID);
-    console.log(data);
-    file.
-  }
-}
+module.exports = {
+  save: (data) => {
+    // console.log(data);
+    File.findOne({ FileID: data.fileID }).then((err, file) => {
+      if (err) {
+        throw err;
+      }
 
-module.exports = new File();
+      if (file) {
+        throw new Error('File already saved in db');
+      }
+
+      const newFile = new File({
+        username: data.username,
+        path: data.file.path,
+        originalname: data.file.originalname,
+        filename: data.file.filename,
+        statusID: 0,
+        FileID: data.fileID,
+        companyID: 1,
+      });
+
+      newFile.save().then((error) => {
+        if (error) {
+          console.log(err);
+          throw error;
+        }
+        console.log('saved');
+        return newFile;
+      });
+    });
+  },
+};
