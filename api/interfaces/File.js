@@ -13,7 +13,7 @@ module.exports = {
       }
 
       const newFile = new File({
-        username: data.username,
+        username: data.username || 'admin',
         path: data.file.path,
         originalname: data.file.originalname,
         filename: data.file.filename,
@@ -22,13 +22,9 @@ module.exports = {
         companyID: 1,
       });
 
-      newFile.save().then((error) => {
-        if (error) {
-          console.log(err);
-          throw error;
-        }
-        console.log('saved');
-        return newFile;
+      newFile.save().then((doc) => {
+        console.log(doc);
+        // return newFile;
       });
     });
   },
