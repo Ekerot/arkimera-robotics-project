@@ -17,6 +17,20 @@ app.use(bodyParser.json());
 app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
 app.use(cors());
 
+app.use((req, res, next) => {
+  res.customSend = (success, statusCode, data) => {
+    const payload = {
+      success,
+      data,
+      time: moment().format('YYYY-MM-DD hh:mm:ss'),
+    };
+
+    res.status(statusCode).json(payload);
+  };
+
+  next();
+});
+
 app.set('x-powered-by', false); // set so app do not leak implementation details
 
 //  -- ROUTING -- \\
