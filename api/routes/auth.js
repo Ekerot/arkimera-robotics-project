@@ -1,22 +1,21 @@
 const router = require('express').Router();
 const createToken = require('../jwtAuth').createToken;
+const createError = require('http-errors');
 
-router.post('/users/auth', (req, res) => {
+router.post('/users/auth', (req, res, next) => {
   const user = {
     username: req.body.username,
     password: req.body.password,
   };
 
   if (!user.username || !user.password) {
-    return res.status(401).json({ success: false, message: 'Missing username and/or password' });
-  }
-
-  if (user.username === 'admin' && user.password === 'admin') {
+    next(createError(401, 'Missing username and/or password'));
+  } else if (user.username === 'admin' && user.password === 'admin') {
     const jwt = createToken(user.username);
-    return res.json({ success: true, message: 'Successfully logged in', data: { token: jwt } });
+    res.customSend(true, 200, { token: jwt });
+  } else {
+    next(createError(401, 'Unauthorized'));
   }
-
-  return res.status(401).send({ success: false, message: 'Unauthorized' });
 });
 
 module.exports = router;
