@@ -7,18 +7,13 @@ const createError = require('http-errors');
 
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
-const a1axios = require('../azoraOneAxios');
-const File = require('../interfaces/File');
+const Files = require('../interfaces/Files');
 
 moment.locale('sv');
 
-// CONFIG disk storage for mutler file upload
+// CONFIG disk storage for multer file upload
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
-
-function forwardToClient(res, response) {
-  res.customSend(response.data.success, response.status, response.data.data);
-}
 
 function standardErrorHandling(res, error, next) {
   if (error.response) {
@@ -37,17 +32,19 @@ function standardErrorHandling(res, error, next) {
 }
 
 router.get('/', (req, res, next) => {
-  // TODOS
-  // Add logging the requests,
-  // maybe change timestamp instead of just using what was received from AzoraOne???
-  a1axios
-    .get('student/api/companies')
-    .then((response) => {
-      forwardToClient(res, response);
-    })
-    .catch((error) => {
-      standardErrorHandling(res, error, next);
-    });
+  const url = 'https://azoraone.azure-api.net/student/api/companies/';
+  request.get({ url, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
+
+    const parsedBody = JSON.parse(body);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
+  });
 });
 
 /**
@@ -55,16 +52,20 @@ router.get('/', (req, res, next) => {
  *
  * Get list of files from DB
  */
-router.get('/:compnayID/files', (req, res, next) => {
+router.get('/:companyID/files', (req, res, next) => {
   const companyID = req.params.companyID;
-  let data = {};
+  const data = {
+    companyID,
+  };
 
-  if (req.query.statusID) {
-    const statusID = req.query.statusID;
-    console.log(statusID);
+  if (req.query.status) {
+    data.status = req.query.status;
+    console.log(data.status);
   }
 
-  return res.status(200).send({ status: 'success', files: [] });
+  Files.get(data)
+    .then(files => res.customSend(true, 200, files))
+    .catch(err => res.status(500).send(next(createError(500, err))));
 });
 
 /**
@@ -77,27 +78,34 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const file = req.file;
   const fileIDWithEncType = req.file.filename.split('-')[1];
   const fileID = fileIDWithEncType.split('.')[0];
-  const data = {
+  const formData = {
     FileID: fileID,
     File: fs.createReadStream(file.path),
   };
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  request.post({ url, formData, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
 
-  File.save({ fileID, file });
+    const data = {
+      fileID,
+      file,
+      status: 'uploaded',
+      username: req.decoded.username,
+      companyID,
+    };
 
-  // request.post({ url, formData: data, headers }, (err, response, body) => {
-  //   if (err) {
-  //     return standardErrorHandling(res, err, next);
-  //   }
+    Files.save(data);
 
-  //   const parsedBody = JSON.parse(body);
-  //   return res.customSend(
-  //     parsedBody.success,
-  //     response.statusCode,
-  //     parsedBody.data,
-  //   );
-  // });
+    const parsedBody = JSON.parse(body);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
+  });
 });
 
 /**
@@ -106,8 +114,14 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
  * Gets a single file
  */
 router.get('/:companyID/files/:fileID', (req, res, next) => {
-  const companyID = req.params.companyID;
-  return res.status(200).send({ status: 'success', file: {} });
+  const FileID = req.params.fileID;
+  const data = {
+    FileID,
+  };
+
+  Files.get(data)
+    .then(file => res.customSend(true, 200, file))
+    .catch(error => res.status(500).send(next(createError(500, error))));
 });
 
 /**
@@ -116,8 +130,14 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
  * Deletes a single file
  */
 router.delete('/:companyID/files/:fileID', (req, res, next) => {
-  const companyID = req.params.companyID;
-  return res.status(200).send({ status: 'success', file: {} });
+  const fileID = req.params.fileID;
+  const data = {
+    fileID,
+  };
+
+  Files.get(data)
+    .then(file => res.customSend(true, 200, file))
+    .catch(err => res.status(500).send(next(createError(500, err))));
 });
 
 /**
@@ -135,7 +155,13 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
+
     const parsedBody = JSON.parse(body);
+    if (response.statusCode === 412) {
+      return res.status(412).send(next(createError(412, parsedBody.data[0].message)));
+    }
+
+    Files.updateStatus(fileID, 'extracted');
     return res.customSend(
       parsedBody.success,
       response.statusCode,
@@ -147,18 +173,23 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
-  const body = req.body;
+  const data = req.body;
   const url = `student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  // TODO add validation?
-  a1axios
-    .put(url, body)
-    .then((response) => {
-      forwardToClient(res, response);
-    })
-    .catch((error) => {
-      standardErrorHandling(res, error, next);
-    });
+  request.post({ url, formData: data, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
+
+    Files.updateStatus(fileID, 'booked');
+
+    const parsedBody = JSON.parse(body);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
+  });
 });
 
 module.exports = router;
