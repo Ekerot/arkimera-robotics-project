@@ -10,6 +10,19 @@ function setupRequestAndExpectsRunner(options) {
   };
 }
 
+function responseFormatAsserts(expectedResult, extraAsserts) {
+  return (res, body) => {
+    expect(res.statusCode).toBe(expectedResult.code);
+
+    expect(body.code).toBe(expectedResult.code);
+    expect(body.success).toBe(expectedResult.success);
+    expect(body.message).toBe(expectedResult.message);
+    expect(typeof body.time).toBe('string');
+    if (extraAsserts) extraAsserts(res, body);
+  };
+}
+
 module.exports = {
   setupRequestAndExpectsRunner,
+  responseFormatAsserts,
 };
