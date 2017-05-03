@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 function mongoDB() {
-  const connectionString = 'mongodb://localhost/mongoDB';
+  const connectionString = 'mongodb://localhost/arkimera';
   const db = mongoose.connect(connectionString);
   mongoose.Promise = global.Promise;
 

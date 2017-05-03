@@ -6,39 +6,65 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 }, { timestamps: true });
 
-// TODO add better validation on name and password
-// Validate password
-userSchema.path('password').validate((password) => {
-  return password.length >= 6;
-}, 'The password must be of minimum length 6 characters.');
+const nameMinLength = 5;
+userSchema.path('username').validate(
+  name => name.length >= nameMinLength, `The username must be of minimum length ${nameMinLength} characters.`
+);
 
-// Hash and salt password
+const pwMinLength = 5;
+userSchema.path('password').validate(
+  password => password.length >= pwMinLength, `The password must be of minimum length ${pwMinLength} characters.`
+);
+
 userSchema.pre('save', function (next) {
-  const _this = this;
-  bcrypt.genSalt(10, (err, salt) => {
-      if (err) { return next(err); }
-
-        // Using https://www.npmjs.com/package/bcrypt-nodejs
-      bcrypt.hash(_this.password, salt, (err, hash) => {
-          if (err) { return next(err); }
-
-            // set the password to the hash
-          _this.password = hash;
+  const that = this;
+  bcrypt.genSalt(10, (saltErr, salt) => {
+    if (saltErr) {
+      next(saltErr);
+    } else {
+      bcrypt.hash(that.password, salt, (hashErr, hash) => {
+        if (hashErr) {
+          next(hashErr);
+        } else {
+          that.password = hash;
           next();
-        });
-    });
+        }
+      });
+    }
+  });
 });
 
-userSchema.methods.comparePassword = function (candidatePassword, callback) {
+userSchema.methods.comparePassword = (candidatePassword, callback) => {
   bcrypt.compare(candidatePassword, this.password, (err, res) => {
-      if (err) {
-          return callback(err);
-        }
-
+    if (err) {
+      callback(err);
+    } else {
       callback(null, res);
-    });
+    }
+  });
 };
 
-let User = mongoose.model('User', userSchema);
+// Have to use regular function def instead of () => {}
+// because otherwise the meaning of this changes.
+userSchema.statics.addNew = function (user, callback) {
+  if (!user.username) {
+    callback(new TypeError('Missing username'));
+  } else if (!user.password) {
+    callback(new TypeError('Missing password'));
+  } else {
+    this.findOne({ username: user.username }, (findErr, foundUser) => {
+      if (findErr) {
+        callback(findErr);
+      } else if (foundUser) {
+        callback(new Error('User already exists'));
+      } else {
+        new this(user).save((saveErr, document) => callback(saveErr, document));
+      }
+    });
+  }
+};
+
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+
