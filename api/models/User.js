@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-let userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 }, { timestamps: true });
@@ -14,7 +14,7 @@ userSchema.path('password').validate((password) => {
 
 // Hash and salt password
 userSchema.pre('save', function (next) {
-  let _this = this;
+  const _this = this;
   bcrypt.genSalt(10, (err, salt) => {
       if (err) { return next(err); }
 
