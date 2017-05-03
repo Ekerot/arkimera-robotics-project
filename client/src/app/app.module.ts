@@ -31,7 +31,7 @@ import { IncomeDashboardComponent } from './components/dashboard/income-dashboar
 import { CreateGraph } from './components/dashboard/create-graph';
 
 import { LoginComponent } from './components/login/login.component';
-import { Md2Module }  from 'md2';
+import { Md2Module } from 'md2';
 import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
 
 
