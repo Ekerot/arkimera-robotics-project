@@ -1,11 +1,16 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+<<<<<<< HEAD
 const userSchema = new mongoose.Schema({
+=======
+let userSchema = new mongoose.Schema({
+>>>>>>> init
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
 }, { timestamps: true });
 
+<<<<<<< HEAD
 const nameMinLength = 5;
 const usernameValidationMsg = `The username must be of minimum length ${nameMinLength} characters.`;
 userSchema.path('username').validate(name => name.length >= nameMinLength, usernameValidationMsg);
@@ -32,10 +37,34 @@ userSchema.pre('save', function (next) {
       });
     }
   });
+=======
+// TODO add better validation on name and password
+// Validate password
+userSchema.path('password').validate((password) => {
+  return password.length >= 6;
+}, 'The password must be of minimum length 6 characters.');
+
+// Hash and salt password
+userSchema.pre('save', function (next) {
+  let _this = this;
+  bcrypt.genSalt(10, (err, salt) => {
+      if (err) { return next(err); }
+
+        // Using https://www.npmjs.com/package/bcrypt-nodejs
+      bcrypt.hash(_this.password, salt, (err, hash) => {
+          if (err) { return next(err); }
+
+            // set the password to the hash
+          _this.password = hash;
+          next();
+        });
+    });
+>>>>>>> init
 });
 
 userSchema.methods.comparePassword = function (candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, (err, res) => {
+<<<<<<< HEAD
     if (err) {
       callback(err);
     } else {
@@ -87,3 +116,16 @@ const User = mongoose.model('User', userSchema);
 
 module.exports = User;
 
+=======
+      if (err) {
+          return callback(err);
+        }
+
+      callback(null, res);
+    });
+};
+
+let User = mongoose.model('User', userSchema);
+
+module.exports = User;
+>>>>>>> init
