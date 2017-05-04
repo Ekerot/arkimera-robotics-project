@@ -90,13 +90,13 @@ export class AccountComponent implements OnInit {
   }
 
   addAccount() {
-    // add address to the list
+
     const control = <FormArray>this.accountForm.controls['accounts'];
     control.push(this.initAccount( null, null, null ));
   }
 
   deleteAccount(value: number) {
-    // remove address from the list
+
     const control = <FormArray>this.accountForm.controls['accounts'];
     control.removeAt(value);
   }
