@@ -25,6 +25,8 @@ export class AccountComponent implements OnInit {
     { value: '6072', viewValue: 'Representation, ej avdragsgill' },
     { value: '6110', viewValue: 'Kontorsmaterial' },
   ];
+  public date: Date;
+  public memo: string;
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -36,12 +38,12 @@ export class AccountComponent implements OnInit {
 
   deleteRow(value: number) {
 
-    let index: number = value;
+    const index: number = value;
 
     if (index !== -1) {
-        this.invoiceItemsData.splice(index, 1);
-    }        
-}
+      this.invoiceItemsData.splice(index, 1);
+    }
+  }
 
   update() {
 
