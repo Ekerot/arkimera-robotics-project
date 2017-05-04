@@ -10,8 +10,8 @@ export class ExtractResponse {
         account: number,
         debit: number,
         credit: number
-      }
+      }[]
     },
-    public time: string
+    public time: Date
   ) { }
 }
