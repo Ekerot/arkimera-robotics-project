@@ -8,14 +8,16 @@ const userSchema = new mongoose.Schema({
 
 const nameMinLength = 5;
 userSchema.path('username').validate(
-  name => name.length >= nameMinLength, `The username must be of minimum length ${nameMinLength} characters.`
+  name => name.length >= nameMinLength, `The username must be of minimum length ${nameMinLength} characters.`,
 );
 
 const pwMinLength = 5;
 userSchema.path('password').validate(
-  password => password.length >= pwMinLength, `The password must be of minimum length ${pwMinLength} characters.`
+  password => password.length >= pwMinLength, `The password must be of minimum length ${pwMinLength} characters.`,
 );
 
+// Have to use regular function def instead of () => {}
+// because otherwise the meaning of 'this' changes.
 userSchema.pre('save', function (next) {
   const that = this;
   bcrypt.genSalt(10, (saltErr, salt) => {
@@ -34,7 +36,7 @@ userSchema.pre('save', function (next) {
   });
 });
 
-userSchema.methods.comparePassword = (candidatePassword, callback) => {
+userSchema.methods.comparePassword = function (candidatePassword, callback) {
   bcrypt.compare(candidatePassword, this.password, (err, res) => {
     if (err) {
       callback(err);
@@ -44,8 +46,6 @@ userSchema.methods.comparePassword = (candidatePassword, callback) => {
   });
 };
 
-// Have to use regular function def instead of () => {}
-// because otherwise the meaning of this changes.
 userSchema.statics.addNew = function (user, callback) {
   if (!user.username) {
     callback(new TypeError('Missing username'));
@@ -58,7 +58,28 @@ userSchema.statics.addNew = function (user, callback) {
       } else if (foundUser) {
         callback(new Error('User already exists'));
       } else {
-        new this(user).save((saveErr, document) => callback(saveErr, document));
+        new this(user).save((saveErr, newUser) => {
+          const returnedUser = { username: newUser.username, password: newUser.password };
+          callback(saveErr, returnedUser);
+        });
+      }
+    });
+  }
+};
+
+userSchema.statics.verifyPassword = function (user, callback) {
+  if (!user.username) {
+    callback(new TypeError('Missing username'));
+  } else if (!user.password) {
+    callback(new TypeError('Missing password'));
+  } else {
+    this.findOne({ username: user.username }, (findErr, foundUser) => {
+      if (findErr) {
+        callback(findErr);
+      } else if (!foundUser) {
+        callback(new Error('No user with that username'));
+      } else {
+        foundUser.comparePassword(user.password, callback);
       }
     });
   }
