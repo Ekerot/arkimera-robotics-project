@@ -7,14 +7,12 @@ const userSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const nameMinLength = 5;
-userSchema.path('username').validate(
-  name => name.length >= nameMinLength, `The username must be of minimum length ${nameMinLength} characters.`,
-);
+const usernameValidationMsg = `The username must be of minimum length ${nameMinLength} characters.`;
+userSchema.path('username').validate(name => name.length >= nameMinLength, usernameValidationMsg);
 
 const pwMinLength = 5;
-userSchema.path('password').validate(
-  password => password.length >= pwMinLength, `The password must be of minimum length ${pwMinLength} characters.`,
-);
+const passwordValidationMsg = `The password must be of minimum length ${pwMinLength} characters.`;
+userSchema.path('password').validate(password => password.length >= pwMinLength, passwordValidationMsg);
 
 // Have to use regular function def instead of () => {}
 // because otherwise the meaning of 'this' changes.
