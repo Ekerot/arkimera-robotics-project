@@ -1,6 +1,6 @@
-
-
 const jwt = require('jsonwebtoken');
+const createError = require('http-errors');
+
 const jwtSecret = require('./secrets.js').jwtSecret;
 
 function checkAuth(req, res, next) {
@@ -9,7 +9,7 @@ function checkAuth(req, res, next) {
   if (token) {
     jwt.verify(token, jwtSecret, (err, decoded) => {
       if (err) {
-        return res.status(401).send({ status: 'fail', message: 'Provided token was not valid' });
+        return next(createError(401, 'Provided token was not valid'));
       }
       req.decoded = decoded;
       next();
@@ -23,7 +23,7 @@ function requireAuth(req, res, next) {
   if (req.decoded) {
     return next();
   }
-  return res.status(401).send({ status: 'fail', message: 'No token provided.' });
+  return next(createError(401, 'No token provided.'));
 }
 
 function createToken(username) {
