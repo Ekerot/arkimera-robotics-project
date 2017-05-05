@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
 import { ExtractResponse } from 'app/_models';
 
+import 'rxjs/add/operator/debounceTime';
+
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -23,16 +25,16 @@ export class AccountComponent implements OnInit {
         {
           account: 1930,
           debit: 0.00,
-          credit: 123.00
+          credit: 128.00
         },
         {
           account: 4323,
-          debit: 1234.00,
+          debit: 100.00,
           credit: 0.00
         },
         {
-          account: 4323,
-          debit: 1234.00,
+          account: 1827,
+          debit: 23.00,
           credit: 0.00
         },
       ]
@@ -42,7 +44,6 @@ export class AccountComponent implements OnInit {
 
   public accountForm: FormGroup;
   public totalAmount: number = 0;
-  public memo: string;
 
   /*public accounts = [
     { value: '', viewValue: '' },
@@ -74,13 +75,32 @@ export class AccountComponent implements OnInit {
     })
 
     for (const account of this.testData[0].data.accounts) {
+
       const control = <FormArray>this.accountForm.controls['accounts'];
-    control.push(this.initAccount( account.account, account.debit, account.credit ));
+      control.push(this.initAccount(account.account, account.debit, account.credit));
     }
+
+    this.accountForm.valueChanges.debounceTime(1000).subscribe(data => {
+
+      this.totalAmount = 0;
+
+      console.log('first total: ' + this.totalAmount);
+
+      for (const value of data.accounts) {
+
+        this.totalAmount += parseInt(value.debit);
+        this.totalAmount -= parseInt(value.credit);
+
+      }
+
+    });
 
   }
 
-  initAccount( account: number,debit: number, credit: number ) {
+  initAccount(account: number, debit: number, credit: number) {
+
+    this.totalAmount += debit;
+    this.totalAmount -= credit;
 
     return this.formBuilder.group({
       account: [account, Validators.required],
@@ -92,7 +112,7 @@ export class AccountComponent implements OnInit {
   addAccount() {
 
     const control = <FormArray>this.accountForm.controls['accounts'];
-    control.push(this.initAccount( null, null, null ));
+    control.push(this.initAccount(null, null, null));
   }
 
   deleteAccount(value: number) {
@@ -107,6 +127,3 @@ export class AccountComponent implements OnInit {
     });
   }
 }
-
-
-
