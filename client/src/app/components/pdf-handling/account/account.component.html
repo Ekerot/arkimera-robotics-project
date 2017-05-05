@@ -1,45 +1,88 @@
 <div>
+
   <h3>Expenses</h3>
   <md-divider></md-divider>
-  <label>Payment Date:</label>
-  <md2-datepicker [(ngModel)]="date"></md2-datepicker>
+
 </div>
 
-<div *ngFor="let row of invoiceItemsData; let i = index" #ival class="table" id="{{i}}">
+<form [formGroup]="accountForm">
+  
+  <div class="form-group">
 
-  <div *ngIf="i<6" class="form-group">
-    <label class="id-input"># {{i +1}}</label>
+    <label>Purchase Date</label>
 
-    <md-select placeholder="Accounts" [(ngModel)]="row.selectedValue" class="form-control" name="selectedValue">
-      <md-option *ngFor="let accounts of accounts" [value]="accounts.value">
-        {{accounts.value + " " + accounts.viewValue}}
-      </md-option>
-    </md-select>
+    <input type="text" formControlName="receiptDate">
+    <br>
+    <label>Verification serie</label>
+    <input type="text" formControlName="verificationSerie">
 
-    <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}" name="description"
-        placeholder="Description"></md-input-container>
-
-    <md-input-container><input mdInput (change)="update()" type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}"
-        name="amount" placeholder="Amount"></md-input-container>
-
-    <a class="btn btn-primary" (click)="deleteRow(ival.id)">
-      <md-icon>delete</md-icon>
-    </a>
+    <small *ngIf="!accountForm.controls.receiptDate" class="text-danger">
+            Purchase date is required.
+        </small>
 
   </div>
-</div>
 
-<a class="btn btn-primary" (click)="addNewRow()">Add line</a>
+  <div formArrayName="accounts">
 
-<div>
-  <md-input-container class="input-field message">
-    <textarea mdInput md-autosize minRows="3" placeholder="Memo" name="memo" [(ngModel)]="memo" class="form-control"></textarea>
-  </md-input-container>
-</div>
+    <div *ngFor="let account of accountForm.controls.accounts.controls; let i=index">
+      
+      <div>
 
-<p> Total: {{totalAmount}} kr </p>
+        <span># {{i + 1}}</span>
+        <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deletAccount(i)"></span>
 
-<div class="buttons-expenses">
-  <button md-button>Extract</button>
-  <button md-button>Account</button>
-</div>
+      </div>
+
+      <div [formGroupName]="i">
+
+        <div>
+          <label>Account</label>
+
+          <small [hidden]="accountForm.controls.accounts.controls[i].controls.account">
+                Account is required
+          </small>
+
+          <input type="number" formControlName="account">
+
+          <input type="debit" formControlName="debit" placeholder="Debit" >
+
+          <input type="credit" formControlName="credit" placeholder="Credit" >
+
+        </div>
+
+      </div>
+
+    </div>
+    
+  </div>
+
+  <div class="margin-20">
+    <a (click)="addAccount()" style="cursor: default">
+            Add another account +
+        </a>
+  </div>
+
+  <div>
+    <label>Description</label>
+    <input type="text" formControlName="description">
+  </div>
+
+  <div>
+
+    <label>Sum: {{totalAmount}} kr</label>
+
+  </div>
+
+  <button type="submit" [disabled]="!accountForm.valid">Submit</button>
+
+  <div class="margin-20">
+
+          <div>accountForm details:-</div>
+
+          <pre>Is accountForm valid?: <br>{{accountForm.valid | json}}</pre>
+
+          <pre>form value: <br>{{accountForm.value | json}}</pre>
+
+        </div>
+
+</form>

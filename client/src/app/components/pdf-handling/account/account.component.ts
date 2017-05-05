@@ -1,5 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+
+
+import { MdSnackBar } from '@angular/material';
+import { ExtractResponse } from 'app/_models';
+
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'app-account',
@@ -8,58 +14,116 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AccountComponent implements OnInit {
 
-  public selectedValue: string;
-  public myForm: FormGroup;
-  public invoiceItemsData: object[] = [{}];
-  public totalAmount: number;
-  public accounts = [
+  public testData: ExtractResponse[] = [{
+    success: true,
+    data: {
+      verificationSerie: 'A',
+      description: 'Hej hej',
+      receiptDate: new Date(2017, 4, 2),
+      accounts:
+      [
+        {
+          account: 1930,
+          debit: 0.00,
+          credit: 128.00
+        },
+        {
+          account: 4323,
+          debit: 100.00,
+          credit: 0.00
+        },
+        {
+          account: 1827,
+          debit: 23.00,
+          credit: 0.00
+        },
+      ]
+    },
+    time: new Date(2017, 4, 27, 12, 32)
+  }];
+
+  public accountForm: FormGroup;
+  public totalAmount: number = 0;
+
+  /*public accounts = [
     { value: '', viewValue: '' },
-    { value: '1910', viewValue: 'Kassa' },
-    { value: '1920', viewValue: 'Plusgiro' },
-    { value: '1930', viewValue: 'Bankkonto' },
-    { value: '2641', viewValue: 'Ingående moms' },
-    { value: '3740', viewValue: 'Öresutjämning' },
-    { value: '5611', viewValue: 'Drivmedel personbilar' },
-    { value: '5890', viewValue: 'Övriga resekostnader' },
-    { value: '6071', viewValue: 'Representation, avdragsgill' },
-    { value: '6072', viewValue: 'Representation, ej avdragsgill' },
-    { value: '6110', viewValue: 'Kontorsmaterial' },
-  ];
-  public date: Date;
-  public memo: string;
+    { value: 1910, viewValue: 'Kassa' },
+    { value: 1920, viewValue: 'Plusgiro' },
+    { value: 1930, viewValue: 'Bankkonto' },
+    { value: 2641, viewValue: 'Ingående moms' },
+    { value: 3740, viewValue: 'Öresutjämning' },
+    { value: 5611, viewValue: 'Drivmedel personbilar' },
+    { value: 5890, viewValue: 'Övriga resekostnader' },
+    { value: 6071, viewValue: 'Representation, avdragsgill' },
+    { value: 6072, viewValue: 'Representation, ej avdragsgill' },
+    { value: 6110, viewValue: 'Kontorsmaterial' },
+  ];*/
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    public snackBar: MdSnackBar) { }
 
-  ngOnInit() { }
+  ngOnInit() {
 
-  addNewRow() {
-    this.invoiceItemsData.push({});
-  }
+    this.accountForm = this.formBuilder.group({
 
-  deleteRow(value: number) {
+      verificationSerie: [this.testData[0].data.verificationSerie, Validators.required],
+      description: [this.testData[0].data.description],
+      receiptDate: [this.testData[0].data.receiptDate, Validators.required],
+      accounts: this.formBuilder.array([
+      ])
+    })
 
-    const index: number = value;
+    for (const account of this.testData[0].data.accounts) {
 
-    if (index !== -1) {
-      this.invoiceItemsData.splice(index, 1);
+      const control = <FormArray>this.accountForm.controls['accounts'];
+      control.push(this.initAccount(account.account, account.debit, account.credit));
     }
-  }
 
-  update() {
+    this.accountForm.valueChanges.debounceTime(1000).subscribe(data => {
 
-    const val: number[] = [3740, 1910, 1920, 1930, 3740];
-    this.totalAmount = 0;
+      this.totalAmount = 0;
 
-    for (const item of this.invoiceItemsData) {
+      console.log('first total: ' + this.totalAmount);
 
-      if (item['amount'] != null) {
-        if (val.indexOf(parseInt(item['selectedValue'], 10)) > -1) {
-          this.totalAmount -= item['amount'];
-        } else {
-          this.totalAmount += item['amount'];
-        }
+      for (const value of data.accounts) {
+
+        this.totalAmount += parseInt(value.debit);
+        this.totalAmount -= parseInt(value.credit);
+
       }
-    }
+
+    });
+
+  }
+
+  initAccount(account: number, debit: number, credit: number) {
+
+    this.totalAmount += debit;
+    this.totalAmount -= credit;
+
+    return this.formBuilder.group({
+      account: [account, Validators.required],
+      debit: [debit],
+      credit: [credit]
+    });
+  }
+
+  addAccount() {
+
+    const control = <FormArray>this.accountForm.controls['accounts'];
+    control.push(this.initAccount(null, null, null));
+  }
+
+  deleteAccount(value: number) {
+
+    const control = <FormArray>this.accountForm.controls['accounts'];
+    control.removeAt(value);
+  }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
   }
 }
-
