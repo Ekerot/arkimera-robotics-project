@@ -1,6 +1,8 @@
 const router = require('express').Router();
-const createToken = require('../jwtAuth').createToken;
 const createError = require('http-errors');
+
+const createToken = require('../jwtAuth').createToken;
+const User = require('../interfaces/User.js');
 
 router.post('/users/auth', (req, res, next) => {
   const user = {
@@ -10,11 +12,21 @@ router.post('/users/auth', (req, res, next) => {
 
   if (!user.username || !user.password) {
     next(createError(401, 'Missing username and/or password'));
-  } else if (user.username === 'admin' && user.password === 'admin') {
-    const jwt = createToken(user.username);
-    res.customSend(true, 200, { token: jwt });
   } else {
-    next(createError(401, 'Unauthorized'));
+    User.verifyPassword(user, (err, result) => {
+      if (err) {
+        if (err.message === 'No user with that username') {
+          next(createError(401, 'Unauthorized'));
+        } else {
+          next(createError(500, 'Internal server error'));
+        }
+      } else if (result === true) {
+        const jwt = createToken(user.username);
+        res.customSend(true, 200, { token: jwt });
+      } else {
+        next(createError(401, 'Unauthorized'));
+      }
+    });
   }
 });
 
