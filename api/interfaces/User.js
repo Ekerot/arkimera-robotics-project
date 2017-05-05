@@ -1,4 +1,4 @@
-const User = require('../models/User.js');
+const User = require('../models/MongoUser.js');
 
 module.exports = {
   addNew: (user, callback) => {
