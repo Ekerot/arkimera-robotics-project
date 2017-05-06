@@ -5,7 +5,7 @@
 
 </div>
 
-<form [formGroup]="accountForm">
+<form [formGroup]="receiptForm">
   
   <div class="form-group">
 
@@ -16,7 +16,7 @@
     <label>Verification serie</label>
     <input type="text" formControlName="verificationSerie">
 
-    <small *ngIf="!accountForm.controls.receiptDate" class="text-danger">
+    <small *ngIf="!receiptForm.controls.receiptDate" class="text-danger">
             Purchase date is required.
         </small>
 
@@ -24,12 +24,12 @@
 
   <div formArrayName="accounts">
 
-    <div *ngFor="let account of accountForm.controls.accounts.controls; let i=index">
+    <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
       
       <div>
 
         <span># {{i + 1}}</span>
-        <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deletAccount(i)"></span>
+        <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)">DELETE</span>
 
       </div>
 
@@ -38,7 +38,7 @@
         <div>
           <label>Account</label>
 
-          <small [hidden]="accountForm.controls.accounts.controls[i].controls.account">
+          <small [hidden]="receiptForm.controls.accounts.controls[i].controls.account">
                 Account is required
           </small>
 
@@ -73,15 +73,15 @@
 
   </div>
 
-  <button type="submit" [disabled]="!accountForm.valid">Submit</button>
+  <button type="submit" [disabled]="!receiptForm.valid">Submit</button>
 
   <div class="margin-20">
 
-          <div>accountForm details:-</div>
+          <div>receiptForm details:-</div>
 
-          <pre>Is accountForm valid?: <br>{{accountForm.valid | json}}</pre>
+          <pre>Is receiptForm valid?: <br>{{receiptForm.valid | json}}</pre>
 
-          <pre>form value: <br>{{accountForm.value | json}}</pre>
+          <pre>form value: <br>{{receiptForm.value | json}}</pre>
 
         </div>
 
