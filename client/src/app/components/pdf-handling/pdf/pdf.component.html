@@ -1,15 +1,11 @@
 <div class="container">
-  
-  <div class="choose-pdf-container">
-    <input *ngIf="pdfOptions.data==false" class="input-pdf" type="file" name="files" title="Load File" accept=".pdf" (change)="onFileChanged($event)"
-    />
+  <div>
+    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
   <div class="inline-block">
-    <pdf-viewer *ngIf="pdfOptions.data" zoom={{value}} [src]="pdfOptions" [page]="page" [show-all]="false" [original-size]="true"
-      style="display: block;"></pdf-viewer>
+    <pdf-viewer *ngIf="pdfOptions.data" zoom={{value}} [src]="pdfOptions" [page]="page" [show-all]="false" [original-size]="false"></pdf-viewer>
   </div>
-
 </div>
 
 <div>
@@ -17,5 +13,11 @@
 </div>
 
 <div>
-  <button md-button (click)="onExtractData()">Extract</button>
+  <div>
+    <button md-button (click)="onUpload()" [disabled]="!pdfOptions.data">Upload</button>
+  </div>
+
+  <div>
+    <button md-button (click)="onCancel()" [disabled]="pdfOptions.data">Cancel</button>
+  </div>
 </div>
