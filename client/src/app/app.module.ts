@@ -34,6 +34,7 @@ import { LoginComponent } from './components/login/login.component';
 import { Md2Module } from 'md2';
 import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
 
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.com
     FormsModule,
     ReactiveFormsModule,
     Md2Module.forRoot(),
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    FlexLayoutModule
   ],
   providers: [
     AuthGuard,
