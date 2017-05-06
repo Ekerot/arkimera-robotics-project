@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
-
 import { RequestOptions, Headers, Http, RequestMethod, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
-
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-
-import { User } from 'app/_models/User';
-
-import { ApiResponse } from 'app/_models/ApiResponse';
+import { ApiResponse, User } from 'app/_models';
 
 @Injectable()
 export class HttpService {
@@ -43,10 +38,9 @@ export class HttpService {
       .catch(this.handleError);
   }
 
-  private extractData(res: Response) {
+  private extractData(res: Response): ApiResponse {
     const body = res.json();
-
-    return body || {};
+    return body as ApiResponse;
   }
 
   private handleError(error: Response | any) {
