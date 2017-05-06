@@ -1,10 +1,9 @@
-.buttons-expenses{
-  position:absolute;
-   right:0;
-   bottom:10px;
+.buttons-expenses {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
 }
 
-.id-input{
+.id-input {
   width: 18px;
 }
-
