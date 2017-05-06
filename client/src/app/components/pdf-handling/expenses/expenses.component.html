@@ -1,19 +1,8 @@
-<md-grid-list cols="2" rowHeight="2:1" gutterSize="12px">
-
-  <md-grid-tile [colspan]="1" [rowspan]="2" id="accounts">
-
-    <div class=" account-container ">
-      <app-account></app-account>
-    </div>
-
-  </md-grid-tile>
-
-  <md-grid-tile [colspan]="0.90" [rowspan]="2" id="pdf">
-
-    <div class="pdf-container ">
-      <app-pdf></app-pdf>
-    </div>
-
-  </md-grid-tile>
-
-</md-grid-list>
+<div class="md-padding" fxFlex>
+  <div class="flex-item" fxFlex>
+    <app-account></app-account>
+  </div>
+  <div class="flex-item" fxFlex>
+    <app-pdf></app-pdf>
+  </div>
+</div>
