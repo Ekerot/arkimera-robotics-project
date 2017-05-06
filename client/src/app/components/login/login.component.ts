@@ -43,10 +43,10 @@ export class LoginComponent implements OnInit {
     // Disable formControls during pending login
     this.loginForm.disable();
 
-    const user: User = new User(
-      this.loginForm.get('username').value,
-      this.loginForm.get('password').value
-    );
+    const user: User = {
+      username: this.loginForm.get('username').value,
+      password: this.loginForm.get('password').value
+    }
 
     this.auth.login(user)
       .subscribe(res => {
@@ -55,6 +55,7 @@ export class LoginComponent implements OnInit {
       }, error => {
         this.loading = false;
         this.loginForm.enable();
+        this.loginForm.patchValue({ username: '' });
         this.loginForm.patchValue({ password: '' });
 
         // TODO: Different messages depending on error type
