@@ -12,7 +12,7 @@ export class PdfComponent implements OnInit {
   public value = '0.8'; // Starting zoom value
   public page = 1; // Starting page
   public pdfOptions = {
-    data: ''
+    data: null
   };
   public file: File;
 
@@ -34,7 +34,11 @@ export class PdfComponent implements OnInit {
     fileReader.readAsBinaryString(this.file);
   }
 
-  onExtractData(): void {
+  onUpload(): void {
     this.httpService.uploadFile(this.file).subscribe(data => console.log('response', data));
+  }
+
+  onCancel(): void {
+    this.pdfOptions.data = null;
   }
 }
