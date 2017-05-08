@@ -17,8 +17,8 @@ const FileSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  statusID: {
-    type: Number,
+  status: {
+    type: String,
     required: true,
   },
   FileID: {
