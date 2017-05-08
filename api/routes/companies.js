@@ -12,7 +12,7 @@ const File = require('../interfaces/File');
 
 moment.locale('sv');
 
-// CONFIG disk storage for mutler file upload
+// CONFIG disk storage for multer file upload
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
 
@@ -55,16 +55,23 @@ router.get('/', (req, res, next) => {
  *
  * Get list of files from DB
  */
-router.get('/:compnayID/files', (req, res, next) => {
+router.get('/:companyID/files', (req, res, next) => {
   const companyID = req.params.companyID;
-  let data = {};
+  const data = {
+    companyID,
+  };
 
-  if (req.query.statusID) {
-    const statusID = req.query.statusID;
-    console.log(statusID);
+  if (req.query.status) {
+    data.status = req.query.status;
   }
 
-  return res.status(200).send({ status: 'success', files: [] });
+  File.get(data)
+    .then(files => res.customSend(true, 200, files))
+    .catch(err =>
+      res
+        .status(500)
+        .send(next(createError(500, err))),
+    );
 });
 
 /**
@@ -83,35 +90,28 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   };
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  request.post({ url, formData, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
 
-  // request.post({ url, formData: formData, headers }, (err, response, body) => {
-  //   if (err) {
-  //     return standardErrorHandling(res, err, next);
-  //   }
+    const data = {
+      fileID,
+      file,
+      status: 'uploaded',
+      username: req.decoded.username,
+      companyID,
+    };
 
-  const data = {
-    fileID,
-    file,
-    status: 'uploaded',
-    username: 'admin',
-    companyID,
-  };
+    File.save(data);
 
-  File.save(data);
-
-  //   const parsedBody = JSON.parse(body);
-
-  //   return res.customSend(
-
-  //     parsedBody.success,
-
-  //     response.statusCode,
-
-  //     parsedBody.data,
-
-  //   );
-
-  // });
+    const parsedBody = JSON.parse(body);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
+  });
 });
 
 /**
