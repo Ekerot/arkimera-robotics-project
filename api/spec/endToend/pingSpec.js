@@ -1,7 +1,9 @@
-const request = require('request');
 const app = require('../../index.js');
+const e2eHelpers = require('../helpers/e2eHelpers');
 
-const url = 'http://localhost:8081/ping';
+
+const setupRequestAndExpectsRunner = e2eHelpers.setupRequestAndExpectsRunner;
+const responseFormatAsserts = e2eHelpers.responseFormatAsserts;
 
 describe('testing /ping route', () => {
   let server;
@@ -14,21 +16,26 @@ describe('testing /ping route', () => {
     server.close();
   });
 
+  const options = {
+    url: 'http://localhost:8081/ping',
+    method: 'GET',
+    json: true,
+  };
 
-  describe('GET', () => {
-    it('should return status code 200', (done) => {
-      request.get(url, (err, res) => {
-        expect(err).toBe(null);
-        expect(res.statusCode).toBe(200);
-        done();
-      });
-    });
+  const requestAndExpectsRunner = setupRequestAndExpectsRunner(options);
 
-    it('should return "pong" in body.answer', (done) => {
-      request.get(url, (err, res, body) => {
-        const answer = JSON.parse(body).answer;
-        expect(answer).toBe('pong');
-        done();
+  describe('GET /pong', () => {
+    it('should return status code 200 and message pong', (done) => {
+      const expectedResult = {
+        success: true,
+        message: '',
+        code: 200,
+      };
+
+      requestAndExpectsRunner(null, done, (res, body) => {
+        responseFormatAsserts(expectedResult, () => {
+          expect(body.data.answer).toBe('pong');
+        });
       });
     });
   });
