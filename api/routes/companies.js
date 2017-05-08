@@ -63,6 +63,7 @@ router.get('/:companyID/files', (req, res, next) => {
 
   if (req.query.status) {
     data.status = req.query.status;
+    console.log(data.status);
   }
 
   File.get(data)
@@ -148,6 +149,8 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
     if (err) {
       return standardErrorHandling(res, err, next);
     }
+
+    File.updateStatus(fileID, 'extracted');
 
     const parsedBody = JSON.parse(body);
     return res.customSend(

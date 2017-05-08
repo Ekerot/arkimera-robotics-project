@@ -2,7 +2,7 @@ const File = require('../models/File');
 
 module.exports = {
   save: (data) => {
-    File.findOne({ FileID: data.fileID }).then((err, file) => {
+    File.findOne({ FileID: data.fileID }).exec((err, file) => {
       if (err) {
         throw err;
       }
@@ -26,7 +26,7 @@ module.exports = {
   },
 
   updateStatus: (fileID, status) => {
-    File.findOne({ FileID: fileID }).then((err, file) => {
+    File.findOne({ FileID: fileID }).exec((err, file) => {
       if (err) {
         throw err;
       }
@@ -35,10 +35,9 @@ module.exports = {
         throw new Error('File not found!');
       }
 
-      const updatedFile = file;
-      updatedFile.status = status;
+      file.status = status;
 
-      updatedFile.save((error) => {
+      file.save((error) => {
         if (error) {
           throw new Error(error);
         }
