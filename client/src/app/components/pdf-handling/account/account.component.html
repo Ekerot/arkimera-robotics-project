@@ -1,0 +1,88 @@
+<div>
+
+  <h3>Expenses</h3>
+  <md-divider></md-divider>
+
+</div>
+
+<form [formGroup]="accountForm">
+  
+  <div class="form-group">
+
+    <label>Purchase Date</label>
+
+    <input type="text" formControlName="receiptDate">
+    <br>
+    <label>Verification serie</label>
+    <input type="text" formControlName="verificationSerie">
+
+    <small *ngIf="!accountForm.controls.receiptDate" class="text-danger">
+            Purchase date is required.
+        </small>
+
+  </div>
+
+  <div formArrayName="accounts">
+
+    <div *ngFor="let account of accountForm.controls.accounts.controls; let i=index">
+      
+      <div>
+
+        <span># {{i + 1}}</span>
+        <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deletAccount(i)"></span>
+
+      </div>
+
+      <div [formGroupName]="i">
+
+        <div>
+          <label>Account</label>
+
+          <small [hidden]="accountForm.controls.accounts.controls[i].controls.account">
+                Account is required
+          </small>
+
+          <input type="number" formControlName="account">
+
+          <input type="debit" formControlName="debit" placeholder="Debit" >
+
+          <input type="credit" formControlName="credit" placeholder="Credit" >
+
+        </div>
+
+      </div>
+
+    </div>
+    
+  </div>
+
+  <div class="margin-20">
+    <a (click)="addAccount()" style="cursor: default">
+            Add another account +
+        </a>
+  </div>
+
+  <div>
+    <label>Description</label>
+    <input type="text" formControlName="description">
+  </div>
+
+  <div>
+
+    <label>Sum: {{totalAmount}} kr</label>
+
+  </div>
+
+  <button type="submit" [disabled]="!accountForm.valid">Submit</button>
+
+  <div class="margin-20">
+
+          <div>accountForm details:-</div>
+
+          <pre>Is accountForm valid?: <br>{{accountForm.valid | json}}</pre>
+
+          <pre>form value: <br>{{accountForm.value | json}}</pre>
+
+        </div>
+
+</form>

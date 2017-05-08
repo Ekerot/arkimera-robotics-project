@@ -19,11 +19,11 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { ExpensesComponent } from './components/expenses/expenses.component';
-import { PdfComponent } from './components/pdf/pdf.component';
+import { ExpensesComponent } from './components/pdf-handling/expenses/expenses.component';
+import { PdfComponent } from './components/pdf-handling/pdf/pdf.component';
 
 import { PdfViewerComponent } from 'ng2-pdf-viewer';
-import { AccountComponent } from './components/account/account.component';
+import { AccountComponent } from './components/pdf-handling/account/account.component';
 import { ProfitAndLossComponent } from './components/dashboard/profit-and-loss/profit-and-loss.component';
 import { StatisticsComponent } from './components/dashboard/statistics/statistics.component';
 import { ExpensesDashboardComponent } from './components/dashboard/expenses-dashboard/expenses-dashboard.component';
@@ -31,7 +31,8 @@ import { IncomeDashboardComponent } from './components/dashboard/income-dashboar
 import { CreateGraph } from './components/dashboard/create-graph';
 
 import { LoginComponent } from './components/login/login.component';
-import { Md2Module }  from 'md2';
+import { Md2Module } from 'md2';
+import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { Md2Module }  from 'md2';
     StatisticsComponent,
     ExpensesDashboardComponent,
     IncomeDashboardComponent,
-    LoginComponent
+    LoginComponent,
+    PdfHandlingComponent
   ],
   imports: [
     AppRoutingModule,

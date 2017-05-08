@@ -34,9 +34,9 @@ ng serve
 ```
 Then open up your browser and browse to [http://localhost:4200](http://localhost:4200)
 
-### Lint
+### Lint (with type checking)
 ```
-ng lint
+ng lint --type-check
 ```
 [Lint](https://github.com/angular/angular-cli/wiki/lint) results is displayed in the console.
 
