@@ -42,6 +42,19 @@ npm start
 ```
 for starting the server in production mode.
 
+### Robomongo
+If you are using [Robomongo](https://robomongo.org) you will need to change a setting in mongod.conf inside the vagrant machine in order to connect to the database.
+
+Inside the vagrant machine:
+```
+$ sudo nano /etc/mongod.conf
+```
+Then find the line that binds the ip and comment it out. This will allow connections from outside of the vagrant machine.
+```
+# Listen to local interface only. Comment out to listen on all interfaces.
+# bind_ip = 127.0.0.1
+```
+Now you can connect using Robomongo and view the database.
 
 ## Prerequisites
 [NodeJS](https://nodejs.org/en/)
