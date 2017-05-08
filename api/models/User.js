@@ -57,7 +57,7 @@ userSchema.statics.addNew = function (user, callback) {
         callback(new Error('User already exists'));
       } else {
         new this(user).save((saveErr, newUser) => {
-          const returnedUser = { username: newUser.username, password: newUser.password };
+          const returnedUser = { username: newUser.username };
           callback(saveErr, returnedUser);
         });
       }
