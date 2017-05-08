@@ -7,18 +7,12 @@ const createError = require('http-errors');
 
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
-const a1axios = require('../azoraOneAxios');
-
 
 moment.locale('sv');
 
 // CONFIG disk storage for mutler file upload
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
-
-function forwardToClient(res, response) {
-  res.customSend(response.data.success, response.status, response.data.data);
-}
 
 function standardErrorHandling(res, error, next) {
   if (error.response) {
@@ -35,17 +29,15 @@ function standardErrorHandling(res, error, next) {
 }
 
 router.get('/', (req, res, next) => {
-  // TODOS
-  // Add logging the requests,
-  // maybe change timestamp instead of just using what was received from AzoraOne???
-  a1axios
-    .get('student/api/companies')
-    .then((response) => {
-      forwardToClient(res, response);
-    })
-    .catch((error) => {
-      standardErrorHandling(res, error, next);
-    });
+  const url = 'https://azoraone.azure-api.net/student/api/companies/';
+  request.get({ url, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
+
+    const parsedBody = JSON.parse(body);
+    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+  });
 });
 
 /**
@@ -134,18 +126,17 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
-  const body = req.body;
+  const data = req.body;
   const url = `student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  // TODO add validation?
-  a1axios
-    .put(url, body)
-    .then((response) => {
-      forwardToClient(res, response);
-    })
-    .catch((error) => {
-      standardErrorHandling(res, error, next);
-    });
+  request.post({ url, formData: data, headers }, (err, response, body) => {
+    if (err) {
+      return standardErrorHandling(res, err, next);
+    }
+
+    const parsedBody = JSON.parse(body);
+    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+  });
 });
 
 module.exports = router;
