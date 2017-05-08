@@ -22,7 +22,7 @@ export class HttpService {
     const options = new RequestOptions({ headers: headers });
 
     const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
+    formData.append('File', file, file.name);
 
     return this.http.post(this.apiUrl + 'companies/1/files', formData, options)
       .map(this.extractData)
