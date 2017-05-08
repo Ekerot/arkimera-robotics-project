@@ -54,7 +54,7 @@ Then find the line that binds the ip and comment it out. This will allow connect
 # Listen to local interface only. Comment out to listen on all interfaces.
 # bind_ip = 127.0.0.1
 ```
-Now you can connect using Robomongo and view the database.
+Now you can connect using Robomongo and view the database in a GUI.
 
 ## Prerequisites
 [NodeJS](https://nodejs.org/en/)
