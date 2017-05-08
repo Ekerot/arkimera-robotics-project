@@ -77,26 +77,40 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const file = req.file;
   const fileIDWithEncType = req.file.filename.split('-')[1];
   const fileID = fileIDWithEncType.split('.')[0];
-  const data = {
+  const formData = {
     FileID: fileID,
     File: fs.createReadStream(file.path),
   };
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
 
-  File.save({ fileID, file });
-
-  // request.post({ url, formData: data, headers }, (err, response, body) => {
+  // request.post({ url, formData: formData, headers }, (err, response, body) => {
   //   if (err) {
   //     return standardErrorHandling(res, err, next);
   //   }
 
+  const data = {
+    fileID,
+    file,
+    status: 'uploaded',
+    username: 'admin',
+    companyID,
+  };
+
+  File.save(data);
+
   //   const parsedBody = JSON.parse(body);
+
   //   return res.customSend(
+
   //     parsedBody.success,
+
   //     response.statusCode,
+
   //     parsedBody.data,
+
   //   );
+
   // });
 });
 
