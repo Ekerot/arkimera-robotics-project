@@ -9,7 +9,7 @@ import { HttpService } from 'app/_services/http.service';
 })
 export class PdfComponent implements OnInit {
 
-  public value = '0.8'; // Starting zoom value
+  public zoom = '0.7'; // Starting zoom value
   public page = 1; // Starting page
   public pdfOptions = {
     data: null
