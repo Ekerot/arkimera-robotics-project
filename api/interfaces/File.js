@@ -24,6 +24,7 @@ module.exports = {
       newFile.save().then(doc => doc);
     });
   },
+
   updateStatus: (fileID, status) => {
     File.findOne({ FileID: fileID }).then((err, file) => {
       if (err) {
@@ -44,4 +45,13 @@ module.exports = {
       });
     });
   },
+
+  get: data => new Promise((resolve, reject) => {
+    File.find(data).exec((err, files) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(files);
+    });
+  }),
 };
