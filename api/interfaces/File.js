@@ -35,9 +35,10 @@ module.exports = {
         throw new Error('File not found!');
       }
 
-      file.status = status;
+      const updatedFile = file;
+      updatedFile.status = status;
 
-      file.save((error) => {
+      updatedFile.save((error) => {
         if (error) {
           throw new Error(error);
         }
