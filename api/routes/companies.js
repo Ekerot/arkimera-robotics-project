@@ -97,14 +97,14 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       companyID,
     };
 
-    Files.save(data);
-
     const parsedBody = JSON.parse(body);
-    return res.customSend(
-      parsedBody.success,
-      response.statusCode,
-      parsedBody.data,
-    );
+    Files.save(data)
+      .then(() => res.customSend(
+          parsedBody.success,
+          response.statusCode,
+          parsedBody.data,
+        ))
+      .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
 
@@ -155,18 +155,18 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-
     const parsedBody = JSON.parse(body);
     if (response.statusCode === 412) {
-      return res.status(412).send(next(createError(412, parsedBody.data[0].message)));
+      return res
+        .status(412)
+        .send(next(createError(412, parsedBody.data[0].message)));
     }
 
-    Files.updateStatus(fileID, 'extracted');
-    return res.customSend(
-      parsedBody.success,
-      response.statusCode,
-      parsedBody.data,
-    );
+    Files.updateStatus(fileID, 'extracted')
+      .then(() =>
+        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+      )
+      .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
 
@@ -181,14 +181,13 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-    Files.updateStatus(fileID, 'booked');
-
     const parsedBody = JSON.parse(body);
-    return res.customSend(
-      parsedBody.success,
-      response.statusCode,
-      parsedBody.data,
-    );
+
+    Files.updateStatus(fileID, 'booked')
+      .then(() =>
+        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+      )
+      .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
 
