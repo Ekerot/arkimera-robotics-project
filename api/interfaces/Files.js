@@ -1,14 +1,14 @@
 const Files = require('../models/File');
 
 module.exports = {
-  save: (data) => {
+  save: data => new Promise((resolve, reject) => {
     Files.findOne({ FileID: data.fileID }).exec((err, file) => {
       if (err) {
-        throw err;
+        reject(err);
       }
 
       if (file) {
-        throw new Error('File already saved in db');
+        reject('File already saved in db');
       }
 
       const newFile = new Files({
@@ -21,18 +21,20 @@ module.exports = {
         companyID: data.companyID,
       });
 
-      newFile.save().then(doc => doc);
+      newFile.save()
+        .then(doc => resolve(doc))
+        .catch(error => reject(error));
     });
-  },
+  }),
 
-  updateStatus: (fileID, status) => {
+  updateStatus: (fileID, status) => new Promise((resolve, reject) => {
     Files.findOne({ FileID: fileID }).exec((err, file) => {
       if (err) {
-        throw err;
+        reject(err);
       }
 
       if (!file) {
-        throw new Error('File not found!');
+        reject('File not found!');
       }
 
       const updatedFile = file;
@@ -40,18 +42,21 @@ module.exports = {
 
       updatedFile.save((error) => {
         if (error) {
-          throw new Error(error);
+          reject(error);
+        } else {
+          resolve();
         }
       });
     });
-  },
-
-  get: data => new Promise((resolve, reject) => {
-    Files.find(data).exec((err, result) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(result);
-    });
   }),
+
+  get: data =>
+    new Promise((resolve, reject) => {
+      Files.find(data).exec((err, result) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    }),
 };
