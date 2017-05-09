@@ -1,8 +1,8 @@
-const File = require('../models/File');
+const Files = require('../models/File');
 
 module.exports = {
   save: (data) => {
-    File.findOne({ FileID: data.fileID }).exec((err, file) => {
+    Files.findOne({ FileID: data.fileID }).exec((err, file) => {
       if (err) {
         throw err;
       }
@@ -11,7 +11,7 @@ module.exports = {
         throw new Error('File already saved in db');
       }
 
-      const newFile = new File({
+      const newFile = new Files({
         username: data.username,
         path: data.file.path,
         originalname: data.file.originalname,
@@ -26,7 +26,7 @@ module.exports = {
   },
 
   updateStatus: (fileID, status) => {
-    File.findOne({ FileID: fileID }).exec((err, file) => {
+    Files.findOne({ FileID: fileID }).exec((err, file) => {
       if (err) {
         throw err;
       }
@@ -47,11 +47,11 @@ module.exports = {
   },
 
   get: data => new Promise((resolve, reject) => {
-    File.find(data).exec((err, files) => {
+    Files.find(data).exec((err, result) => {
       if (err) {
         reject(err);
       }
-      resolve(files);
+      resolve(result);
     });
   }),
 };
