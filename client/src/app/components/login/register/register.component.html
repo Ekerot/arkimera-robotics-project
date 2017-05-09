@@ -1,0 +1,28 @@
+<div class="flex-container">
+  <div>
+
+    <h2>Register</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmitLogin(registerForm)" class="form-width">
+
+      <md-input-container class="full-width">
+        <input formControlName="username" mdInput placeholder="Username">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="password" mdInput placeholder="Password" type="password">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="passwordRepeat" mdInput placeholder="Password repeat" type="password">
+      </md-input-container>
+
+      <button md-button type="submit" [disabled]="loading || registerForm.invalid">Login</button>
+
+      <a md-button [routerLink]="['/login']">Cancel</a>
+
+    </form>
+  </div>
+</div>
+
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
