@@ -165,6 +165,8 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
+    File.updateStatus(fileID, 'booked');
+
     const parsedBody = JSON.parse(body);
     return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
   });
