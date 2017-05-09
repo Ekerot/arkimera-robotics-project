@@ -7,7 +7,7 @@ const createError = require('http-errors');
 
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
-const File = require('../interfaces/File');
+const Files = require('../interfaces/Files');
 
 moment.locale('sv');
 
@@ -63,7 +63,7 @@ router.get('/:companyID/files', (req, res, next) => {
     console.log(data.status);
   }
 
-  File.get(data)
+  Files.get(data)
     .then(files => res.customSend(true, 200, files))
     .catch(err => res.status(500).send(next(createError(500, err))));
 });
@@ -97,7 +97,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       companyID,
     };
 
-    File.save(data);
+    Files.save(data);
 
     const parsedBody = JSON.parse(body);
     return res.customSend(
@@ -119,7 +119,7 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
     FileID,
   };
 
-  File.get(data)
+  Files.get(data)
     .then(file => res.customSend(true, 200, file))
     .catch(error => res.status(500).send(next(createError(500, error))));
 });
@@ -135,7 +135,7 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
     fileID,
   };
 
-  File.get(data)
+  Files.get(data)
     .then(file => res.customSend(true, 200, file))
     .catch(err => res.status(500).send(next(createError(500, err))));
 });
@@ -155,7 +155,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-    File.updateStatus(fileID, 'extracted');
+    Files.updateStatus(fileID, 'extracted');
 
     const parsedBody = JSON.parse(body);
     return res.customSend(
@@ -177,7 +177,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-    File.updateStatus(fileID, 'booked');
+    Files.updateStatus(fileID, 'booked');
 
     const parsedBody = JSON.parse(body);
     return res.customSend(
