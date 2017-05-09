@@ -31,7 +31,7 @@ describe('testing /users/auth route', () => {
     const expectedResult = {
       success: false,
       message: 'Missing username and/or password',
-      code: 401,
+      code: 400,
     };
     const missingInfoExpects = responseFormatAsserts(expectedResult);
 

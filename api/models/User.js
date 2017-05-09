@@ -5,7 +5,7 @@ const nameMinLength = 3;
 const nameMaxLength = 20;
 
 const pwMinLength = 5;
-const pwMaxLength = 5;
+const pwMaxLength = 20;
 
 const clientKeyLength = 22;
 const subKeyLength = 32;
@@ -18,35 +18,35 @@ const urlMinLength = 2;
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: [true, 'Username cannot be blank'],
-    unique: [true, 'Username already taken'],
+    required: [true, 'username cannot be blank'],
+    unique: true,
     trim: true,
-    minLength: [nameMinLength, `Username min length is ${nameMinLength}`],
-    maxLength: [nameMaxLength, `Username max length is ${nameMaxLength}`],
+    minlength: [nameMinLength, `username min length is ${nameMinLength}`],
+    maxlength: [nameMaxLength, `username max length is ${nameMaxLength}`],
   },
   password: {
     type: String,
-    required: [true, 'Password cannot be blank'],
-    minLength: [pwMinLength, `Password min length is ${pwMinLength}`],
-    maxLength: [pwMaxLength, `Password max length is ${pwMaxLength}`],
+    required: [true, 'password cannot be blank'],
+    minlength: [pwMinLength, `password min length is ${pwMinLength}`],
+    maxlength: [pwMaxLength, `password max length is ${pwMaxLength}`],
   },
   subscriptionKey: {
     type: String,
-    required: [true, 'Subscription key cannot be blank'],
-    minLength: [subKeyLength, `Subscription key min length is ${subKeyLength}`],
-    maxLength: [subKeyLength, `Subscription key max length is ${subKeyLength}`],
+    required: [true, 'subscriptionKey cannot be blank'],
+    minlength: [subKeyLength, `subscriptionKey key min length is ${subKeyLength}`],
+    maxlength: [subKeyLength, `subscriptionKey key max length is ${subKeyLength}`],
   },
   clientKey: {
     type: String,
-    required: [true, 'Client key cannot be blank'],
-    minLength: [clientKeyLength, `Client key min length is ${clientKeyLength}`],
-    maxLength: [clientKeyLength, `Client key max length is ${clientKeyLength}`],
+    required: [true, 'clientKey cannot be blank'],
+    minlength: [clientKeyLength, `clientKey min length is ${clientKeyLength}`],
+    maxlength: [clientKeyLength, `clientKey max length is ${clientKeyLength}`],
   },
   appUrl: {
     type: String,
-    required: [true, 'Application url cannot be blank'],
+    required: [true, 'appUrl cannot be blank'],
     trim: true,
-    minLength: [urlMinLength, `Application url min length is ${urlMinLength}`],
+    minlength: [urlMinLength, `Application url min length is ${urlMinLength}`],
   },
 }, { timestamps: true });
 
@@ -78,79 +78,6 @@ userSchema.methods.comparePassword = function (candidatePassword, callback) {
       callback(null, res);
     }
   });
-};
-
-/*
-userSchema.statics.addNew = function (user, callback) {
-  if (!user.username) {
-    callback(new TypeError('Missing username'));
-  } else if (!user.password) {
-    callback(new TypeError('Missing password'));
-  } else {
-    this.findOne({ username: user.username }, (findErr, foundUser) => {
-      if (findErr) {
-        callback(findErr);
-      } else if (foundUser) {
-        callback(new Error('User already exists'));
-      } else {
-        new this(user).save((saveErr, newUser) => {
-          const returnedUser = { username: newUser.username };
-          callback(saveErr, returnedUser);
-        });
-      }
-    });
-  }
-};
-*/
-
-function formatMongoDocUser(user) {
-  return {
-    username: user.username,
-    clientKey: user.clientKey,
-    subscriptionKey: user.subscriptionKey,
-    appUrl: user.appUrl,
-  };
-}
-
-userSchema.statics.addNew = function (user, callback) {
-  new this(user).save((err, newUser) => {
-    if (err) {
-      callback(err);
-    } else {
-      callback(null, formatMongoDocUser(newUser));
-    }
-  });
-};
-
-userSchema.statics.verifyPassword = function (user, callback) {
-  if (!user.username) {
-    callback(new TypeError('Missing username'));
-  } else if (!user.password) {
-    callback(new TypeError('Missing password'));
-  } else {
-    this.findOne({ username: user.username }, (findErr, foundUser) => {
-      if (findErr) {
-        callback(findErr);
-      } else if (!foundUser) {
-        callback(new Error('No user with that username'));
-      } else {
-        foundUser.comparePassword(user.password, (err, result) => {
-          if (err) {
-            callback(err);
-          } else if (result === true) {
-            callback(null, {
-              username: foundUser.username,
-              clientKey: foundUser.clientKey,
-              subscriptionKey: foundUser.subscriptionKey,
-              appUrl: foundUser.appUrl,
-            });
-          } else {
-            callback(new Error('Wrong password'));
-          }
-        });
-      }
-    });
-  }
 };
 
 const User = mongoose.model('User', userSchema);
