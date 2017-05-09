@@ -15,7 +15,7 @@ import { ApiResponse } from 'app/_models/ApiResponse';
 @Injectable()
 export class HttpService {
 
-  private apiUrl = 'http://localhost:8080/';
+  private apiUrl = 'http://localhost:8080';
 
   constructor(private http: Http) { }
 
@@ -29,7 +29,7 @@ export class HttpService {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post(this.apiUrl + 'companies/1/files', formData, options)
+    return this.http.post(this.apiUrl + '/companies/1/files', formData, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -38,7 +38,16 @@ export class HttpService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this.apiUrl + 'users/auth', user, options)
+    return this.http.post(this.apiUrl + '/users/auth', user, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  public registerNewUser(user: User): Observable<ApiResponse> {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this.apiUrl + '/users', user, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
