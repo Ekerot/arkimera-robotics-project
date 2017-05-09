@@ -21,7 +21,7 @@ router.post('/users/auth', (req, res, next) => {
           next(createError(500, 'Internal server error'));
         }
       } else if (result === true) {
-        const jwt = createToken(user.username);
+        const jwt = createToken(user);
         res.customSend(true, 200, { token: jwt });
       } else {
         next(createError(401, 'Unauthorized'));

@@ -1,12 +1,16 @@
 const router = require('express').Router();
 const createError = require('http-errors');
 
+const createToken = require('../jwtAuth').createToken;
 const User = require('../interfaces/User.js');
 
 router.post('/users', (req, res, next) => {
   const user = {
     username: req.body.username,
     password: req.body.password,
+    subscriptionKey: req.body.subscriptionKey,
+    clientKey: req.body.clientKey,
+    appUrl: req.body.appUrl,
   };
 
   User.addNew(user, (err, newUser) => {
@@ -20,7 +24,8 @@ router.post('/users', (req, res, next) => {
         next(createError(500, 'Internal server error'));
       }
     } else if (newUser) {
-      res.customSend(true, 202, newUser);
+      const jwt = createToken(newUser);
+      res.customSend(true, 202, { token: jwt });
     } else {
       next(createError(500, 'Internal server error'));
     }
