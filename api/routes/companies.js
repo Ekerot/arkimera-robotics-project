@@ -155,9 +155,13 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return standardErrorHandling(res, err, next);
     }
 
-    Files.updateStatus(fileID, 'extracted');
 
     const parsedBody = JSON.parse(body);
+    if (response.statusCode === 412) {
+      return res.status(412).send(next(createError(412, parsedBody.data[0].message)));
+    }
+
+    Files.updateStatus(fileID, 'extracted');
     return res.customSend(
       parsedBody.success,
       response.statusCode,
