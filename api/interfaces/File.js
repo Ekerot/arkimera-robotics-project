@@ -47,11 +47,11 @@ module.exports = {
   },
 
   get: data => new Promise((resolve, reject) => {
-    File.find(data).exec((err, files) => {
+    File.find(data).exec((err, result) => {
       if (err) {
         reject(err);
       }
-      resolve(files);
+      resolve(result);
     });
   }),
 };
