@@ -39,7 +39,11 @@ router.get('/', (req, res, next) => {
     }
 
     const parsedBody = JSON.parse(body);
-    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
   });
 });
 
@@ -61,11 +65,7 @@ router.get('/:companyID/files', (req, res, next) => {
 
   File.get(data)
     .then(files => res.customSend(true, 200, files))
-    .catch(err =>
-      res
-        .status(500)
-        .send(next(createError(500, err))),
-    );
+    .catch(err => res.status(500).send(next(createError(500, err))));
 });
 
 /**
@@ -114,8 +114,14 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
  * Gets a single file
  */
 router.get('/:companyID/files/:fileID', (req, res, next) => {
-  const companyID = req.params.companyID;
-  return res.status(200).send({ status: 'success', file: {} });
+  const FileID = req.params.fileID;
+  const data = {
+    FileID,
+  };
+
+  File.get(data)
+    .then(file => res.customSend(true, 200, file))
+    .catch(error => res.status(500).send(next(createError(500, error))));
 });
 
 /**
@@ -124,8 +130,14 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
  * Deletes a single file
  */
 router.delete('/:companyID/files/:fileID', (req, res, next) => {
-  const companyID = req.params.companyID;
-  return res.status(200).send({ status: 'success', file: {} });
+  const fileID = req.params.fileID;
+  const data = {
+    fileID,
+  };
+
+  File.get(data)
+    .then(file => res.customSend(true, 200, file))
+    .catch(err => res.status(500).send(next(createError(500, err))));
 });
 
 /**
@@ -168,7 +180,11 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
     File.updateStatus(fileID, 'booked');
 
     const parsedBody = JSON.parse(body);
-    return res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+    return res.customSend(
+      parsedBody.success,
+      response.statusCode,
+      parsedBody.data,
+    );
   });
 });
 
