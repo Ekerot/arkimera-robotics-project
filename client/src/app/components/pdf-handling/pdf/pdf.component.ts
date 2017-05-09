@@ -21,6 +21,11 @@ export class PdfComponent implements OnInit {
   constructor(private httpService: HttpService) { }
 
   ngOnInit() {
+    const pdfData = localStorage.getItem('pdf');
+
+    if (pdfData) {
+      this.pdfOptions.data = pdfData;
+    }
   }
 
   onFileChanged($event: Event): void {
@@ -29,6 +34,7 @@ export class PdfComponent implements OnInit {
 
     fileReader.onloadend = (e) => {
       this.pdfOptions.data = fileReader.result;
+      localStorage.setItem('pdf', fileReader.result);
     };
 
     fileReader.readAsBinaryString(this.file);
@@ -40,5 +46,6 @@ export class PdfComponent implements OnInit {
 
   onCancel(): void {
     this.pdfOptions.data = null;
+    localStorage.removeItem('pdf');
   }
 }
