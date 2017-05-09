@@ -86,3 +86,7 @@ userSchema.statics.verifyPassword = function (user, callback) {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
+<<<<<<< HEAD
+=======
+
+>>>>>>> d30dc9a336ae64a596b65ca81e1c80df7ed7b505
