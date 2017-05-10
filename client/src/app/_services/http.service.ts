@@ -5,12 +5,12 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { ApiResponse, User } from 'app/_models';
+import { ApiResponse, User, FileId, FileResponse } from 'app/_models';
 
 @Injectable()
 export class HttpService {
 
-  private apiUrl = 'http://localhost:8080/';
+  private apiUrl = 'http://localhost:8080';
 
   constructor(private http: Http) { }
 
@@ -24,7 +24,7 @@ export class HttpService {
     const formData: FormData = new FormData();
     formData.append('File', file, file.name);
 
-    return this.http.post(this.apiUrl + 'companies/1/files', formData, options)
+    return this.http.post(this.apiUrl + '/companies/1/files', formData, options)
       .map(this.extractData)
       .catch(this.handleError);
   }
@@ -33,8 +33,31 @@ export class HttpService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.post(this.apiUrl + 'users/auth', user, options)
+    return this.http.post(this.apiUrl + '/users/auth', user, options)
       .map(this.extractData)
+      .catch(this.handleError);
+  }
+
+  public getFilesReadyForExtraction(): Observable<FileId[]> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.get(this.apiUrl + '/companies/1/files?status=uploaded', options)
+      .map(response => response.json().data as FileResponse[])
+      .map(files => {
+        const result: FileId[] = [];
+        files.forEach((file: FileResponse) => {
+          const fileId: FileId = {
+            fileId: file.FileID
+          };
+          result.push(fileId);
+        });
+        return result;
+      })
+      // .map(fileRes => console.debug('RES: ', fileRes))
       .catch(this.handleError);
   }
 
