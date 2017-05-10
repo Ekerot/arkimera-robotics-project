@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { FileId } from '../../../_models';
 import { HttpService } from '../../../_services/http.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class PdfComponent implements OnInit {
   public file: File;
   public loading: boolean;
   public fileUploaded: boolean;
+  public filesToBookkeep: FileId[];
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
@@ -26,6 +28,12 @@ export class PdfComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.httpService
+    .getFilesReadyForExtraction()
+    .subscribe(fileIds => {
+      this.filesToBookkeep = fileIds;
+      console.debug('FILES: ', this.filesToBookkeep);
+    });
   }
 
   onFileChanged($event: Event): void {
@@ -44,7 +52,7 @@ export class PdfComponent implements OnInit {
 
     this.httpService.uploadFile(this.file)
       .subscribe(data => {
-        console.log('response', data);
+        console.debug('Upload response', data);
         this.fileUploaded = true;
         this.loading = false;
       });
@@ -53,4 +61,5 @@ export class PdfComponent implements OnInit {
   onCancel(): void {
     this.pdfOptions.data = null;
   }
+
 }
