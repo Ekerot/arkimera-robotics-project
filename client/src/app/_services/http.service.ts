@@ -57,7 +57,6 @@ export class HttpService {
         });
         return result;
       })
-      // .map(fileRes => console.debug('RES: ', fileRes))
       .catch(this.handleError);
   }
 
