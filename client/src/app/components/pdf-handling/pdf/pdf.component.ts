@@ -16,11 +16,13 @@ export class PdfComponent implements OnInit {
   };
   public file: File;
   public loading: boolean;
+  public fileUploaded: boolean;
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
   constructor(private httpService: HttpService) {
     this.loading = false;
+    this.fileUploaded = false;
   }
 
   ngOnInit() {
@@ -43,6 +45,7 @@ export class PdfComponent implements OnInit {
     this.httpService.uploadFile(this.file)
       .subscribe(data => {
         console.log('response', data);
+        this.fileUploaded = true;
         this.loading = false;
       });
   }

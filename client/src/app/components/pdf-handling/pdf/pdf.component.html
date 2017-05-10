@@ -13,14 +13,14 @@
 
   <div fxFlex fxFlexAlign="center">
     <div fxFlex>
-      <button md-button (click)="onUpload()" [disabled]="!pdfOptions.data" color="primary">
+      <button md-button (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
       <md-icon>file_upload</md-icon>
       Upload
     </button>
     </div>
 
     <div fxFlex>
-      <button md-button (click)="onCancel()" [disabled]="!pdfOptions.data" color="warn">
+      <button md-button (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
       <md-icon>cancel</md-icon>
       Cancel
     </button>
