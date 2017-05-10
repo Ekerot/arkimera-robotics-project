@@ -12,33 +12,35 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AccountComponent implements OnInit {
 
-  public testData: ReceiptResponse = {
-    success: true,
-    data: {
-      verificationSerie: 'A',
-      description: 'Hej hej',
-      receiptDate: new Date(2017, 4, 2),
-      accounts:
-      [
-        {
-          account: 1930,
-          debit: 0.00,
-          credit: 128.00
-        },
-        {
-          account: 4323,
-          debit: 100.00,
-          credit: 0.00
-        },
-        {
-          account: 1827,
-          debit: 23.00,
-          credit: 0.00
-        },
-      ]
-    },
-    time: new Date(2017, 4, 27, 12, 32)
-  };
+  // public testData: ReceiptResponse = {
+  //   success: true,
+  //   data: {
+  //     verificationSerie: 'A',
+  //     description: 'Hej hej',
+  //     receiptDate: new Date(2017, 4, 2),
+  //     accounts:
+  //     [
+  //       {
+  //         account: 1930,
+  //         debit: 0.00,
+  //         credit: 128.00
+  //       },
+  //       {
+  //         account: 4323,
+  //         debit: 100.00,
+  //         credit: 0.00
+  //       },
+  //       {
+  //         account: 1827,
+  //         debit: 23.00,
+  //         credit: 0.00
+  //       },
+  //     ]
+  //   },
+  //   time: new Date(2017, 4, 27, 12, 32)
+  // };
+
+  public testData: ReceiptResponse = null;
 
   public receiptForm: FormGroup;
   public totalAmount: number;
@@ -50,18 +52,20 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.initForm(this.testData.data);
+    if (this.testData) {
+      this.initForm(this.testData.data);
 
-    this.receiptForm.valueChanges
-      .debounceTime(200)
-      .subscribe((formData: ReceiptData) => {
-        this.totalAmount = 0;
+      this.receiptForm.valueChanges
+        .debounceTime(200)
+        .subscribe((formData: ReceiptData) => {
+          this.totalAmount = 0;
 
-        formData.accounts.forEach((account: Account) => {
-          this.totalAmount += Number(account.debit);
-          this.totalAmount -= Number(account.credit);
-        })
-      });
+          formData.accounts.forEach((account: Account) => {
+            this.totalAmount += Number(account.debit);
+            this.totalAmount -= Number(account.credit);
+          })
+        });
+    }
   }
 
   initForm(data: ReceiptData): void {

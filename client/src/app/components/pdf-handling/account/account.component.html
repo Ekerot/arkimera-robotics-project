@@ -5,7 +5,7 @@
 
 </div>
 
-<form [formGroup]="receiptForm">
+<form *ngIf="testData" [formGroup]="receiptForm">
   
   <div class="form-group">
 
