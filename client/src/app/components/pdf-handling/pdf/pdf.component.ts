@@ -28,12 +28,7 @@ export class PdfComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.httpService
-    .getFilesReadyForExtraction()
-    .subscribe(fileIds => {
-      this.filesToBookkeep = fileIds;
-      console.debug('FILES: ', this.filesToBookkeep);
-    });
+    this.getFilesReadyForExtraction();
   }
 
   onFileChanged($event: Event): void {
@@ -52,7 +47,6 @@ export class PdfComponent implements OnInit {
 
     this.httpService.uploadFile(this.file)
       .subscribe(data => {
-        console.debug('Upload response', data);
         this.fileUploaded = true;
         this.loading = false;
       });
@@ -60,6 +54,17 @@ export class PdfComponent implements OnInit {
 
   onCancel(): void {
     this.pdfOptions.data = null;
+  }
+
+  getFilesReadyForExtraction(): void {
+    this.loading = true;
+    this.httpService
+      .getFilesReadyForExtraction()
+      .subscribe(fileIds => {
+        console.debug('TEST: ', fileIds)
+        this.filesToBookkeep = fileIds;
+        this.loading = false;
+      });
   }
 
 }
