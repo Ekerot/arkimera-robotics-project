@@ -30,25 +30,18 @@ describe('testing /users/auth route', () => {
   describe('Fail due to missing info ', () => {
     const expectedResult = {
       success: false,
-      message: 'Missing username and/or password',
+      message: '',
       code: 400,
     };
-    const missingInfoExpects = responseFormatAsserts(expectedResult);
-
-    it('empty username&pw = fail & missing info msg', (done) => {
-      const data = {
-        username: '',
-        password: '',
-      };
-
-      requestAndExpectsRunner(data, done, missingInfoExpects);
-    });
 
     it('empty pw = fail & missing info msg', (done) => {
       const data = {
         username: 'admin',
         password: '',
       };
+
+      expectedResult.message = 'Missing password';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
@@ -57,6 +50,9 @@ describe('testing /users/auth route', () => {
         username: '',
         password: 'admin',
       };
+
+      expectedResult.message = 'Missing username';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
@@ -64,6 +60,9 @@ describe('testing /users/auth route', () => {
       const data = {
 
       };
+
+      expectedResult.message = 'Missing username';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
   });
