@@ -1,18 +1,54 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
-
-const nameMinLength = 5;
-const usernameValidationMsg = `The username must be of minimum length ${nameMinLength} characters.`;
-userSchema.path('username').validate(name => name.length >= nameMinLength, usernameValidationMsg);
+const nameMinLength = 3;
+const nameMaxLength = 20;
 
 const pwMinLength = 5;
-const passwordValidationMsg = `The password must be of minimum length ${pwMinLength} characters.`;
-userSchema.path('password').validate(password => password.length >= pwMinLength, passwordValidationMsg);
+const pwMaxLength = 20;
+
+const clientKeyLength = 22;
+const subKeyLength = 32;
+const urlMinLength = 2;
+
+// subscriptionKey is Ocp-Apim-Subscription-Key, Found in Profile
+// Client Key, The application's unique key.
+// urlPath is 'student' in this url: https://azoraone.azure-api.net/student/api/companies
+
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: [true, 'username cannot be blank'],
+    unique: true,
+    trim: true,
+    minlength: [nameMinLength, `username min length is ${nameMinLength}`],
+    maxlength: [nameMaxLength, `username max length is ${nameMaxLength}`],
+  },
+  password: {
+    type: String,
+    required: [true, 'password cannot be blank'],
+    minlength: [pwMinLength, `password min length is ${pwMinLength}`],
+    maxlength: [pwMaxLength, `password max length is ${pwMaxLength}`],
+  },
+  subscriptionKey: {
+    type: String,
+    required: [true, 'subscriptionKey cannot be blank'],
+    minlength: [subKeyLength, `subscriptionKey key min length is ${subKeyLength}`],
+    maxlength: [subKeyLength, `subscriptionKey key max length is ${subKeyLength}`],
+  },
+  clientKey: {
+    type: String,
+    required: [true, 'clientKey cannot be blank'],
+    minlength: [clientKeyLength, `clientKey min length is ${clientKeyLength}`],
+    maxlength: [clientKeyLength, `clientKey max length is ${clientKeyLength}`],
+  },
+  appUrl: {
+    type: String,
+    required: [true, 'appUrl cannot be blank'],
+    trim: true,
+    minlength: [urlMinLength, `Application url min length is ${urlMinLength}`],
+  },
+}, { timestamps: true });
 
 // Have to use regular function def instead of () => {}
 // because otherwise the meaning of 'this' changes.
@@ -44,46 +80,6 @@ userSchema.methods.comparePassword = function (candidatePassword, callback) {
   });
 };
 
-userSchema.statics.addNew = function (user, callback) {
-  if (!user.username) {
-    callback(new TypeError('Missing username'));
-  } else if (!user.password) {
-    callback(new TypeError('Missing password'));
-  } else {
-    this.findOne({ username: user.username }, (findErr, foundUser) => {
-      if (findErr) {
-        callback(findErr);
-      } else if (foundUser) {
-        callback(new Error('User already exists'));
-      } else {
-        new this(user).save((saveErr, newUser) => {
-          const returnedUser = { username: newUser.username };
-          callback(saveErr, returnedUser);
-        });
-      }
-    });
-  }
-};
-
-userSchema.statics.verifyPassword = function (user, callback) {
-  if (!user.username) {
-    callback(new TypeError('Missing username'));
-  } else if (!user.password) {
-    callback(new TypeError('Missing password'));
-  } else {
-    this.findOne({ username: user.username }, (findErr, foundUser) => {
-      if (findErr) {
-        callback(findErr);
-      } else if (!foundUser) {
-        callback(new Error('No user with that username'));
-      } else {
-        foundUser.comparePassword(user.password, callback);
-      }
-    });
-  }
-};
-
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
