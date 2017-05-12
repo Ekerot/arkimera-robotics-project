@@ -26,9 +26,12 @@ function requireAuth(req, res, next) {
   return next(createError(401, 'No token provided.'));
 }
 
-function createToken(username) {
+function createToken(user) {
   const infoToEncode = {
-    username,
+    username: user.username,
+    clientKey: user.clientKey,
+    subscriptionKey: user.subscriptionKey,
+    appUrl: user.appUrl,
   };
 
   const options = {
