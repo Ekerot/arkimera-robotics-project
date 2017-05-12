@@ -45,34 +45,13 @@ export class AccountComponent implements OnInit {
   public accountForm: FormGroup;
   public totalAmount: number = 0;
 
-  /*public accounts = [
-    { value: '', viewValue: '' },
-    { value: 1910, viewValue: 'Kassa' },
-    { value: 1920, viewValue: 'Plusgiro' },
-    { value: 1930, viewValue: 'Bankkonto' },
-    { value: 2641, viewValue: 'Ingående moms' },
-    { value: 3740, viewValue: 'Öresutjämning' },
-    { value: 5611, viewValue: 'Drivmedel personbilar' },
-    { value: 5890, viewValue: 'Övriga resekostnader' },
-    { value: 6071, viewValue: 'Representation, avdragsgill' },
-    { value: 6072, viewValue: 'Representation, ej avdragsgill' },
-    { value: 6110, viewValue: 'Kontorsmaterial' },
-  ];*/
-
   constructor(
     private formBuilder: FormBuilder,
     public snackBar: MdSnackBar) { }
 
   ngOnInit() {
 
-    this.accountForm = this.formBuilder.group({
-
-      verificationSerie: [this.testData[0].data.verificationSerie, Validators.required],
-      description: [this.testData[0].data.description],
-      receiptDate: [this.testData[0].data.receiptDate, Validators.required],
-      accounts: this.formBuilder.array([
-      ])
-    })
+    this.buildForm();
 
     for (const account of this.testData[0].data.accounts) {
 
@@ -80,22 +59,36 @@ export class AccountComponent implements OnInit {
       control.push(this.initAccount(account.account, account.debit, account.credit));
     }
 
-    this.accountForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.accountForm.valueChanges
+      .debounceTime(1000)
+      .subscribe(data => {
 
-      this.totalAmount = 0;
+        this.totalAmount = 0;
 
-      console.log('first total: ' + this.totalAmount);
+        for (const value of data.accounts) {
 
-      for (const value of data.accounts) {
+          this.totalAmount += parseInt(value.debit);
+          this.totalAmount -= parseInt(value.credit);
 
-        this.totalAmount += parseInt(value.debit);
-        this.totalAmount -= parseInt(value.credit);
+        }
+      });
+  }
 
-      }
+  buildForm(): void {
+    this.accountForm = this.formBuilder.group({
 
+      verificationSerie: [this.testData[0].data.verificationSerie, Validators.required],
+      description: [this.testData[0].data.description],
+      receiptDate: [this.testData[0].data.receiptDate, Validators.required],
+      accounts: this.formBuilder.array([
+      ])
     });
 
-  }
+    this.accountForm.valueChanges
+      .subscribe(data => this.onValueChanged(data));
+
+    this.onValueChanged();
+  };
 
   initAccount(account: number, debit: number, credit: number) {
 
@@ -103,16 +96,19 @@ export class AccountComponent implements OnInit {
     this.totalAmount -= credit;
 
     return this.formBuilder.group({
-      account: [account, Validators.required],
+      account: [account, [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(4)]
+      ],
       debit: [debit],
       credit: [credit]
     });
-  }
+  };
 
   addAccount() {
-
     const control = <FormArray>this.accountForm.controls['accounts'];
-    control.push(this.initAccount(null, null, null));
+    control.push(this.initAccount(null, 0, 0));
   }
 
   deleteAccount(value: number) {
@@ -126,4 +122,42 @@ export class AccountComponent implements OnInit {
       duration: 5000,
     });
   }
+
+  onValueChanged(data?: any) {
+    if (!this.accountForm) {
+
+      return;
+
+    }
+
+    const form = this.accountForm;
+
+    for (const field in this.formErrors) {
+
+      this.formErrors[field] = '';
+      const control = form.get(field);
+
+      if (control && control.dirty && !control.valid) {
+
+        const messages = this.validationMessages[field];
+
+        for (const key in control.errors) {
+
+          this.formErrors[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  formErrors = {
+    'account': '',
+  };
+
+  validationMessages = {
+    'account': {
+      'required': 'Account is required.',
+      'minlength': 'Account must be at least 4 numbers long.',
+      'maxlength': 'Account cannot be more than 4 numbers long.',
+    },
+  };
 }

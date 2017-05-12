@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MdSidenav } from '@angular/material';
+import { ROUTES } from '/Users/ekerot/Documents/arkimera-robotics-project/arkimera-robotics-project/client/src/app/components/sidenav/sidenav-routes.config';
 
 import { AuthService } from 'app/_services/auth.service';
 
@@ -10,15 +11,13 @@ import { AuthService } from 'app/_services/auth.service';
 })
 export class NavbarComponent implements OnInit {
 
-  @Input() sidenav: MdSidenav;
+    constructor(private auth: AuthService) {}
 
-  constructor(private auth: AuthService) { }
+    ngOnInit() {
+    }
 
-  ngOnInit() {
-  }
-
-  onLogout(): void {
-    this.auth.logout();
-  }
+    onLogout(): void {
+        this.auth.logout();
+    }
 
 }
