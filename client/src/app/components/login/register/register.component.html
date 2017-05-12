@@ -3,7 +3,7 @@
 
     <h2>Register</h2>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmitLogin(registerForm)" class="form-width">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister(registerForm)" class="form-width">
 
       <md-input-container class="full-width">
         <input formControlName="username" mdInput placeholder="Username">
@@ -15,6 +15,18 @@
 
       <md-input-container class="full-width">
         <input formControlName="passwordRepeat" mdInput placeholder="Password repeat" type="password">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="subscriptionKey" mdInput placeholder="Subscription Key" type="text">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="clientKey" mdInput placeholder="Client Key" type="text">
+      </md-input-container>
+
+      <md-input-container class="full-width">
+        <input formControlName="appUrl" mdInput placeholder="Application Name" type="text">
       </md-input-container>
 
       <button md-button type="submit" [disabled]="loading || registerForm.invalid">Login</button>
