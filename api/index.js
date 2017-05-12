@@ -9,10 +9,12 @@ const jwtAuth = require('./jwtAuth');
 // -- IMPORT ROUTES -- \\
 const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
+const usersRoutes = require('./routes/users');
 const companiesRoutes = require('./routes/companies');
 
 const app = express();
-mongoose();
+const dbName = 'arkimera';
+mongoose(dbName);
 
 // -- MIDDLEWARE -- \\
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -56,6 +58,7 @@ app.set('x-powered-by', false); // set so app do not leak implementation details
 //  -- ROUTING -- \\
 app.use('/', pingRoutes);
 app.use('/', authRoutes);
+app.use('/', usersRoutes);
 app.use('/companies', jwtAuth.requireAuth, companiesRoutes);
 
 // General 404 error is not specified in AzoraOne API documentation,
