@@ -1,0 +1,14 @@
+.form-width {
+  width: 250px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.flex-container {
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

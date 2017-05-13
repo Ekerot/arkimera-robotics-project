@@ -33,6 +33,7 @@ import { CreateGraph } from './components/dashboard/create-graph';
 import { LoginComponent } from './components/login/login.component';
 import { Md2Module } from 'md2';
 import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
+import { RegisterComponent } from './components/login/register/register.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.com
     ExpensesDashboardComponent,
     IncomeDashboardComponent,
     LoginComponent,
-    PdfHandlingComponent
+    PdfHandlingComponent,
+    RegisterComponent
   ],
   imports: [
     AppRoutingModule,
