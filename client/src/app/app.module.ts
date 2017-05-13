@@ -6,8 +6,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
-import { MaterialModule } from '@angular/material';
 
+import { AppMaterialModule } from 'app/app-material.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AuthGuard } from 'app/_guards/auth.guard';
 import { SidenavModule } from './components/sidenav/sidenav.module';
@@ -67,7 +67,7 @@ import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.com
     ReactiveFormsModule,
     SidenavModule,
     Md2Module.forRoot(),
-    MaterialModule.forRoot(),
+    AppMaterialModule,
     FlexLayoutModule
   ],
   providers: [
