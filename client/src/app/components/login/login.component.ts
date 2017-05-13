@@ -43,10 +43,16 @@ export class LoginComponent implements OnInit {
     // Disable formControls during pending login
     this.loginForm.disable();
 
-    const user: User = new User(
-      this.loginForm.get('username').value,
-      this.loginForm.get('password').value
-    );
+    const username = this.loginForm.get('username').value;
+    const password = this.loginForm.get('password').value;
+
+    const user: User = {
+      username,
+      password,
+      subscriptionKey: undefined,
+      clientKey: undefined,
+      appUrl: undefined
+    }
 
     this.auth.login(user)
       .subscribe(res => {
