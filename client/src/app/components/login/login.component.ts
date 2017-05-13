@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from 'app/_services/auth.service';
 
-import { User } from 'app/_models/user';
+import { User } from 'app/_models';
 import { MdSnackBar } from '@angular/material';
 
 @Component({
@@ -43,15 +43,21 @@ export class LoginComponent implements OnInit {
     // Disable formControls during pending login
     this.loginForm.disable();
 
+    const username = this.loginForm.get('username').value;
+    const password = this.loginForm.get('password').value;
+
     const user: User = {
-      username: this.loginForm.get('username').value,
-      password: this.loginForm.get('password').value
+      username,
+      password,
+      subscriptionKey: undefined,
+      clientKey: undefined,
+      appUrl: undefined
     }
 
     this.auth.login(user)
       .subscribe(res => {
         this.loading = false;
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/']);
       }, error => {
         this.loading = false;
         this.loginForm.enable();

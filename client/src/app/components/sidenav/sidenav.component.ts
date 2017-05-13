@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
+import { ROUTES } from './sidenav-routes.config';
 
 @Component({
-  selector: 'app-sidenav',
-  templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.css']
+    moduleId: module.id,
+    selector: 'app-sidenav',
+    templateUrl: './sidenav.component.html',
+
 })
+
 export class SidenavComponent implements OnInit {
+    public menuItems: any[];
+    ngOnInit() {
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
+        this.menuItems = ROUTES.filter(menuItem => menuItem);
+    };
+};

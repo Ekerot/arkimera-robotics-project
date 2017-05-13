@@ -9,6 +9,7 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from 'app/components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ExpensesComponent } from 'app/components/pdf-handling/expenses/expenses.component';
+import { RegisterComponent } from 'app/components/login/register/register.component';
 
 const routes: Routes = [
   {
@@ -17,15 +18,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'dashboard',
+        path: '',
         component: DashboardComponent
       },
       {
-        path: 'upload',
-        component: PdfHandlingComponent,
-      },
-      {
-        path: 'upload/expenses',
+        path: 'expenses',
         component: ExpensesComponent
       }
 
@@ -33,7 +30,11 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+  },
+  {
+    path: 'login/register',
+    component: RegisterComponent
   },
   {
     path: '**',
