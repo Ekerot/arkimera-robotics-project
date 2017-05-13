@@ -1,19 +1,23 @@
-<md-grid-list cols="2" rowHeight="2:1" gutterSize="12px">
-
-  <md-grid-tile [colspan]="1" [rowspan]="2" id="accounts">
-
-    <div class=" account-container ">
-      <app-account></app-account>
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card card-stats">
+      <div class="card-header" data-background-color="blue">
+        <i class="material-icons">receipt</i>
+      </div>
+      <div class="card-content">
+        <app-account></app-account>
+      </div>
     </div>
+  </div>
 
-  </md-grid-tile>
-
-  <md-grid-tile [colspan]="0.90" [rowspan]="2" id="pdf">
-
-    <div class="pdf-container ">
-      <app-pdf></app-pdf>
+  <div class="col-sm-6">
+    <div class="card card-stats">
+      <div class="card-header" data-background-color="red">
+        <i class="material-icons">picture_as_pdf</i>
+      </div>
+      <div class="card-content">
+        <app-pdf></app-pdf>
+      </div>
     </div>
-
-  </md-grid-tile>
-
-</md-grid-list>
+  </div>
+</div>

@@ -18,15 +18,11 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'dashboard',
+        path: '',
         component: DashboardComponent
       },
       {
-        path: 'upload',
-        component: PdfHandlingComponent,
-      },
-      {
-        path: 'upload/expenses',
+        path: 'expenses',
         component: ExpensesComponent
       }
 

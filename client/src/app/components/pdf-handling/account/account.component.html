@@ -1,88 +1,90 @@
-<div>
+<form [formGroup]="accountForm" class="form">
 
-  <h3>Expenses</h3>
-  <md-divider></md-divider>
-
-</div>
-
-<form [formGroup]="accountForm">
-  
-  <div class="form-group">
-
-    <label>Purchase Date</label>
-
-    <input type="text" formControlName="receiptDate">
-    <br>
-    <label>Verification serie</label>
-    <input type="text" formControlName="verificationSerie">
-
-    <small *ngIf="!accountForm.controls.receiptDate" class="text-danger">
-            Purchase date is required.
-        </small>
-
+  <div class="">
+    <div class="col-sm-3">
+      <div class="form-control label-floating date">
+        <label class="control-label">Reciept Date</label>
+        <input type="text" class="form-control" formControlName="receiptDate">
+      </div>
+    </div>
   </div>
 
-  <div formArrayName="accounts">
+<div>
+  <div class="col-sm-3">
+    <div class="form-control label-floating verification">
+      <label class="control-label">Varification Serie</label>
+      <input type="text" class="form-control" formControlName="verificationSerie">
+    </div>
+  </div>
+  </div>
 
+<div class="account-container">
+  <div formArrayName="accounts" class="account-part">
     <div *ngFor="let account of accountForm.controls.accounts.controls; let i=index">
-      
-      <div>
 
-        <span># {{i + 1}}</span>
-        <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deletAccount(i)"></span>
-
+      <div class="col-sm-2 index">
+        <div class="form-group label-floating">
+          <label class="control-label">Id</label>
+          <input type="number" class="form-control" placeholder="# {{i + 1}}">
+        </div>
       </div>
 
-      <div [formGroupName]="i">
+      <div [formGroupName]="i" class="accounts">
 
-        <div>
-          <label>Account</label>
-
-          <small [hidden]="accountForm.controls.accounts.controls[i].controls.account">
-                Account is required
-          </small>
-
-          <input type="number" formControlName="account">
-
-          <input type="debit" formControlName="debit" placeholder="Debit" >
-
-          <input type="credit" formControlName="credit" placeholder="Credit" >
-
+        <div class="col-sm-3">
+          <div class="form-group label-floating">
+            <label class="control-label">Account</label>
+            <input type="number" class="form-control" formControlName="account">
+          </div>
         </div>
 
+        <div class="col-sm-3">
+          <div class="form-group label-floating">
+            <label class="control-label">Debit</label>
+            <input type="number" class="form-control" formControlName="debit">
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <div class="form-group label-floating">
+            <label class="control-label">Credit</label>
+            <input type="number" class="form-control" formControlName="credit">
+          </div>
+        </div>
+
+        <div class="col-sm-1">
+          <div class="form-group label-floating">
+            <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
+              <i class="material-icons">delete forever</i>
+            </span>
+
+          </div>
+        </div>
       </div>
-
     </div>
-    
   </div>
+</div>
 
-  <div class="margin-20">
+  <div class="add">
     <a (click)="addAccount()" style="cursor: default">
-            Add another account +
-        </a>
+      <i data-background-color="blue" class="material-icons">add</i>
+    </a>
   </div>
 
   <div>
     <label>Description</label>
-    <input type="text" formControlName="description">
+    <input type="text" class="form-control" formControlName="description">
   </div>
 
   <div>
-
-    <label>Sum: {{totalAmount}} kr</label>
-
+    <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
+    <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
   </div>
 
-  <button type="submit" [disabled]="!accountForm.valid">Submit</button>
-
-  <div class="margin-20">
-
-          <div>accountForm details:-</div>
-
-          <pre>Is accountForm valid?: <br>{{accountForm.valid | json}}</pre>
-
-          <pre>form value: <br>{{accountForm.value | json}}</pre>
-
-        </div>
+  <div>
+    <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Account</button>
+    <ng-template #elseBlock></ng-template>
+    <button class="btn btn-default">Sync</button>
+  </div>
 
 </form>
