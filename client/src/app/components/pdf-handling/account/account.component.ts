@@ -70,9 +70,9 @@ export class AccountComponent implements OnInit {
           this.totalAmount += parseInt(value.debit);
           this.totalAmount -= parseInt(value.credit);
 
-        }
+        };
       });
-  }
+  };
 
   buildForm(): void {
     this.accountForm = this.formBuilder.group({
