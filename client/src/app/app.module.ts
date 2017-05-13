@@ -33,8 +33,8 @@ import { CreateGraph } from './components/dashboard/create-graph';
 import { LoginComponent } from './components/login/login.component';
 import { Md2Module } from 'md2';
 import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
+import { SidenavModule } from './components/sidenav/sidenav.module';
 import { RegisterComponent } from './components/login/register/register.component';
-
 
 @NgModule({
   declarations: [
@@ -64,6 +64,7 @@ import { RegisterComponent } from './components/login/register/register.componen
     HttpModule,
     FormsModule,
     ReactiveFormsModule,
+    SidenavModule,
     Md2Module.forRoot(),
     MaterialModule.forRoot()
   ],

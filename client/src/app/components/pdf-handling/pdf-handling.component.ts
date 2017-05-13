@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { MdSnackBar } from '@angular/material';
+
 @Component({
   selector: 'app-pdf-handling',
   templateUrl: './pdf-handling.component.html',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PdfHandlingComponent implements OnInit {
 
-  constructor() { }
+  constructor(public snackBar: MdSnackBar) { }
 
   ngOnInit() {
+  }
+
+    openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
   }
 
 }
