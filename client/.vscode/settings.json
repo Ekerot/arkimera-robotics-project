@@ -1,5 +1,6 @@
 {
   "tslint.rulesDirectory": "./node_modules/codelyzer",
   "typescript.tsdk": "node_modules/typescript/lib/",
-  "editor.snippetSuggestions": "top"
+  "editor.snippetSuggestions": "top",
+  "tslint.autoFixOnSave": true
 }
