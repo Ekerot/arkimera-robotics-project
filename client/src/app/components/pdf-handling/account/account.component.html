@@ -1,49 +1,26 @@
-<div>
+<form [formGroup]="receiptForm" class="form" *ngIf="receiptData">
 
-  <h3>Expenses</h3>
-  <md-divider></md-divider>
-
-</div>
-
-<form *ngIf="receiptData" [formGroup]="receiptForm">
-
-  <div class="form-group">
-
-    <label>Purchase Date</label>
-
-    <input type="text" formControlName="receiptDate">
-    <br>
-    <label>Verification serie</label>
-    <input type="text" formControlName="verificationSerie">
-
-    <small *ngIf="!receiptForm.controls.receiptDate" class="text-danger">
-      Purchase date is required.
-    </small>
-
-    <div class="">
-      <div class="col-sm-3">
-        <div class="form-control label-floating date">
-          <label class="control-label">Reciept Date</label>
-          <input type="text" class="form-control" formControlName="receiptDate">
-        </div>
+  <div class="">
+    <div class="col-sm-3">
+      <div class="form-control label-floating date">
+        <label class="control-label">Reciept Date</label>
+        <input type="text" class="form-control" formControlName="receiptDate">
       </div>
     </div>
+  </div>
 
-    <div>
-      <div class="col-sm-3">
-        <div class="form-control label-floating verification">
-          <label class="control-label">Varification Serie</label>
-          <input type="text" class="form-control" formControlName="verificationSerie">
-        </div>
+  <div>
+    <div class="col-sm-3">
+      <div class="form-control label-floating verification">
+        <label class="control-label">Varification Serie</label>
+        <input type="text" class="form-control" formControlName="verificationSerie">
       </div>
     </div>
+  </div>
 
-    <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
-
-      <div>
-
-        <span># {{i + 1}}</span>
-        <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)">DELETE</span>
+  <div class="account-container">
+    <div formArrayName="accounts" class="account-part">
+      <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
 
         <div class="col-sm-2 index">
           <div class="form-group label-floating">
@@ -54,9 +31,12 @@
 
         <div [formGroupName]="i" class="accounts">
 
-          <small [hidden]="receiptForm.controls.accounts.controls[i].controls.account">
-            Account is required
-          </small>
+          <div class="col-sm-3">
+            <div class="form-group label-floating">
+              <label class="control-label">Account</label>
+              <input type="number" class="form-control" formControlName="account">
+            </div>
+          </div>
 
           <div class="col-sm-3">
             <div class="form-group label-floating">
