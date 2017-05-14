@@ -12,7 +12,7 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AccountComponent implements OnInit {
 
-  public testData: ReceiptResponse = null;
+  public receiptData: ReceiptResponse;
 
   public receiptForm: FormGroup;
   public totalAmount: number;
@@ -24,8 +24,8 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.testData) {
-      this.initForm(this.testData.data);
+    if (this.receiptData) {
+      this.initForm(this.receiptData.data);
 
       this.receiptForm.valueChanges
         .debounceTime(200)
