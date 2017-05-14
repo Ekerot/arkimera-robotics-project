@@ -3,8 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 
-import { AuthService } from 'app/_services/auth.service';
-import { HttpService } from 'app/_services/http.service';
+import { AuthService, HttpService } from 'app/_services';
 import { User } from 'app/_models';
 
 import * as helpers from 'app/_helpers/helpers';
@@ -76,7 +75,8 @@ export class RegisterComponent implements OnInit {
     this.http.registerNewUser(user)
       .subscribe(res => {
         this.loading = false;
-        this.router.navigate(['/dashboard']);
+        this.openSnackBar('User created! Please login.');
+        this.router.navigate(['/']);
       }, error => {
         this.loading = false;
         this.registerForm.enable();
