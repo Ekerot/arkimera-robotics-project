@@ -61,7 +61,6 @@ export class PdfComponent implements OnInit {
     this.httpService
       .getFilesReadyForExtraction()
       .subscribe(fileIds => {
-        console.debug('TEST: ', fileIds)
         this.filesToBookkeep = fileIds;
         this.loading = false;
       });
