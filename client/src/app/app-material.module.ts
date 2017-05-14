@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MdButtonModule, MdSnackBarModule, MdInputModule } from '@angular/material';
+import { MdButtonModule, MdSnackBarModule, MdInputModule, MdSliderModule } from '@angular/material';
 
 @NgModule({
-    imports: [MdButtonModule, MdSnackBarModule, MdInputModule],
-    exports: [MdButtonModule, MdSnackBarModule, MdInputModule],
+    imports: [MdButtonModule, MdSnackBarModule, MdInputModule, MdSliderModule],
+    exports: [MdButtonModule, MdSnackBarModule, MdInputModule, MdSliderModule],
 })
 export class AppMaterialModule { }

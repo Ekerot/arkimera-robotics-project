@@ -1,6 +1,6 @@
 <div fxLayout="column">
   <div fxFlex>
-  <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
+    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
@@ -13,17 +13,17 @@
 
   <div fxFlex fxFlexAlign="center">
     <div fxFlex>
-      <button md-button (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
-      <md-icon>file_upload</md-icon>
-      Upload
-    </button>
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+        <i class="material-icons">file_upload</i>
+        Upload
+      </button>
     </div>
 
     <div fxFlex>
-      <button md-button (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
-      <md-icon>cancel</md-icon>
-      Cancel
-    </button>
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
+        <i class="material-icons">cancel</i>
+        Cancel
+      </button>
     </div>
   </div>
 </div>
