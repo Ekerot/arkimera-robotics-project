@@ -7,7 +7,7 @@ const db = mongoose();
 const userDetails = {
   username: 'admin',
   password: 'admin',
-  clientKey: secrets.clientKey,
+  clientKey: secrets.azoraOneclientKeySecret,
   subscriptionKey: secrets.azoraOneSubscriptionKeySecret,
   appUrl: secrets.appUrl,
 };

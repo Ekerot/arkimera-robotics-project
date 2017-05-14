@@ -1,19 +1,44 @@
-<h4>Recent</h4>
-<md-divider></md-divider>
-<md-list>
-  <md-list-item *ngFor="let recent of recents">
-    <md-icon md-list-icon>check_box</md-icon>
-    <h4 md-line>{{recent.name}}</h4>
-    <p md-line> {{recent.time}}ms {{recent.accuracy}}</p>
-  </md-list-item>
-</md-list>
-
 <h4>Statistics</h4>
-<md-divider></md-divider>
-<md-list>
-  <md-list-item *ngFor="let recent of recents">
-    <md-icon md-list-icon>check_box</md-icon>
-    <h4 md-line>{{recent.name}}</h4>
-    <p md-line> {{recent.time}}ms {{recent.accuracy}}</p>
-  </md-list-item>
-</md-list>
+  <div class="col-lg-12 col-md-12">
+    <div class="card" >
+      <div class="card-content">
+        <table class="table table-hover">
+          <thead class="text-success">
+          <tr>
+            <th>File name</th>
+            <th>Status</th>
+            <th>Extraction time (ms)</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let recentFiles of recentFiles">
+            <td>{{recentFiles.originalname}}</td>
+            <td>{{recentFiles.status}}</td>
+            <td>{{recentFiles.time}}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<div class="col-lg-12 col-md-5">
+  <div class="card" >
+    <div class="card-content">
+      <table class="table table-hover">
+        <thead class="text-success">
+        <tr>
+          <th>Average hit rate</th>
+          <th>Average time</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

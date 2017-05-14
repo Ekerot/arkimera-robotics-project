@@ -146,6 +146,8 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
  * Extract data from uploaded receipt
  */
 router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
+  const now = Date.now(); // Timer for the execution time
+
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
@@ -164,6 +166,8 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
 
     Files.updateStatus(fileID, 'extracted')
       .then(() =>
+              Files.updateTime(fileID, Date.now() - now), // Stop timer and update the database
+          console.log('Time elapsed:', Date.now() - now, 'ms'),
         res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
       )
       .catch(error => res.status(500).send(next(createError(500, error))));

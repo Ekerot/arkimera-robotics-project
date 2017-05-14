@@ -29,6 +29,10 @@ const FileSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  extractionTime: {
+    type: Number,
+    required: false,
+  },
 });
 
 module.exports = mongoose.model('Files', FileSchema);
