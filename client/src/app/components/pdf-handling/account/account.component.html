@@ -1,4 +1,4 @@
-<form [formGroup]="accountForm" class="form">
+<form [formGroup]="receiptForm" class="form" *ngIf="receiptData">
 
   <div class="">
     <div class="col-sm-3">
@@ -9,61 +9,61 @@
     </div>
   </div>
 
-<div>
-  <div class="col-sm-3">
-    <div class="form-control label-floating verification">
-      <label class="control-label">Varification Serie</label>
-      <input type="text" class="form-control" formControlName="verificationSerie">
+  <div>
+    <div class="col-sm-3">
+      <div class="form-control label-floating verification">
+        <label class="control-label">Varification Serie</label>
+        <input type="text" class="form-control" formControlName="verificationSerie">
+      </div>
     </div>
   </div>
-  </div>
 
-<div class="account-container">
-  <div formArrayName="accounts" class="account-part">
-    <div *ngFor="let account of accountForm.controls.accounts.controls; let i=index">
+  <div class="account-container">
+    <div formArrayName="accounts" class="account-part">
+      <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
 
-      <div class="col-sm-2 index">
-        <div class="form-group label-floating">
-          <label class="control-label">Id</label>
-          <input type="number" class="form-control" placeholder="# {{i + 1}}">
-        </div>
-      </div>
-
-      <div [formGroupName]="i" class="accounts">
-
-        <div class="col-sm-3">
+        <div class="col-sm-2 index">
           <div class="form-group label-floating">
-            <label class="control-label">Account</label>
-            <input type="number" class="form-control" formControlName="account">
+            <label class="control-label">Id</label>
+            <input type="number" class="form-control" placeholder="# {{i + 1}}">
           </div>
         </div>
 
-        <div class="col-sm-3">
-          <div class="form-group label-floating">
-            <label class="control-label">Debit</label>
-            <input type="number" class="form-control" formControlName="debit">
-          </div>
-        </div>
+        <div [formGroupName]="i" class="accounts">
 
-        <div class="col-sm-3">
-          <div class="form-group label-floating">
-            <label class="control-label">Credit</label>
-            <input type="number" class="form-control" formControlName="credit">
+          <div class="col-sm-3">
+            <div class="form-group label-floating">
+              <label class="control-label">Account</label>
+              <input type="number" class="form-control" formControlName="account">
+            </div>
           </div>
-        </div>
 
-        <div class="col-sm-1">
-          <div class="form-group label-floating">
-            <span *ngIf="accountForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
+          <div class="col-sm-3">
+            <div class="form-group label-floating">
+              <label class="control-label">Debit</label>
+              <input type="number" class="form-control" formControlName="debit">
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group label-floating">
+              <label class="control-label">Credit</label>
+              <input type="number" class="form-control" formControlName="credit">
+            </div>
+          </div>
+
+          <div class="col-sm-1">
+            <div class="form-group label-floating">
+              <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
               <i class="material-icons">delete forever</i>
             </span>
 
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
   <div class="add">
     <a (click)="addAccount()" style="cursor: default">

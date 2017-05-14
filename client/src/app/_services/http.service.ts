@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
-
 import { RequestOptions, Headers, Http, RequestMethod, Response } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
-
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-
-import { User } from 'app/_models/User';
-
-import { ApiResponse } from 'app/_models/ApiResponse';
+import { ApiResponse, User, FileResponse } from 'app/_models';
 
 @Injectable()
 export class HttpService {
@@ -27,7 +22,7 @@ export class HttpService {
     const options = new RequestOptions({ headers: headers });
 
     const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
+    formData.append('File', file, file.name);
 
     return this.http.post(this.apiUrl + '/companies/1/files', formData, options)
       .map(this.extractData)
@@ -52,10 +47,21 @@ export class HttpService {
       .catch(this.handleError);
   }
 
-  private extractData(res: Response) {
-    const body = res.json();
+  public getFilesReadyForExtraction(): Observable<FileResponse[]> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({ headers: headers });
 
-    return body || {};
+    return this.http.get(this.apiUrl + '/companies/1/files?status=uploaded', options)
+      .map(response => response.json().data as FileResponse[])
+      .catch(this.handleError);
+  }
+
+  private extractData(res: Response): ApiResponse {
+    const body = res.json();
+    return body as ApiResponse;
   }
 
   private handleError(error: Response | any) {

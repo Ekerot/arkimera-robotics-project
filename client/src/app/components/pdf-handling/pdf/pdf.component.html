@@ -1,21 +1,31 @@
-<div class="container">
-  
-  <div class="choose-pdf-container">
-    <input *ngIf="pdfOptions.data==false" class="input-pdf" type="file" name="files" title="Load File" accept=".pdf" (change)="onFileChanged($event)"
-    />
+<div fxLayout="column">
+  <div fxFlex>
+    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
-  <div class="inline-block">
-    <pdf-viewer *ngIf="pdfOptions.data" zoom={{value}} [src]="pdfOptions" [page]="page" [show-all]="false" [original-size]="true"
-      style="display: block;"></pdf-viewer>
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
+    <pdf-viewer [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="false"></pdf-viewer>
   </div>
 
+  <div fxFlex fxFlexAlign="center">
+    <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
+  </div>
+
+  <div fxFlex fxFlexAlign="center">
+    <div fxFlex>
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+        <i class="material-icons">file_upload</i>
+        Upload
+      </button>
+    </div>
+
+    <div fxFlex>
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
+        <i class="material-icons">cancel</i>
+        Cancel
+      </button>
+    </div>
+  </div>
 </div>
 
-<div>
-  <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
-</div>
-
-<div>
-  <button md-button (click)="onExtractData()">Extract</button>
-</div>
+<div *ngIf="loading" class="loading">Loading&#8230;</div>

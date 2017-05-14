@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'app/_guards/auth.guard';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PdfHandlingComponent } from 'app/components/pdf-handling/pdf-handling.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from 'app/components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';

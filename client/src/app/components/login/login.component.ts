@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from 'app/_services/auth.service';
 
-import { User } from 'app/_models/user';
+import { User } from 'app/_models';
 import { MdSnackBar } from '@angular/material';
 
 @Component({
@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
       }, error => {
         this.loading = false;
         this.loginForm.enable();
+        this.loginForm.patchValue({ username: '' });
         this.loginForm.patchValue({ password: '' });
 
         // TODO: Different messages depending on error type

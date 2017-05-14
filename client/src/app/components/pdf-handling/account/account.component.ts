@@ -1,9 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
-
-import { MdSnackBar } from '@angular/material';
-import { ExtractResponse } from 'app/_models';
+import { Account, ReceiptData, ReceiptResponse } from 'app/_models';
 
 import 'rxjs/add/operator/debounceTime';
 
@@ -14,150 +12,100 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AccountComponent implements OnInit {
 
-  public testData: ExtractResponse[] = [{
-    success: true,
-    data: {
-      verificationSerie: 'A',
-      description: 'Hej hej',
-      receiptDate: new Date(2017, 4, 2),
-      accounts:
-      [
-        {
-          account: 1930,
-          debit: 0.00,
-          credit: 128.00
-        },
-        {
-          account: 4323,
-          debit: 100.00,
-          credit: 0.00
-        },
-        {
-          account: 1827,
-          debit: 23.00,
-          credit: 0.00
-        },
-      ]
-    },
-    time: new Date(2017, 4, 27, 12, 32)
-  }];
+  // public receiptData: ReceiptResponse = {
+  //   success: true,
+  //   data: {
+  //     verificationSerie: 'A',
+  //     description: 'Hej hej',
+  //     receiptDate: new Date(2017, 4, 2),
+  //     accounts:
+  //     [
+  //       {
+  //         account: 1930,
+  //         debit: 0.00,
+  //         credit: 128.00
+  //       },
+  //       {
+  //         account: 4323,
+  //         debit: 100.00,
+  //         credit: 0.00
+  //       },
+  //       {
+  //         account: 1827,
+  //         debit: 23.00,
+  //         credit: 0.00
+  //       },
+  //     ]
+  //   },
+  //   time: new Date(2017, 4, 27, 12, 32)
+  // };
 
-  public accountForm: FormGroup;
-  public totalAmount: number = 0;
+  public receiptData: ReceiptResponse = null;
+
+  public receiptForm: FormGroup;
+  public totalAmount: number;
 
   constructor(
     private formBuilder: FormBuilder,
-    public snackBar: MdSnackBar) { }
+  ) {
+    this.totalAmount = 0;
+  }
 
   ngOnInit() {
+    if (this.receiptData) {
+      this.initForm(this.receiptData.data);
 
-    this.buildForm();
+      this.receiptForm.valueChanges
+        .debounceTime(200)
+        .subscribe((formData: ReceiptData) => {
+          this.totalAmount = 0;
 
-    for (const account of this.testData[0].data.accounts) {
-
-      const control = <FormArray>this.accountForm.controls['accounts'];
-      control.push(this.initAccount(account.account, account.debit, account.credit));
+          formData.accounts.forEach((account: Account) => {
+            this.totalAmount += Number(account.debit);
+            this.totalAmount -= Number(account.credit);
+          })
+        });
     }
+  }
 
-    this.accountForm.valueChanges
-      .debounceTime(1000)
-      .subscribe(data => {
+  initForm(data: ReceiptData): void {
+    const accounts: FormArray = new FormArray([]);
 
-        this.totalAmount = 0;
-
-        for (const value of data.accounts) {
-
-          this.totalAmount += parseInt(value.debit);
-          this.totalAmount -= parseInt(value.credit);
-
-        };
-      });
-  };
-
-  buildForm(): void {
-    this.accountForm = this.formBuilder.group({
-
-      verificationSerie: [this.testData[0].data.verificationSerie, Validators.required],
-      description: [this.testData[0].data.description],
-      receiptDate: [this.testData[0].data.receiptDate, Validators.required],
-      accounts: this.formBuilder.array([
-      ])
+    this.receiptForm = this.formBuilder.group({
+      verificationSerie: [data.verificationSerie, Validators.required],
+      description: [data.description],
+      receiptDate: [data.receiptDate, Validators.required],
+      accounts: accounts
     });
 
-    this.accountForm.valueChanges
-      .subscribe(data => this.onValueChanged(data));
+    data.accounts.forEach((account: Account) => {
+      this.totalAmount += account.debit;
+      this.totalAmount -= account.credit;
 
-    this.onValueChanged();
-  };
+      this.addAccount(account);
+    });
+  }
 
-  initAccount(account: number, debit: number, credit: number) {
-
-    this.totalAmount += debit;
-    this.totalAmount -= credit;
+  initAccount(account?: Account): FormGroup {
+    const accountNum = account ? account.account : '';
+    const debit = account ? account.debit : 0;
+    const credit = account ? account.credit : 0;
 
     return this.formBuilder.group({
-      account: [account, [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(4)]
-      ],
+      account: [accountNum, Validators.required],
       debit: [debit],
       credit: [credit]
     });
-  };
-
-  addAccount() {
-    const control = <FormArray>this.accountForm.controls['accounts'];
-    control.push(this.initAccount(null, 0, 0));
   }
 
-  deleteAccount(value: number) {
+  addAccount(account?: Account): void {
+    const control = <FormArray>this.receiptForm.controls['accounts'];
+    const accountCtrl = this.initAccount(account);
+    control.push(accountCtrl);
+  }
 
-    const control = <FormArray>this.accountForm.controls['accounts'];
+  deleteAccount(value: number): void {
+    const control = <FormArray>this.receiptForm.controls['accounts'];
     control.removeAt(value);
   }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-    });
-  }
-
-  onValueChanged(data?: any) {
-    if (!this.accountForm) {
-
-      return;
-
-    }
-
-    const form = this.accountForm;
-
-    for (const field in this.formErrors) {
-
-      this.formErrors[field] = '';
-      const control = form.get(field);
-
-      if (control && control.dirty && !control.valid) {
-
-        const messages = this.validationMessages[field];
-
-        for (const key in control.errors) {
-
-          this.formErrors[field] += messages[key] + ' ';
-        }
-      }
-    }
-  }
-
-  formErrors = {
-    'account': '',
-  };
-
-  validationMessages = {
-    'account': {
-      'required': 'Account is required.',
-      'minlength': 'Account must be at least 4 numbers long.',
-      'maxlength': 'Account cannot be more than 4 numbers long.',
-    },
-  };
 }

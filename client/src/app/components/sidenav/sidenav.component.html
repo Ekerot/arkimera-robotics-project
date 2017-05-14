@@ -1,6 +1,6 @@
 <div class="logo">
   <a href="http://www.arkimera.se" class="simple-text">  
-      <img class="logotype" src="/assets/img/Logo_Arkimera_Robotics.png" alt="logo Arkimera"> 
+    <img class="logotype" src="/assets/img/Logo_Arkimera_Robotics.png" alt="logo Arkimera"> 
   </a>
 </div>
 
@@ -9,9 +9,9 @@
     <ul class="nav">
       <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
         <a [routerLink]="[menuItem.path]">
-                    <i class="material-icons">{{menuItem.icon}}</i>
-                    <p>{{menuItem.title}}</p>
-                </a>
+          <i class="material-icons">{{menuItem.icon}}</i>
+          <p>{{menuItem.title}}</p>
+        </a>
       </li>
     </ul>
   </div>

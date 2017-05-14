@@ -4,11 +4,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpModule } from '@angular/http';
-import { MaterialModule } from '@angular/material';
 
+import { AppMaterialModule } from 'app/app-material.module';
 import { AppRoutingModule } from 'app/app-routing.module';
 import { AuthGuard } from 'app/_guards/auth.guard';
+import { SidenavModule } from './components/sidenav/sidenav.module';
 
 import { AuthService } from 'app/_services/auth.service';
 import { HttpService } from 'app/_services/http.service';
@@ -31,10 +33,8 @@ import { IncomeDashboardComponent } from './components/dashboard/income-dashboar
 import { CreateGraph } from './components/dashboard/create-graph';
 
 import { LoginComponent } from './components/login/login.component';
-import { Md2Module } from 'md2';
-import { PdfHandlingComponent } from './components/pdf-handling/pdf-handling.component';
-import { SidenavModule } from './components/sidenav/sidenav.module';
 import { RegisterComponent } from './components/login/register/register.component';
+import { Md2Module } from 'md2';
 
 @NgModule({
   declarations: [
@@ -53,7 +53,6 @@ import { RegisterComponent } from './components/login/register/register.componen
     ExpensesDashboardComponent,
     IncomeDashboardComponent,
     LoginComponent,
-    PdfHandlingComponent,
     RegisterComponent
   ],
   imports: [
@@ -66,7 +65,8 @@ import { RegisterComponent } from './components/login/register/register.componen
     ReactiveFormsModule,
     SidenavModule,
     Md2Module.forRoot(),
-    MaterialModule.forRoot()
+    AppMaterialModule,
+    FlexLayoutModule
   ],
   providers: [
     AuthGuard,

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { HttpService } from 'app/_services/http.service';
+import { FileResponse } from 'app/_models';
+import { HttpService } from '../../../_services/http.service';
 
 @Component({
   selector: 'app-pdf',
@@ -9,18 +10,25 @@ import { HttpService } from 'app/_services/http.service';
 })
 export class PdfComponent implements OnInit {
 
-  public value = '0.8'; // Starting zoom value
+  public zoom = '0.7'; // Starting zoom value
   public page = 1; // Starting page
   public pdfOptions = {
-    data: ''
+    data: null
   };
   public file: File;
+  public loading: boolean;
+  public fileUploaded: boolean;
+  public filesToBookkeep: FileResponse[];
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
-  constructor(private httpService: HttpService) { }
+  constructor(private httpService: HttpService) {
+    this.loading = false;
+    this.fileUploaded = false;
+  }
 
   ngOnInit() {
+    this.getFilesReadyForExtraction();
   }
 
   onFileChanged($event: Event): void {
@@ -34,7 +42,28 @@ export class PdfComponent implements OnInit {
     fileReader.readAsBinaryString(this.file);
   }
 
-  onExtractData(): void {
-    this.httpService.uploadFile(this.file).subscribe(data => console.log('response', data));
+  onUpload(): void {
+    this.loading = true;
+
+    this.httpService.uploadFile(this.file)
+      .subscribe(data => {
+        this.fileUploaded = true;
+        this.loading = false;
+      });
   }
+
+  onCancel(): void {
+    this.pdfOptions.data = null;
+  }
+
+  getFilesReadyForExtraction(): void {
+    this.loading = true;
+    this.httpService
+      .getFilesReadyForExtraction()
+      .subscribe(fileIds => {
+        this.filesToBookkeep = fileIds;
+        this.loading = false;
+      });
+  }
+
 }
