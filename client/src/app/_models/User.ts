@@ -1,4 +1,7 @@
 export interface User {
-  username: string,
-  password: string
+  username: string;
+  password: string;
+  subscriptionKey: string;
+  clientKey: string;
+  appUrl;
 }

@@ -1,9 +1,18 @@
-<md-toolbar color="primary">
-  <img class="logo" src="assets/img/Logo-Arkimera-minimalistic-white.png" alt="Arkimera logo">
-</md-toolbar>
+<div class="logo">
+  <a href="http://www.arkimera.se" class="simple-text">  
+    <img class="logotype" src="/assets/img/Logo_Arkimera_Robotics.png" alt="logo Arkimera"> 
+  </a>
+</div>
 
-<md-nav-list>
-  <a md-list-item routerLink="/dashboard">Dashboard</a>
-  <a md-list-item routerLink="/invoices">Invoices</a>
-  <a md-list-item routerLink="/upload/expenses">Expenses</a>
-</md-nav-list>
+<div class="sidebar-wrapper">
+  <div class="nav-container">
+    <ul class="nav">
+      <li *ngFor="let menuItem of menuItems" routerLinkActive="active" class="{{menuItem.class}}">
+        <a [routerLink]="[menuItem.path]">
+          <i class="material-icons">{{menuItem.icon}}</i>
+          <p>{{menuItem.title}}</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

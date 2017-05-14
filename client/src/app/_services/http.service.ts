@@ -38,6 +38,15 @@ export class HttpService {
       .catch(this.handleError);
   }
 
+  public registerNewUser(user: User): Observable<ApiResponse> {
+    const headers = new Headers({ 'Content-Type': 'application/json' });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.post(this.apiUrl + '/users', user, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
   public getFilesReadyForExtraction(): Observable<FileId[]> {
     const headers = new Headers({
       'Content-Type': 'application/json',

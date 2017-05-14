@@ -1,8 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~https://fonts.googleapis.com/icon?family=Roboto';
+@import '/assets/css/bootstrap.min.css';
+@import '/assets/css/material-dashboard.css';
+@import '/assets/css/custom.css';
 
 body {
   margin: 0;
@@ -16,20 +18,16 @@ body {
     flex: 1 1 auto;
 }
 
-.mat-sidenav {
-  width: 165px;
+.logotype{
+  width: 10%;
 }
 
-.main-content {
-  padding-left: 20px;
+.logout{
+    margin: 5%;
 }
 
-.mat-sidenav .mat-toolbar {
-  padding: 0;
-}
-
-.logo {
-  width: 155px;
+.sidebar-wrapper{
+  width: 100px;
 }
 
 /* Absolute Center Spinner */
