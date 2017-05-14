@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { ApiResponse, User, FileId, FileResponse } from 'app/_models';
+import { ApiResponse, User, FileResponse } from 'app/_models';
 
 @Injectable()
 export class HttpService {
@@ -47,7 +47,7 @@ export class HttpService {
       .catch(this.handleError);
   }
 
-  public getFilesReadyForExtraction(): Observable<FileId[]> {
+  public getFilesReadyForExtraction(): Observable<FileResponse[]> {
     const headers = new Headers({
       'Content-Type': 'application/json',
       'x-access-token': localStorage.getItem('token') || ''
@@ -56,16 +56,6 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + '/companies/1/files?status=uploaded', options)
       .map(response => response.json().data as FileResponse[])
-      .map(files => {
-        const result: FileId[] = [];
-        files.forEach((file: FileResponse) => {
-          const fileId: FileId = {
-            fileId: file.FileID
-          };
-          result.push(fileId);
-        });
-        return result;
-      })
       .catch(this.handleError);
   }
 

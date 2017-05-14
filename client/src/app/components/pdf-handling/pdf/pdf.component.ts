@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { FileId } from '../../../_models';
+import { FileResponse } from 'app/_models';
 import { HttpService } from '../../../_services/http.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class PdfComponent implements OnInit {
   public file: File;
   public loading: boolean;
   public fileUploaded: boolean;
-  public filesToBookkeep: FileId[];
+  public filesToBookkeep: FileResponse[];
 
   // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
