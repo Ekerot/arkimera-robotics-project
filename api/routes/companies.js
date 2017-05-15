@@ -81,9 +81,9 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       });
     }
 
+    const parsedBody = JSON.parse(body);
     if (response.statusCode !== 202) {
       return fs.unlink(file.path, () => {
-        const parsedBody = JSON.parse(body);
         res.send(next(createError(response.statusCode, parsedBody.data)));
       });
     }
@@ -104,9 +104,9 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
           status: 'uploaded',
           username: req.decoded.username,
           companyID,
+          extractedData: parsedBody.data,
         };
 
-        const parsedBody = JSON.parse(body);
         Files.save(data)
           .then(() =>
             res.customSend(
