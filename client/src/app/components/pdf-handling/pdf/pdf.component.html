@@ -1,29 +1,29 @@
 <div fxLayout="column">
 
   <!-- Select file button is not displayed if theer already are a file loaded -->
-  <div fxFlex *ngIf="!pdfOptions.data && !pdfOptions.url">
+  <div fxFlex *ngIf="!pdfSrc">
     <input type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
-  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data || pdfOptions.url">
-    <pdf-viewer [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="false"></pdf-viewer>
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" show-all="false" original-size="false"></pdf-viewer>
   </div>
 
-  <div fxFlex fxFlexAlign="center" *ngIf="pdfOptions.data || pdfOptions.url">
+  <div fxFlex fxFlexAlign="center" *ngIf="pdfSrc">
     <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
   </div>
 
   <!-- These buttons are not displayed if we are working on a extracted file -->
-  <div fxFlex fxFlexAlign="center" *ngIf="!pdfOptions.url">
+  <div fxFlex fxFlexAlign="center">
     <div fxFlex>
-      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
         <i class="material-icons">file_upload</i>
         Upload
       </button>
     </div>
 
     <div fxFlex>
-      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc || fileUploaded" color="warn">
         <i class="material-icons">cancel</i>
         Cancel
       </button>

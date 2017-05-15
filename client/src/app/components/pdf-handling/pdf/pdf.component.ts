@@ -13,10 +13,8 @@ export class PdfComponent implements OnInit {
 
   public zoom = '0.6'; // Starting zoom value
   public page = 1; // Starting page
-  public pdfOptions: any = {
-    data: null,
-    url: null
-  };
+  public pdf: any;
+  public pdfSrc: string;
   public file: File;
   public loading: boolean;
   public fileUploaded: boolean;
@@ -46,10 +44,10 @@ export class PdfComponent implements OnInit {
     const fileReader = new FileReader();
 
     fileReader.onloadend = (e) => {
-      this.pdfOptions.data = fileReader.result;
+      this.pdfSrc = fileReader.result;
     };
 
-    fileReader.readAsBinaryString(this.file);
+    fileReader.readAsArrayBuffer(this.file);
   }
 
   onUpload(): void {
@@ -57,7 +55,7 @@ export class PdfComponent implements OnInit {
 
     this.httpService.uploadFile(this.file)
       .subscribe(data => {
-        this.pdfOptions.data = null;
+        this.pdfSrc = null;
         this.fileUploaded = true;
         this.getFilesReadyForExtraction();
         this.loading = false;
@@ -69,7 +67,7 @@ export class PdfComponent implements OnInit {
    * @memberof PdfComponent
    */
   onCancel(): void {
-    this.pdfOptions.data = null;
+    this.pdfSrc = null;
   }
 
   /**
@@ -97,8 +95,7 @@ export class PdfComponent implements OnInit {
   setCurrentFileData(): void {
     if (this.filesToBookkeep.length > 0) {
       const file: FileResponse = this.filesToBookkeep[0];
-      delete this.pdfOptions.data;
-      this.pdfOptions.url = config.webAPIBaseUrl + '/' + file.path;
+      this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
     }
   }
 }
