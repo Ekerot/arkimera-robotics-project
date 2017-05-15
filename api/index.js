@@ -58,7 +58,7 @@ app.use((req, res, next) => {
 app.set('x-powered-by', false); // set so app do not leak implementation details
 
 //  -- STATIC FILES -- \\
-app.use('/files', express.static(path.join(__dirname, 'files')));
+app.use(express.static(path.join(__dirname, 'files')));
 
 //  -- ROUTING -- \\
 app.use('/', pingRoutes);

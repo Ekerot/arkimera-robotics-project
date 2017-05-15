@@ -91,8 +91,11 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
+      fs.unlink(file.path);
       return standardErrorHandling(res, err, next);
     }
+
+    // Move file to files folder
 
     const data = {
       fileID,
