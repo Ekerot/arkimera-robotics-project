@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { FileResponse } from 'app/_models';
-import { HttpService } from '../../../_services/http.service';
+import { HttpService, BookkeepService } from 'app/_services/';
 import { config } from 'app/_config/config';
 
 @Component({
@@ -20,7 +20,10 @@ export class PdfComponent implements OnInit {
   public fileUploaded: boolean;
   public filesToBookkeep: FileResponse[];
 
-  constructor(private httpService: HttpService) {
+  constructor(
+    private httpService: HttpService,
+    private bkService: BookkeepService
+  ) {
     this.loading = false;
     this.fileUploaded = false;
   }
@@ -94,6 +97,7 @@ export class PdfComponent implements OnInit {
     if (this.filesToBookkeep.length > 0) {
       const file: FileResponse = this.filesToBookkeep[0];
       this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
+      this.bkService.announceBookkeep(file.FileID);
     }
   }
 
