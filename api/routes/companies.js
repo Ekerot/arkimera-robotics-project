@@ -91,38 +91,44 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
-      fs.unlink(file.path);
-      return standardErrorHandling(res, err, next);
+      return fs.unlink(file.path, () => {
+        standardErrorHandling(res, err, next);
+      });
     }
+
+    if (response.statusCode !== 202) {
+      return fs.unlink(file.path, () => {
+        const parsedBody = JSON.parse(body);
+        res.send(next(createError(response.statusCode, parsedBody.data)));
+      });
+    }
+
     Files.move(file.path)
-        .then((newPath) => {
-          file.path = newPath;
+      .then((newPath) => {
+        file.path = newPath;
 
-          const data = {
-            fileID,
-            file,
-            status: 'uploaded',
-            username: req.decoded.username,
-            companyID,
-          };
+        const data = {
+          fileID,
+          file,
+          status: 'uploaded',
+          username: req.decoded.username,
+          companyID,
+        };
 
-          const parsedBody = JSON.parse(body);
-          Files.save(data)
-            .then(() =>
-              res.customSend(
-                parsedBody.success,
-                response.statusCode,
-                parsedBody.data,
-              ),
-            )
-            .catch(error =>
-
-              res.status(500).send(next(createError(500, error))),
-            );
-        })
-        .catch((error) => {
-          res.send(next(createError(500, error)));
-        });
+        const parsedBody = JSON.parse(body);
+        Files.save(data)
+          .then(() =>
+            res.customSend(
+              parsedBody.success,
+              response.statusCode,
+              parsedBody.data,
+            ),
+          )
+          .catch(error => res.status(500).send(next(createError(500, error))));
+      })
+      .catch((error) => {
+        res.send(next(createError(500, error)));
+      });
   });
 });
 
