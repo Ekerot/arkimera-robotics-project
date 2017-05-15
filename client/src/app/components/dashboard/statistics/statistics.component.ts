@@ -9,13 +9,14 @@ import { FileModel } from '../../../_models/FileModel'
 })
 export class StatisticsComponent implements OnInit {
   recentFiles = [];
-
+  averageTime;
+  averageHitRate;
   constructor( private httpService: HttpService) { }
 
   ngOnInit() {
-    this.getRecent();
+    this.getRecentFiles();
   }
-  getRecent () {
+  getRecentFiles () {
     this.httpService.getAllFiles()
       .subscribe(res => {
         let originalName;
@@ -36,7 +37,20 @@ export class StatisticsComponent implements OnInit {
           }
         }
         this.recentFiles.reverse();
+        this.getAverarge();
       }, error => {
       });
+  }
+
+  getAverarge() {
+    let counter = 0;
+    let time = 0;
+    for (const key of Object.keys(this.recentFiles)) {
+      if (this.recentFiles[key].time) {
+        time += this.recentFiles[key].time;
+        counter++;
+      }
+    }
+    this.averageTime = time / counter;
   }
 }
