@@ -216,37 +216,3 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 });
 
 module.exports = router;
-
-// function move(oldPath) {
-
-//   console.log(oldPath);
-
-// return new Promise((resolve, reject) => {
-
-//   fs.rename(oldPath, newPath, (err) => {
-
-//     if (err) {
-
-//       if (err.code === "EXDEV") {
-
-//         copy();
-
-//       } else {
-
-//         reject(err);
-
-//       }
-
-//     }
-
-//     resolve();
-
-//   });
-
-// });
-
-// }
-
-// function copy() {
-
-// }
