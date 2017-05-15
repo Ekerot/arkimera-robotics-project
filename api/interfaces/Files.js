@@ -40,7 +40,6 @@ module.exports = {
         }
 
         const updatedFile = file;
-        console.log(data);
         updatedFile.status = data.status;
 
         if (data.bookedData) {

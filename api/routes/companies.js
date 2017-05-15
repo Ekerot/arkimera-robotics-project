@@ -185,22 +185,23 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const data = req.body;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  request.post({ url, formData: data, headers }, (err, response, body) => {
+  request.put({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
     if (response.statusCode !== 200) {
-      console.log("här");
-      console.log(parsedBody);
-      return next(createError(response.statusCode, parsedBody.data));
+      return next(createError(response.statusCode, parsedBody));
     }
-
 
     Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
       .then(() => {
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+        return res.customSend(
+          parsedBody.success,
+          response.statusCode,
+          parsedBody.data,
+        );
       })
       .catch(error => res.status(500).send(next(createError(500, error))));
   });

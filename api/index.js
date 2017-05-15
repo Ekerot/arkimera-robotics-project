@@ -30,6 +30,7 @@ app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
+    console.log(data);
     // 'typeof x' will give object if null so we must check for it not being null as well
     if (
       typeof success !== 'boolean' ||
