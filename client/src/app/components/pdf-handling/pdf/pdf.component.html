@@ -1,17 +1,20 @@
 <div fxLayout="column">
-  <div fxFlex>
-    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
+
+  <!-- Select file button is not displayed if theer already are a file loaded -->
+  <div fxFlex *ngIf="!pdfOptions.data && !pdfOptions.url">
+    <input type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
-  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data || pdfOptions.url">
     <pdf-viewer [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="false"></pdf-viewer>
   </div>
 
-  <div fxFlex fxFlexAlign="center">
+  <div fxFlex fxFlexAlign="center" *ngIf="pdfOptions.data || pdfOptions.url">
     <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
   </div>
 
-  <div fxFlex fxFlexAlign="center">
+  <!-- These buttons are not displayed if we are working on a extracted file -->
+  <div fxFlex fxFlexAlign="center" *ngIf="!pdfOptions.url">
     <div fxFlex>
       <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
         <i class="material-icons">file_upload</i>

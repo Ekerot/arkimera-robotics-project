@@ -54,7 +54,7 @@ export class HttpService {
     });
     const options = new RequestOptions({ headers: headers });
 
-    return this.http.get(this.apiUrl + '/companies/1/files?status=uploaded', options)
+    return this.http.get(this.apiUrl + '/companies/1/files?status=extracted', options)
       .map(response => response.json().data as FileResponse[])
       .catch(this.handleError);
   }
