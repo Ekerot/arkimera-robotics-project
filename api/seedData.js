@@ -4,19 +4,33 @@ const secrets = require('./secrets.js');
 
 const db = mongoose();
 
-const userDetails = {
-  username: 'admin',
-  password: 'admin',
-  clientKey: secrets.azoraOneclientKeySecret,
-  subscriptionKey: secrets.azoraOneSubscriptionKeySecret,
-  appUrl: secrets.appUrl,
-};
+/**
+ * WARNING! DO NOT RUN IN PRODUCTION!
+ *
+ * This script will drop the users collection from the db and add an admin user with hardcoded admin password.
+ */
+db.connection.collections.users.drop((error) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('collection dropped');
 
-User.addNew(userDetails, (err, doc) => {
-  if (err) console.log(err);
-  if (doc) console.log(doc);
-  db.disconnect();
+    const userDetails = {
+      username: 'admin',
+      password: 'admin',
+      clientKey: secrets.azoraOneclientKeySecret,
+      subscriptionKey: secrets.azoraOneSubscriptionKeySecret,
+      appUrl: secrets.appUrl,
+    };
+
+    User.addNew(userDetails, (err, doc) => {
+      if (err) {
+        console.log(err);
+      }
+      if (doc) {
+        console.log(doc);
+      }
+      db.disconnect();
+    });
+  }
 });
-
-// To delete entire db, in terminal use command:
-// mongo <dbname> --eval "db.dropDatabase()"
