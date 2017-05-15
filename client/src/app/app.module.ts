@@ -14,6 +14,7 @@ import { SidenavModule } from './components/sidenav/sidenav.module';
 
 import { AuthService } from 'app/_services/auth.service';
 import { HttpService } from 'app/_services/http.service';
+import { StatisticsService } from 'app/_services/statistics.service';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -72,7 +73,8 @@ import { Md2Module } from 'md2';
     AuthGuard,
     AuthService,
     CreateGraph,
-    HttpService
+    HttpService,
+    StatisticsService
   ],
   bootstrap: [AppComponent]
 })

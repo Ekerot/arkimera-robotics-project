@@ -1,6 +1,7 @@
 import {Component, AfterViewInit} from '@angular/core';
 import {ViewChild, ElementRef} from '@angular/core';
 import {CreateGraph} from '../create-graph';
+import { StatisticsService } from '../../../_services/statistics.service';
 
 
 @Component({
@@ -16,9 +17,9 @@ export class ExpensesDashboardComponent implements AfterViewInit {
   private expenses: number[];
   private otherData: {};
 
-  constructor(private createGraph: CreateGraph) { // TODO Test data, get data from statistics or database?
+  constructor(private createGraph: CreateGraph, private statisticsService: StatisticsService) {
     this.expenses = [2, 3, 4, 32, 7, 48, 2];
-    this.totalExpense = 98;
+    this.totalExpense = 0;
     this.otherData = {
       name: 'Expenses',
       value: true
@@ -26,6 +27,7 @@ export class ExpensesDashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.totalExpense = this.statisticsService.getTotalExpense();
     this.createGraph.createLineGraph(this.expenses, this.expensesGraph, this.otherData);
   }
 
