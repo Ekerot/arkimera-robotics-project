@@ -13,10 +13,13 @@ const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const companiesRoutes = require('./routes/companies');
+const createFolders = require('./common/createFolders');
 
 const app = express();
 const dbName = 'arkimera';
 mongoose(dbName);
+
+createFolders();
 
 // -- MIDDLEWARE -- \\
 app.use(bodyParser.urlencoded({ extended: true }));

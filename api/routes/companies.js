@@ -96,21 +96,26 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     }
 
     // Move file to files folder
+    Files.move(file.path).then((newPath) => {
+      console.log(newPath);
+    }).catch((error) => {
+      console.log(error);
+    })
 
-    const data = {
-      fileID,
-      file,
-      status: 'uploaded',
-      username: req.decoded.username,
-      companyID,
-    };
+  //   const data = {
+  //     fileID,
+  //     file,
+  //     status: 'uploaded',
+  //     username: req.decoded.username,
+  //     companyID,
+  //   };
 
-    const parsedBody = JSON.parse(body);
-    Files.save(data)
-      .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
-      )
-      .catch(error => res.status(500).send(next(createError(500, error))));
+  //   const parsedBody = JSON.parse(body);
+  //   Files.save(data)
+  //     .then(() =>
+  //       res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+  //     )
+  //     .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
 
@@ -198,3 +203,24 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 });
 
 module.exports = router;
+
+// function move(oldPath) {
+//   console.log(oldPath);
+  // return new Promise((resolve, reject) => {
+
+  //   fs.rename(oldPath, newPath, (err) => {
+  //     if (err) {
+  //       if (err.code === "EXDEV") {
+  //         copy();
+  //       } else {
+  //         reject(err);
+  //       }
+  //     }
+  //     resolve();
+  //   });
+  // });
+// }
+
+// function copy() {
+
+// }
