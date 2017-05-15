@@ -23,14 +23,17 @@ db.connection.collections.users.drop((error) => {
       appUrl: secrets.appUrl,
     };
 
-    User.addNew(userDetails, (err, doc) => {
-      if (err) {
-        console.log(err);
-      }
-      if (doc) {
+    User.addNew(userDetails)
+      .then((doc) => {
         console.log(doc);
-      }
-      db.disconnect();
-    });
+        console.log('successfully seeded new user');
+        db.disconnect();
+        process.exit();
+      })
+      .catch((err) => {
+        console.log(err);
+        db.disconnect();
+        process.exit();
+      });
   }
 });
