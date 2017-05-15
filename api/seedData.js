@@ -18,7 +18,7 @@ db.connection.collections.users.drop((error) => {
     const userDetails = {
       username: 'admin',
       password: 'admin',
-      clientKey: secrets.clientKey,
+      clientKey: secrets.azoraOneclientKeySecret,
       subscriptionKey: secrets.azoraOneSubscriptionKeySecret,
       appUrl: secrets.appUrl,
     };

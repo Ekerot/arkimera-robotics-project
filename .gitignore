@@ -41,8 +41,9 @@ jspm_packages
 Debug
 obj
 
-# tmp files
+# pdfs
 api/tmp
+api/files
 
 # vagrant
 .vagrant
