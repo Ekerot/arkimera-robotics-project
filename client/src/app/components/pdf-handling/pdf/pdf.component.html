@@ -9,13 +9,13 @@
     <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="true" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
 
-  <!-- ignoring this for now since I cant get it to work 
+  <!-- ignoring this for now since I cant get the slider to bind to the page property
   <div fxFlex fxFlexAlign="center" *ngIf="pdfSrc && pdf && pdf.numPages > 1">
     <md-slider min="1" max="{ pdf.numPages }" step="1" [(value)]="page"></md-slider>
   </div>
   -->
 
-  <!-- These buttons are not displayed if we are working on a extracted file -->
+  <!-- These buttons are not displayed if we are already viewing a file -->
   <div fxFlex fxFlexAlign="center" *ngIf="!pdfSrc">
     <div fxFlex>
       <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
