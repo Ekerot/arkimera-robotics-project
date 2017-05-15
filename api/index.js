@@ -20,13 +20,13 @@ const dbName = 'arkimera';
 mongoose(dbName);
 
 createFolders();
-app.use('/files', express.static(path.join(__dirname, 'files')));
 
 // -- MIDDLEWARE -- \\
+app.use(cors());
+app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
-app.use(cors());
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
