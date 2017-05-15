@@ -13,14 +13,12 @@ export class PdfComponent implements OnInit {
 
   public zoom = '0.6'; // Starting zoom value
   public page = 1; // Starting page
-  public pdf: any;
+  public pdf: PDFDocumentProxy;
   public pdfSrc: string;
   public file: File;
   public loading: boolean;
   public fileUploaded: boolean;
   public filesToBookkeep: FileResponse[];
-
-  // TODO: How to handle more than one page? Vertical slider? How do we get numPages?
 
   constructor(private httpService: HttpService) {
     this.loading = false;
@@ -97,5 +95,18 @@ export class PdfComponent implements OnInit {
       const file: FileResponse = this.filesToBookkeep[0];
       this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
     }
+  }
+
+  /**
+   * Get pdf information after it's loaded
+   *
+   * You can get numPages from this.pdf.numPages
+   *
+   * @param {PDFDocumentProxy} pdf
+   *
+   * @memberof PdfComponent
+   */
+  afterLoadComplete(pdf: PDFDocumentProxy): void {
+    this.pdf = pdf;
   }
 }
