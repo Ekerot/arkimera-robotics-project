@@ -4,31 +4,31 @@ const createError = require('http-errors');
 const headers = require('../common/headers');
 const Files = require('../interfaces/Files');
 
-module.exports = {
-  extractReceipt: (url, fileID, res, next) => {
-    request.get({ url, headers }, (err, response, body) => {
-      if (err) {
-        return this.standardErrorHandling(res, err, next);
-      }
+const functions = {
+  extractReceipt: (url, fileID) =>
+    new Promise((resolve, reject) => {
+      request.get({ url, headers }, (err, response, body) => {
+        if (err) {
+          reject({ statusCode: 500, message: err });
+        }
 
-      const parsedBody = JSON.parse(body);
-      if (response.statusCode === 412) {
-        return res
-          .status(412)
-          .send(next(createError(412, parsedBody.data[0].message)));
-      }
+        const parsedBody = JSON.parse(body);
+        if (response.statusCode === 412) {
+          reject({
+            statusCode: response.statusCode,
+            message: parsedBody.data[0].message,
+          });
+        }
 
-      Files.updateStatus(fileID, 'extracted')
-        .then(() =>
-          res.customSend(
-            parsedBody.success,
-            response.statusCode,
-            parsedBody.data,
-          ),
-        )
-        .catch(error => res.status(500).send(next(createError(500, error))));
-    });
-  },
+        Files.updateStatus(fileID, 'extracted')
+          .then(() =>
+            resolve({ statusCode: response.statusCode, body: parsedBody }),
+          )
+          .catch((error) => {
+            reject({ statusCode: 500, message: error });
+          });
+      });
+    }),
 
   standardErrorHandling: (res, error, next) => {
     if (error.response) {
@@ -44,17 +44,25 @@ module.exports = {
     }
   },
 
-  poll: (url, fileID) => {
-    let timeout = 1000;
-    setTimeout(() => {
-      request.get({ url, headers }, (err, response, body) => {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log(response);
-          console.log(body);
-        }
+  poll: (url, fileID, time) => {
+    let timeout = time || 1000;
+    let loop;
+    functions
+      .extractReceipt(url, fileID)
+      .then((response) => {
+        console.log('Finally got it!');
+        clearTimeout(loop);
+      })
+      .catch((error) => {
+        loop = setTimeout(() => {
+          console.log('One more round on the merry go round');
+          console.log(`Timer was ${timeout}`);
+          timeout += 1000;
+          console.log(`Next timer set to: ${timeout}`);
+          functions.poll(url, fileID, timeout);
+        }, timeout);
       });
-    }, timeout);
   },
 };
+
+module.exports = functions;

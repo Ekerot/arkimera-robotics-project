@@ -88,7 +88,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       });
     }
 
-    const pollUrl = `${req.protocol}://${req.get('host')}/companies/${companyID}/files/${fileID}/receipts`;
+    const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
     functions.poll(pollUrl, fileID);
 
     Files.move(file.path)
@@ -162,7 +162,14 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  functions.extractReceipt(url, fileID, res, next);
+  functions
+    .extractReceipt(url, fileID, res, next)
+    .then((response) => {
+      res.customSend(true, response.statusCode, response.body);
+    })
+    .catch(error =>
+      res.send(next(createError(error.statusCode, error.message))),
+    );
 });
 
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
