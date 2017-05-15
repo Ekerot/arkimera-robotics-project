@@ -16,57 +16,6 @@ moment.locale('sv');
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
 
-function standardErrorHandling(res, error, next) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    next(
-      createError(error.response.status, { payload: error.response.data.data }),
-    );
-  } else if (error.request) {
-    // The request was made but no response was received
-    next(createError(500, 'No response from downstream API'));
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    next(createError(500, 'Error setting upp request to downstream API'));
-  }
-}
-
-function poll(url, fileID) {
-  let timeout = 1000;
-  setTimeout(() => {
-    request.get({ url, headers }, (err, response, body) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(response);
-        console.log(body);
-      }
-    });
-  }, timeout);
-}
-
-function extractReceipt(url, fileID, res, next) {
-  request.get({ url, headers }, (err, response, body) => {
-    if (err) {
-      return functions.standardErrorHandling(res, err, next);
-    }
-
-    const parsedBody = JSON.parse(body);
-    if (response.statusCode === 412) {
-      return res
-        .status(412)
-        .send(next(createError(412, parsedBody.data[0].message)));
-    }
-
-    Files.updateStatus(fileID, 'extracted')
-      .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
-      )
-      .catch(error => res.status(500).send(next(createError(500, error))));
-  });
-}
-
 /**
  * GET /companies
  *
