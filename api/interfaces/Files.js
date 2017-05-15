@@ -27,9 +27,10 @@ module.exports = {
       });
     }),
 
-  updateStatus: (fileID, status) =>
+  // updateStatus: (fileID, status) =>
+  updateStatus: data =>
     new Promise((resolve, reject) => {
-      Files.findOne({ FileID: fileID }).exec((err, file) => {
+      Files.findOne({ FileID: data.fileID }).exec((err, file) => {
         if (err) {
           reject(err);
         }
@@ -39,7 +40,14 @@ module.exports = {
         }
 
         const updatedFile = file;
-        updatedFile.status = status;
+        console.log(data);
+        updatedFile.status = data.status;
+
+        if (data.bookedData) {
+          updatedFile.bookedData = data.bookedData;
+        } else if (data.extractedData) {
+          updatedFile.extractedData = data.extractedData;
+        }
 
         updatedFile.save((error) => {
           if (error) {

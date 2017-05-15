@@ -104,7 +104,6 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
           status: 'uploaded',
           username: req.decoded.username,
           companyID,
-          extractedData: parsedBody.data,
         };
 
         Files.save(data)
@@ -166,7 +165,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
-    .extractReceipt(url, fileID, res, next)
+    .extractReceipt(url, fileID)
     .then((response) => {
       res.customSend(true, response.statusCode, response.body);
     })
@@ -175,11 +174,16 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
     );
 });
 
+/**
+ * PUT /companies/{companyID}/files/{fileID}/receipts
+ *
+ * Bookkeeps the receipt
+ */
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
   const data = req.body;
-  const url = `student/api/companies/${companyID}/files/${fileID}/receipts`;
+  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
@@ -187,11 +191,17 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
     }
 
     const parsedBody = JSON.parse(body);
+    if (response.statusCode !== 200) {
+      console.log("här");
+      console.log(parsedBody);
+      return next(createError(response.statusCode, parsedBody.data));
+    }
 
-    Files.updateStatus(fileID, 'booked')
-      .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
-      )
+
+    Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
+      .then(() => {
+        res.customSend(parsedBody.success, response.statusCode, parsedBody.data);
+      })
       .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });

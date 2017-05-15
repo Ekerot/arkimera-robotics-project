@@ -32,10 +32,12 @@ const FileSchema = new mongoose.Schema({
   extractedData: {
     type: Object,
     required: false,
+    default: {},
   },
   bookedData: {
     type: Object,
     required: false,
+    default: {},
   },
 });
 
