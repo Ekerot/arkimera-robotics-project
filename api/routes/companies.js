@@ -8,6 +8,7 @@ const createError = require('http-errors');
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
+const functions = require('./functions');
 
 moment.locale('sv');
 
@@ -45,6 +46,27 @@ function poll(url, fileID) {
   }, timeout);
 }
 
+function extractReceipt(url, fileID, res, next) {
+  request.get({ url, headers }, (err, response, body) => {
+    if (err) {
+      return functions.standardErrorHandling(res, err, next);
+    }
+
+    const parsedBody = JSON.parse(body);
+    if (response.statusCode === 412) {
+      return res
+        .status(412)
+        .send(next(createError(412, parsedBody.data[0].message)));
+    }
+
+    Files.updateStatus(fileID, 'extracted')
+      .then(() =>
+        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+      )
+      .catch(error => res.status(500).send(next(createError(500, error))));
+  });
+}
+
 /**
  * GET /companies
  *
@@ -54,7 +76,7 @@ router.get('/', (req, res, next) => {
   const url = 'https://azoraone.azure-api.net/student/api/companies/';
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
@@ -106,7 +128,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
       return fs.unlink(file.path, () => {
-        standardErrorHandling(res, err, next);
+        functions.standardErrorHandling(res, err, next);
       });
     }
 
@@ -118,7 +140,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     }
 
     const pollUrl = `${req.protocol}://${req.get('host')}/companies/${companyID}/files/${fileID}/receipts`;
-    poll(pollUrl, fileID);
+    functions.poll(pollUrl, fileID);
 
     Files.move(file.path)
       .then((newPath) => {
@@ -191,24 +213,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  request.get({ url, headers }, (err, response, body) => {
-    if (err) {
-      return standardErrorHandling(res, err, next);
-    }
-
-    const parsedBody = JSON.parse(body);
-    if (response.statusCode === 412) {
-      return res
-        .status(412)
-        .send(next(createError(412, parsedBody.data[0].message)));
-    }
-
-    Files.updateStatus(fileID, 'extracted')
-      .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
-      )
-      .catch(error => res.status(500).send(next(createError(500, error))));
-  });
+  functions.extractReceipt(url, fileID, res, next);
 });
 
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
@@ -219,7 +224,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
