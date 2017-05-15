@@ -31,6 +31,20 @@ function standardErrorHandling(res, error, next) {
   }
 }
 
+function poll(url, fileID) {
+  let timeout = 1000;
+  setTimeout(() => {
+    request.get({ url, headers }, (err, response, body) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(response);
+        console.log(body);
+      }
+    });
+  }, timeout);
+}
+
 /**
  * GET /companies
  *
@@ -102,6 +116,9 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
         res.send(next(createError(response.statusCode, parsedBody.data)));
       });
     }
+
+    const pollUrl = `${req.protocol}://${req.get('host')}/companies/${companyID}/files/${fileID}/receipts`;
+    poll(pollUrl, fileID);
 
     Files.move(file.path)
       .then((newPath) => {
