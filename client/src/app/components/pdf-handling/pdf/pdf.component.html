@@ -1,31 +1,32 @@
-<div fxLayout="column">
+<div fxLayout="column" class="main-pdf">
   <div fxFlex>
     <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
-    <pdf-viewer [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="false"></pdf-viewer>
+    <pdf-viewer [render-text]="false" [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="true" original-size="false"></pdf-viewer>
   </div>
 
-  <div fxFlex fxFlexAlign="center">
-    <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
-  </div>
+  <div *ngIf="pdfOptions.data;" class="button-container">
 
-  <div fxFlex fxFlexAlign="center">
-    <div fxFlex>
-      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
-        <i class="material-icons">file_upload</i>
-        Upload
-      </button>
+    <div fxFlex fxFlexAlign="left">
+      <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
     </div>
 
-    <div fxFlex>
+    <div fxFlex fxFlexAlign="center">
+
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+          <i class="material-icons">file_upload</i>
+          Upload
+      </button>
+
       <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
-        <i class="material-icons">cancel</i>
-        Cancel
+          <i class="material-icons">cancel</i>
+          Cancel
       </button>
     </div>
   </div>
 </div>
+
 
 <div *ngIf="loading" class="loading">Loading&#8230;</div>

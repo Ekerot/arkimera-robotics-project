@@ -1,0 +1,12 @@
+.container{
+  max-height: 50%;
+  max-width: 90%;
+  display: block;
+}
+
+.pdf-main {
+  overflow:hidden;
+  box-sizing:border-box;
+  height: 200px; 
+  width: 200px; 
+}

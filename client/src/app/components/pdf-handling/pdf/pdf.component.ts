@@ -10,7 +10,7 @@ import { HttpService } from '../../../_services/http.service';
 })
 export class PdfComponent implements OnInit {
 
-  public zoom = '0.7'; // Starting zoom value
+  public zoom = '0.8'; // Starting zoom value
   public page = 1; // Starting page
   public pdfOptions = {
     data: null
@@ -37,6 +37,7 @@ export class PdfComponent implements OnInit {
 
     fileReader.onloadend = (e) => {
       this.pdfOptions.data = fileReader.result;
+      console.debug(this.pdfOptions.data)
     };
 
     fileReader.readAsBinaryString(this.file);

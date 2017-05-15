@@ -1,0 +1,12 @@
+.row {
+    display: -ms-flex;
+	  display: -webkit-flex;
+	  display: flex;
+    height: 90%;
+}
+
+.column {
+  height: 90%;
+}
+
+
