@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jasmine",
     "devs": "nodemon -L server.js --exec babel-node",
-    "seed": "nodemon seedData.js --exec babel-node"
+    "seed": "node seedData.js --exec babel-node"
   },
   "keywords": [
     "node",
