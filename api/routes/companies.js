@@ -31,6 +31,11 @@ function standardErrorHandling(res, error, next) {
   }
 }
 
+/**
+ * GET /companies
+ *
+ * Get list of companies from AzoraOne
+ */
 router.get('/', (req, res, next) => {
   const url = 'https://azoraone.azure-api.net/student/api/companies/';
   request.get({ url, headers }, (err, response, body) => {
@@ -99,11 +104,9 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
 
     const parsedBody = JSON.parse(body);
     Files.save(data)
-      .then(() => res.customSend(
-          parsedBody.success,
-          response.statusCode,
-          parsedBody.data,
-        ))
+      .then(() =>
+        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+      )
       .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
