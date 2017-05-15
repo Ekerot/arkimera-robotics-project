@@ -8,28 +8,13 @@ const createError = require('http-errors');
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
+const functions = require('./functions');
 
 moment.locale('sv');
 
 // CONFIG disk storage for multer file upload
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
-
-function standardErrorHandling(res, error, next) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    next(
-      createError(error.response.status, { payload: error.response.data.data }),
-    );
-  } else if (error.request) {
-    // The request was made but no response was received
-    next(createError(500, 'No response from downstream API'));
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    next(createError(500, 'Error setting upp request to downstream API'));
-  }
-}
 
 /**
  * GET /companies
@@ -40,7 +25,7 @@ router.get('/', (req, res, next) => {
   const url = 'https://azoraone.azure-api.net/student/api/companies/';
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
@@ -92,7 +77,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
       return fs.unlink(file.path, () => {
-        standardErrorHandling(res, err, next);
+        functions.standardErrorHandling(res, err, next);
       });
     }
 
@@ -102,6 +87,9 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
         res.send(next(createError(response.statusCode, parsedBody.data)));
       });
     }
+
+    const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+    functions.poll(pollUrl, fileID);
 
     Files.move(file.path)
       .then((newPath) => {
@@ -174,24 +162,14 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  request.get({ url, headers }, (err, response, body) => {
-    if (err) {
-      return standardErrorHandling(res, err, next);
-    }
-
-    const parsedBody = JSON.parse(body);
-    if (response.statusCode === 412) {
-      return res
-        .status(412)
-        .send(next(createError(412, parsedBody.data[0].message)));
-    }
-
-    Files.updateStatus(fileID, 'extracted')
-      .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
-      )
-      .catch(error => res.status(500).send(next(createError(500, error))));
-  });
+  functions
+    .extractReceipt(url, fileID, res, next)
+    .then((response) => {
+      res.customSend(true, response.statusCode, response.body);
+    })
+    .catch(error =>
+      res.send(next(createError(error.statusCode, error.message))),
+    );
 });
 
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
@@ -202,7 +180,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
@@ -216,37 +194,3 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 });
 
 module.exports = router;
-
-// function move(oldPath) {
-
-//   console.log(oldPath);
-
-// return new Promise((resolve, reject) => {
-
-//   fs.rename(oldPath, newPath, (err) => {
-
-//     if (err) {
-
-//       if (err.code === "EXDEV") {
-
-//         copy();
-
-//       } else {
-
-//         reject(err);
-
-//       }
-
-//     }
-
-//     resolve();
-
-//   });
-
-// });
-
-// }
-
-// function copy() {
-
-// }
