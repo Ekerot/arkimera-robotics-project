@@ -12,11 +12,10 @@ export class IncomeDashboardComponent implements AfterViewInit  {
 
   @ViewChild('incomeGraph') incomeGraph: ElementRef;
   public totalIncome: number;
-  private income: number[];
+  private income = [];
   private otherData: {};
 
-  constructor(private graph: CreateGraph, private statisticsService: StatisticsService) { // TODO Test data, get data from statistics or database?
-    this.income = [5, 2, 10, 32, 7, 10, 2];
+  constructor(private graph: CreateGraph, private statisticsService: StatisticsService) {
     this.otherData = {
       name: 'Incomes',
       value: false
@@ -24,6 +23,7 @@ export class IncomeDashboardComponent implements AfterViewInit  {
   }
   ngAfterViewInit () {
     this.totalIncome = this.statisticsService.getTotalIncome();
+    this.income = this.statisticsService.getIncomes();
     this.graph.createLineGraph(this.income, this.incomeGraph, this.otherData);
   }
 

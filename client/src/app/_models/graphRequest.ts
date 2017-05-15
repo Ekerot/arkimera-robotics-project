@@ -1,6 +1,6 @@
 export class GraphRequest {
   constructor(
-    public data: string,
+    public data: number,
     public date: number
   ) { }
 }

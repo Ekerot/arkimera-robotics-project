@@ -18,8 +18,6 @@ export class ExpensesDashboardComponent implements AfterViewInit {
   private otherData: {};
 
   constructor(private createGraph: CreateGraph, private statisticsService: StatisticsService) {
-    this.expenses = [2, 3, 4, 32, 7, 48, 2];
-    this.totalExpense = 0;
     this.otherData = {
       name: 'Expenses',
       value: true
@@ -28,6 +26,7 @@ export class ExpensesDashboardComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.totalExpense = this.statisticsService.getTotalExpense();
+    this.expenses = this.statisticsService.getExpenses();
     this.createGraph.createLineGraph(this.expenses, this.expensesGraph, this.otherData);
   }
 

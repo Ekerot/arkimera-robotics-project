@@ -3,10 +3,11 @@ import Chart from 'chart.js';
 
 export class CreateGraph {
 
-  public createLineGraph(incomingData: number[], element: ElementRef, otherData: any) {
+  public createLineGraph(incomingData: any, element: ElementRef, otherData: any) {
     const canvas = element.nativeElement.getContext('2d');
-    const data = {                                                                      // Testing with week but monthly might be better
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    const dailyData = this.extractDailyData(incomingData);
+    const data = {
+      labels: dailyData.dates,
       datasets: [
         {
           label: otherData.name,
@@ -22,7 +23,7 @@ export class CreateGraph {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: incomingData,
+          data: dailyData.data,
         }
       ]
     };
@@ -90,4 +91,20 @@ export class CreateGraph {
     }
 
   }
+
+
+  private extractDailyData(incomingData: any) {
+    let dailyData = {
+      data: [],
+      dates: []
+    };
+    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    for (let j = 0; j < incomingData.length; j++) {
+        dailyData.data[j] = Math.round(incomingData[j].data);
+        dailyData.dates[j] = incomingData[j].date;
+    }
+    return dailyData;
+  }
+
 }
