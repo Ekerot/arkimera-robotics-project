@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
-import { ApiResponse, User, FileResponse } from 'app/_models';
+import { ApiResponse, User, FileResponse, ReceiptResponse } from 'app/_models';
 
 @Injectable()
 export class HttpService {
@@ -56,6 +56,23 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + '/companies/1/files?status=extracted', options)
       .map(response => response.json().data as FileResponse[])
+      .catch(this.handleError);
+  }
+
+  public getExtractedData(fileId: number): Observable<ReceiptResponse> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({ headers: headers });
+
+    console.debug('TryExtract: ', fileId);
+
+    return this.http.get(this.apiUrl + `/companies/1/files/${fileId}/receipts`, options)
+      .map(response => {
+        console.debug('DATA: ', response.json().data);
+        return response.json().data as ReceiptResponse;
+      })
       .catch(this.handleError);
   }
 
