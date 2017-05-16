@@ -11,7 +11,6 @@ export class BookkeepService {
   bookkeepConfirmed$ = this.bookkeepConfirmedSource.asObservable();
 
   announceBookkeep(fileId: number) {
-    console.debug('ANN: ', fileId);
     this.bookkeepAnnouncedSource.next(fileId);
   }
 

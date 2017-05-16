@@ -66,12 +66,10 @@ export class HttpService {
     });
     const options = new RequestOptions({ headers: headers });
 
-    console.debug('TryExtract: ', fileId);
-
-    return this.http.get(this.apiUrl + `/companies/1/files/${fileId}/receipts`, options)
+    return this.http.get(this.apiUrl + `/companies/1/files/${fileId}`, options)
       .map(response => {
-        console.debug('DATA: ', response.json().data);
-        return response.json().data as ReceiptResponse;
+        const data = response.json().data.extractedData;
+        return data as ReceiptResponse;
       })
       .catch(this.handleError);
   }

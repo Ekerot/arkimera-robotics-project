@@ -57,14 +57,13 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     this.fileIdSubscription = bkService.bookkeepAnnounced$
       .subscribe(fileId => {
-        console.debug('GetExtract: ', fileId);
         this.getExtractedData(fileId);
       });
   }
 
   ngOnInit() {
     if (this.receiptData) {
-      this.initForm(this.receiptData.data);
+      this.initForm();
 
       this.receiptForm.valueChanges
         .debounceTime(200)
@@ -79,8 +78,9 @@ export class AccountComponent implements OnInit, OnDestroy {
     }
   }
 
-  initForm(data: ReceiptData): void {
+  initForm(): void {
     const accounts: FormArray = new FormArray([]);
+    const data = this.receiptData.data;
 
     this.receiptForm = this.formBuilder.group({
       verificationSerie: [data.verificationSerie, Validators.required],
@@ -122,7 +122,10 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   getExtractedData(fileId: number): void {
     this.http.getExtractedData(fileId)
-      .subscribe(data => this.receiptData = data);
+      .subscribe(data => {
+        this.receiptData = data;
+        this.initForm();
+      });
   }
 
   ngOnDestroy(): void {
