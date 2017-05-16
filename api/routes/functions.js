@@ -44,6 +44,10 @@ const functions = {
     }
   },
 
+  /**
+   * Polling function.
+   * Recommended to replace with webhook functionality and websocket event emitter.
+   */
   poll: (url, fileID, time) => {
     let timeout = time || 1000;
     let loop;

@@ -88,8 +88,11 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       });
     }
 
+    // Temporary polling function to update database after receipt has been extracted.
+    // Recommended to replace with webhook and websockets
     const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
     functions.poll(pollUrl, fileID);
+    // -------
 
     Files.move(file.path)
       .then((newPath) => {
