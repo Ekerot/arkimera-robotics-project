@@ -7,7 +7,7 @@ export class StatisticsService {
   public profit: number;
   public totalExpenses = 0;
   public totalIncome = 0;
-  private recents =  [{
+  private extracted =  [{
     success: true,
     data: [{
       verificationSerie: 'A',
@@ -18,105 +18,47 @@ export class StatisticsService {
           account: 1930,
           debit: 20.00,
           credit: 242.18
-        },
+        }, {
+          account: 1930,
+          debit: 20.00,
+          credit: 242.18
+        }, {
+          account: 1930,
+          debit: 20.00,
+          credit: 242.18
+        }
       ]
-    },
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-04',
-        accounts: [
-          {
-            account: 1930,
-            debit: 100.00,
-            credit: 205.18
-          },
-        ]
-      }
-      ,
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-06-10',
-        accounts: [
-          {
-            account: 1930,
-            debit: 60.00,
-            credit: 42.18
-          },
-        ]
-      }
-      ,
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-04',
-        accounts: [
-          {
-            account: 1930,
-            debit: 0.00,
-            credit: 202.18
-          },
-        ]
-      },
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-03',
-        accounts: [
-          {
-            account: 1930,
-            debit: 0.00,
-            credit: 102.18
-          },
-        ]
-      },
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-06',
-        accounts: [
-          {
-            account: 1930,
-            debit: 50.00,
-            credit: 302.18
-          },
-        ]
-      },
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-07',
-        accounts: [
-          {
-            account: 1930,
-            debit: 0.00,
-            credit: 202.18
-          },
-        ]
-      },
-      {
-        verificationSerie: 'A',
-        description: 'Maxi ICA Stormarknad',
-        receiptDate: '2017-05-08',
-        accounts: [
-          {
-            account: 1930,
-            debit: 70.00,
-            credit: 302.18
-          },
-        ]
-      }],
+    }],
+    time: '2017-03-28 11:41:02'
+  }];
+  private booked =  [{
+    success: true,
+    data: [{
+      verificationSerie: 'A',
+      description: 'Maxi ICA Stormarknad',
+      receiptDate: '2017-06-03',
+      accounts: [
+        {
+          account: 1930,
+          debit: 20.00,
+          credit: 242.18
+        }, {
+          account: 1930,
+          debit: 20.00,
+          credit: 242.18
+        }
+      ]
+    }],
     time: '2017-03-28 11:41:02'
   }];
 
   /*Returns the total amount of profit*/
   public getTotalProfit () {
-    for (const i of Object.keys(this.recents)) {
-      for (const j of Object.keys(this.recents[i].data)) {
-        for (const k of Object.keys(this.recents[i].data[j].accounts)) {
-          this.totalExpenses += this.recents[i].data[j].accounts[k].debit;
-          this.totalIncome += this.recents[i].data[j].accounts[k].credit;
+    for (const i of Object.keys(this.extracted)) {
+      for (const j of Object.keys(this.extracted[i].data)) {
+        for (const k of Object.keys(this.extracted[i].data[j].accounts)) {
+          this.totalExpenses += this.extracted[i].data[j].accounts[k].debit;
+          this.totalIncome += this.extracted[i].data[j].accounts[k].credit;
         }
       }
     }
@@ -139,12 +81,12 @@ export class StatisticsService {
     let incomes = [];
     let total = 0;
     let counter = 0;
-    for (const i of Object.keys(this.recents)) {
-      for (const j of Object.keys(this.recents[i].data)) {
-        for (const k of Object.keys(this.recents[i].data[j].accounts)) {
-          total += this.recents[i].data[j].accounts[k].credit;
+    for (const i of Object.keys(this.extracted)) {
+      for (const j of Object.keys(this.extracted[i].data)) {
+        for (const k of Object.keys(this.extracted[i].data[j].accounts)) {
+          total += this.extracted[i].data[j].accounts[k].credit;
         }
-        incomes[counter] = new GraphRequest(total, this.recents[i].data[j].receiptDate);
+        incomes[counter] = new GraphRequest(total, this.extracted[i].data[j].receiptDate);
         total = 0;
         counter++;
       }
@@ -159,12 +101,12 @@ export class StatisticsService {
     let expenses = [];
     let total = 0;
     let counter = 0;
-    for (const i of Object.keys(this.recents)) {
-      for (const j of Object.keys(this.recents[i].data)) {
-        for (const k of Object.keys(this.recents[i].data[j].accounts)) {
-          total += this.recents[i].data[j].accounts[k].debit;
+    for (const i of Object.keys(this.extracted)) {
+      for (const j of Object.keys(this.extracted[i].data)) {
+        for (const k of Object.keys(this.extracted[i].data[j].accounts)) {
+          total += this.extracted[i].data[j].accounts[k].debit;
         }
-        expenses[counter] = new GraphRequest(total, this.recents[i].data[j].receiptDate);
+        expenses[counter] = new GraphRequest(total, this.extracted[i].data[j].receiptDate);
         total = 0;
         counter++;
       }
@@ -201,5 +143,77 @@ export class StatisticsService {
       }
     }
     return array;
+  }
+
+  public statsticsCalculation () {
+    let max = 2;
+    let points = 0;
+    max += this.maxCalculation();
+    points = this.pointCalculation();
+    return points / max
+  }
+
+  public maxCalculation() {
+    let extractAccount = 0;
+    let bookedAccount = 0;
+    for (const i of Object.keys(this.extracted)) {
+      for (const j of Object.keys(this.extracted[i].data)) {
+        extractAccount += this.extracted[i].data[j].accounts.length;
+      }
+    }
+    for (const i of Object.keys(this.booked)) {
+      for (const j of Object.keys(this.booked[i].data)) {
+          bookedAccount += this.booked[i].data[j].accounts.length;
+      }
+    }
+    if ( extractAccount > bookedAccount) {
+      return extractAccount;
+    }
+    else {
+      return bookedAccount;
+    }
+
+  }
+
+  public pointCalculation() {
+    let points = 0;
+    let date = [];
+    let description = [];
+    let credit = [];
+    let debit = [];
+    let account = [];
+    let counter = 0;
+    for (const i of Object.keys(this.extracted)) {
+      for (const j of Object.keys(this.extracted[i].data)) {
+        description[counter] = this.extracted[i].data[j].description;
+        date[counter] = this.extracted[i].data[j].receiptDate;
+        for (const k of Object.keys(this.extracted[i].data[j].accounts)) {
+          credit[counter] = this.extracted[i].data[j].accounts[k].credit;
+          debit[counter] = this.extracted[i].data[j].accounts[k].debit;
+          account[counter] = this.extracted[i].data[j].accounts[k].account;
+        }
+      }
+    }
+    counter = 0;
+    for (const i of Object.keys(this.booked)) {
+      for (const j of Object.keys(this.booked[i].data)) {
+        if (date[counter] === this.booked[i].data[j].receiptDate) {
+          points++;
+        }
+        if (description[counter] === this.booked[i].data[j].description) {
+          points++;
+        }
+        for (const k of Object.keys(this.booked[i].data[j].accounts)) {
+          if (account[counter] === this.booked[i].data[j].accounts[k].account &&
+            (credit[counter] === this.booked[i].data[j].accounts[k].credit
+            || debit[counter] === this.booked[i].data[j].accounts[k].debit)) {
+            points++;
+          }
+        }
+        counter++;
+      }
+    }
+    console.log(points)
+    return points;
   }
 }
