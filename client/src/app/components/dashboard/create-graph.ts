@@ -3,6 +3,7 @@ import Chart from 'chart.js';
 
 export class CreateGraph {
 
+  /*Method for creating the line graphs*/
   public createLineGraph(incomingData: any, element: ElementRef, otherData: any) {
     const canvas = element.nativeElement.getContext('2d');
     const dailyData = this.extractDailyData(incomingData);
@@ -16,12 +17,13 @@ export class CreateGraph {
           backgroundColor: '#79E195',
           borderColor: '#79E195',
           pointBorderColor: '#79E195',
+          pointBackgroundColor: '#79E195',
           pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: '#79E195',
-          pointHoverBorderColor: '#64AC78',
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: '79E195',
+          pointHoverBorderColor: '#79E195',
           pointHoverBorderWidth: 2,
-          pointRadius: 1,
+          pointRadius: 4,
           pointHitRadius: 10,
           data: dailyData.data,
         }
@@ -33,6 +35,7 @@ export class CreateGraph {
     });
   }
 
+  /*Method for creating the doughnut graph*/
   public createDoughnutGraph(income: number, expense: number, element: ElementRef) {
     const canvas = element.nativeElement.getContext('2d');
     const data = {
@@ -92,14 +95,13 @@ export class CreateGraph {
 
   }
 
-
+  /*Extract the incoming data and put into arrays, easier to handle and chart.js cant handle decimals.
+  * This method removes the decimals as well*/
   private extractDailyData(incomingData: any) {
     let dailyData = {
       data: [],
       dates: []
     };
-    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
     for (let j = 0; j < incomingData.length; j++) {
         dailyData.data[j] = Math.round(incomingData[j].data);
         dailyData.dates[j] = incomingData[j].date;
