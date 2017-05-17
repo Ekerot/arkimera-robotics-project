@@ -182,27 +182,59 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
-  const data = req.body;
-  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+  let data = req.body;
+  // const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+  const url = 'http://localhost:8080/test';
+  headers['Content-Type'] = 'application/json';
+  headers['x-access-token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiY2xpZW50S2V5IjoiYXZHRHR4a1FOYTA4ejd0aFg4V1crUSIsInN1YnNjcmlwdGlvbktleSI6IjE1MzBhNjg5YmI3YTQ2MjA5YTFiNzg5MWZjNDM0ZDYxIiwiYXBwVXJsIjoic3R1ZGVudCIsImlhdCI6MTQ5NTAwMzI1OSwiZXhwIjoxNDk1MDg5NjU5fQ.7MAZtrzehnmSiGqXkhFEwOVCU-F6szccPFkZPaUEgxI';
 
-  request.put({ url, formData: data, headers }, (err, response, body) => {
+  // data = {
+  //   verificationSerie: 'A',
+  //   description: 'Åhléns city',
+  //   receiptDate: '2014-01-01',
+  //   accounts: [
+  //     {
+  //       account: '1930',
+  //       debit: '0.00',
+  //       credit: '272.18',
+  //     },
+  //     {
+  //       account: '7600',
+  //       debit: '241.24',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '2641',
+  //       debit: '28.94',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '6100',
+  //       debit: '1.60',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '2641',
+  //       debit: '0.40',
+  //       credit: '0.00',
+  //     },
+  //   ],
+  // };
+
+  request.put({ url, json: data, headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }
 
-    const parsedBody = JSON.parse(body);
+    // const parsedBody = JSON.parse(body);
     if (response.statusCode !== 200) {
-      return next(createError(response.statusCode, parsedBody));
+      return next(createError(response.statusCode, body));
     }
 
     Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
-      .then(() => {
-        return res.customSend(
-          parsedBody.success,
-          response.statusCode,
-          parsedBody.data,
-        );
-      })
+      .then(() =>
+        res.customSend(body.success, response.statusCode, body.data),
+      )
       .catch(error => res.status(500).send(next(createError(500, error))));
   });
 });
