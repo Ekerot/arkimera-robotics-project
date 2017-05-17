@@ -18,14 +18,14 @@
   <!-- These buttons are not displayed if we are already viewing a file -->
   <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
     <div fxFlex>
-      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc" color="primary">
         <i class="material-icons">file_upload</i>
         Upload
       </button>
     </div>
 
     <div fxFlex>
-      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc || fileUploaded" color="warn">
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc" color="warn">
         <i class="material-icons">cancel</i>
         Cancel
       </button>

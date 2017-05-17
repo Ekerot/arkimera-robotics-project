@@ -17,7 +17,6 @@ export class PdfComponent implements OnInit {
   public pdfSrc: string;
   public file: File;
   public loading: boolean;
-  public fileUploaded: boolean;
   public filesToBookkeep: FileResponse[];
 
   constructor(
@@ -25,11 +24,17 @@ export class PdfComponent implements OnInit {
     private bkService: BookkeepService
   ) {
     this.loading = false;
-    this.fileUploaded = false;
   }
 
   ngOnInit() {
     this.getFilesReadyForExtraction();
+
+    this.bkService.bookkeepConfirmed$
+      .subscribe(fileId => {
+        console.debug('GOT READY CONFIRMATION');
+        this.resetCurrentStatus();
+        this.getFilesReadyForExtraction();
+      });
   }
 
   /**
@@ -56,8 +61,7 @@ export class PdfComponent implements OnInit {
 
     this.httpService.uploadFile(this.file)
       .subscribe(data => {
-        this.pdfSrc = null;
-        this.fileUploaded = true;
+        this.resetCurrentStatus();
         this.getFilesReadyForExtraction();
         this.loading = false;
       });
@@ -99,6 +103,14 @@ export class PdfComponent implements OnInit {
       this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
       this.bkService.announceBookkeep(file.FileID);
     }
+  }
+
+  private resetCurrentStatus(): void {
+    this.file = null;
+    this.filesToBookkeep = null;
+    this.pdf = null;
+    this.pdfSrc = null;
+    this.loading = false;
   }
 
   /**
