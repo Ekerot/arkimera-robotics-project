@@ -29,6 +29,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
     this.fileIdSubscription = bkService.bookkeepAnnounced$
       .subscribe(fileId => {
+        this.fileIdToBookkeep = fileId;
         this.getExtractedData(fileId);
       });
   }
@@ -98,6 +99,23 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.receiptData = data;
         this.initForm();
       });
+  }
+
+  onSubmitReceipt(receiptForm: FormGroup): void {
+    const receiptData = receiptForm.value as ReceiptData;
+
+    this.http.postReceiptData(receiptData, this.fileIdToBookkeep)
+      .subscribe(data => {
+        this.bkService.confirmBookkeep(this.fileIdToBookkeep);
+        this.resetCurrentStatus();
+      });
+  }
+
+  private resetCurrentStatus(): void {
+    this.receiptData = null;
+    this.receiptForm = null;
+    this.totalAmount = 0;
+    this.fileIdToBookkeep = null;
   }
 
   ngOnDestroy(): void {
