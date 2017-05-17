@@ -9,6 +9,7 @@ const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
 const functions = require('./functions');
+const Payload = require('../common/Payload');
 
 moment.locale('sv');
 
@@ -22,18 +23,18 @@ const upload = multer({ storage });
  * Get list of companies from AzoraOne
  */
 router.get('/', (req, res, next) => {
-  const url = 'https://azoraone.azure-api.net/student/api/companies/';
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/`;
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
-    return res.customSend(
-      parsedBody.success,
-      response.statusCode,
-      parsedBody.data,
-    );
+    return res
+      .status(response.statusCode)
+      .send(
+        new Payload(parsedBody.success, response.statusCode, parsedBody.data),
+      );
   });
 });
 
@@ -50,12 +51,11 @@ router.get('/:companyID/files', (req, res, next) => {
 
   if (req.query.status) {
     data.status = req.query.status;
-    console.log(data.status);
   }
 
   Files.get(data)
-    .then(files => res.customSend(true, 200, files))
-    .catch(err => res.status(500).send(next(createError(500, err))));
+    .then(files => res.status(200).send(new Payload(true, 200, files)))
+    .catch(err => next(createError(500, err)));
 });
 
 /**
@@ -73,7 +73,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     File: fs.createReadStream(file.path),
   };
   const companyID = req.params.companyID;
-  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files`;
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
       return fs.unlink(file.path, () => {
@@ -81,16 +81,16 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
       });
     }
 
+    const parsedBody = JSON.parse(body);
     if (response.statusCode !== 202) {
       return fs.unlink(file.path, () => {
-        const parsedBody = JSON.parse(body);
-        res.send(next(createError(response.statusCode, parsedBody.data)));
+        next(createError(response.statusCode, parsedBody.data));
       });
     }
 
     // Temporary polling function to update database after receipt has been extracted.
     // Recommended to replace with webhook and websockets
-    const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+    const pollUrl = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
     functions.poll(pollUrl, fileID);
     // -------
 
@@ -106,19 +106,22 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
           companyID,
         };
 
-        const parsedBody = JSON.parse(body);
         Files.save(data)
           .then(() =>
-            res.customSend(
-              parsedBody.success,
-              response.statusCode,
-              parsedBody.data,
-            ),
+            res
+              .status(response.statusCode)
+              .send(
+                new Payload(
+                  parsedBody.success,
+                  response.statusCode,
+                  parsedBody.data,
+                ),
+              ),
           )
-          .catch(error => res.status(500).send(next(createError(500, error))));
+          .catch(error => next(createError(500, error)));
       })
       .catch((error) => {
-        res.send(next(createError(500, error)));
+        next(createError(500, error));
       });
   });
 });
@@ -135,8 +138,8 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
   };
 
   Files.get(data)
-    .then(file => res.customSend(true, 200, file))
-    .catch(error => res.status(500).send(next(createError(500, error))));
+    .then(file => res.status(200).send(new Payload(true, 200, file)))
+    .catch(error => next(createError(500, error)));
 });
 
 /**
@@ -151,8 +154,8 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
   };
 
   Files.get(data)
-    .then(file => res.customSend(true, 200, file))
-    .catch(err => res.status(500).send(next(createError(500, err))));
+    .then(file => res.status(200).send(new Payload(true, 200, file)))
+    .catch(err => next(createError(500, err)));
 });
 
 /**
@@ -163,36 +166,83 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
 router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
-  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
-    .extractReceipt(url, fileID, res, next)
+    .extractReceipt(url, fileID)
     .then((response) => {
-      res.customSend(true, response.statusCode, response.body);
+      res
+        .status(response.statusCode)
+        .send(new Payload(true, response.statusCode, response.body));
     })
-    .catch(error =>
-      res.send(next(createError(error.statusCode, error.message))),
-    );
+    .catch(error => next(createError(error.statusCode, error.message)));
 });
 
+/**
+ * PUT /companies/{companyID}/files/{fileID}/receipts
+ *
+ * Bookkeeps the receipt
+ */
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
   const data = req.body;
-  const url = `student/api/companies/${companyID}/files/${fileID}/receipts`;
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  request.post({ url, formData: data, headers }, (err, response, body) => {
+  // TEST \\
+  // const url = 'http://localhost:8080/test';
+  // headers['Content-Type'] = 'application/json';
+  // headers['x-access-token'] = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiY2xpZW50S2V5IjoiYXZHRHR4a1FOYTA4ejd0aFg4V1crUSIsInN1YnNjcmlwdGlvbktleSI6IjE1MzBhNjg5YmI3YTQ2MjA5YTFiNzg5MWZjNDM0ZDYxIiwiYXBwVXJsIjoic3R1ZGVudCIsImlhdCI6MTQ5NTAwMzI1OSwiZXhwIjoxNDk1MDg5NjU5fQ.7MAZtrzehnmSiGqXkhFEwOVCU-F6szccPFkZPaUEgxI';
+  // data = {
+  //   verificationSerie: 'A',
+  //   description: 'Åhléns city',
+  //   receiptDate: '2014-01-01',
+  //   accounts: [
+  //     {
+  //       account: '1930',
+  //       debit: '0.00',
+  //       credit: '272.18',
+  //     },
+  //     {
+  //       account: '7600',
+  //       debit: '241.24',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '2641',
+  //       debit: '28.94',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '6100',
+  //       debit: '1.60',
+  //       credit: '0.00',
+  //     },
+  //     {
+  //       account: '2641',
+  //       debit: '0.40',
+  //       credit: '0.00',
+  //     },
+  //   ],
+  // };
+  // END TEST \\
+
+  request.put({ url, json: data, headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }
 
-    const parsedBody = JSON.parse(body);
+    if (response.statusCode !== 200) {
+      return next(createError(response.statusCode, body));
+    }
 
-    Files.updateStatus(fileID, 'booked')
+    Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
       .then(() =>
-        res.customSend(parsedBody.success, response.statusCode, parsedBody.data),
+        res
+          .status(response.statusCode)
+          .send(new Payload(body.success, response.statusCode, body.data)),
       )
-      .catch(error => res.status(500).send(next(createError(500, error))));
+      .catch(error => next(createError(500, error)));
   });
 });
 

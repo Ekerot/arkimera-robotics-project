@@ -29,6 +29,16 @@ const FileSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  extractedData: {
+    type: Object,
+    required: false,
+    default: {},
+  },
+  bookedData: {
+    type: Object,
+    required: false,
+    default: {},
+  },
 });
 
 module.exports = mongoose.model('Files', FileSchema);
