@@ -9,18 +9,22 @@ const functions = {
     new Promise((resolve, reject) => {
       request.get({ url, headers }, (err, response, body) => {
         if (err) {
-          reject({ statusCode: 500, message: err });
+          return reject({ statusCode: 500, message: err });
         }
 
         const parsedBody = JSON.parse(body);
         if (response.statusCode === 412) {
-          reject({
+          return reject({
             statusCode: response.statusCode,
             message: parsedBody.data[0].message,
           });
         }
 
-        Files.updateStatus(fileID, 'extracted')
+        Files.updateStatus({
+          fileID,
+          status: 'extracted',
+          extractedData: parsedBody.data,
+        })
           .then(() =>
             resolve({ statusCode: response.statusCode, body: parsedBody }),
           )

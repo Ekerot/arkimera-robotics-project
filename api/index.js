@@ -21,23 +21,36 @@ mongoose(dbName);
 
 createFolders();
 
-// -- MIDDLEWARE -- \\
+//  -- STATIC FILES -- \\
 app.use(cors());
+// -- MIDDLEWARE -- \\
 app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use('/test', (req, res, next) => {
+  console.log(req.body);
+});
 app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
     // 'typeof x' will give object if null so we must check for it not being null as well
-    if (
-      typeof success !== 'boolean' ||
-      typeof statusCode !== 'number' ||
-      (typeof data !== 'object' && data !== null)
-    ) {
-      throw new TypeError('Incorrect usage of customSend');
-    }
+    // if (
+    //   typeof success !== 'boolean' ||
+    //   typeof statusCode !== 'number' ||
+    //   (typeof data !== 'object' && data !== null)
+    // ) {
+      // throw new TypeError('Incorrect usage of customSend');
+      if (typeof success !== 'boolean') {
+        success = success || false;
+      }
+      if (isNaN(statusCode)) {
+        statusCode = parseInt(statusCode);
+      }
+      if (typeof data !== 'object' && data !== null) {
+        data = { data };
+      }
+    // }
 
     let message = '';
 
@@ -61,8 +74,6 @@ app.use((req, res, next) => {
 
 app.set('x-powered-by', false); // set so app do not leak implementation details
 
-//  -- STATIC FILES -- \\
-
 //  -- ROUTING -- \\
 app.use('/', pingRoutes);
 app.use('/', authRoutes);
@@ -78,20 +89,29 @@ app.use((req, res, next) => {
 // Express error middleware must have 4 args,
 // so do not remove unused parameters even if eslint complains
 app.use((error, req, res, next) => {
-  let payload;
+  let data;
   if (Object.prototype.hasOwnProperty.call(error, 'payload')) {
-    payload = error.payload;
+    data = error.payload;
   } else {
-    payload = [
+    data = [
       {
         code: 0,
         message: error.message,
         details: '',
         element: '',
+        error,
       },
     ];
   }
-  res.customSend(false, error.statusCode, payload);
+  const payload = {
+    success: false,
+    data,
+    time: moment().format('YYYY-MM-DD hh:mm:ss'),
+    code: error.statusCode,
+    message: data[0].message,
+  };
+
+  res.status(500).json(payload);
 });
 
 module.exports = app;
