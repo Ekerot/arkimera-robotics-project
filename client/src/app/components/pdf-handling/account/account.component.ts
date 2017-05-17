@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 
-import { Account, ReceiptData, ReceiptResponse } from 'app/_models';
+import { Account, ReceiptData } from 'app/_models';
 import { BookkeepService, HttpService } from 'app/_services';
 
 @Component({
@@ -13,35 +13,7 @@ import { BookkeepService, HttpService } from 'app/_services';
 })
 export class AccountComponent implements OnInit, OnDestroy {
 
-  // public receiptData: ReceiptResponse = {
-  //   success: true,
-  //   data: {
-  //     verificationSerie: 'A',
-  //     description: 'Hej hej',
-  //     receiptDate: new Date(2017, 4, 2),
-  //     accounts:
-  //     [
-  //       {
-  //         account: 1930,
-  //         debit: 0.00,
-  //         credit: 128.00
-  //       },
-  //       {
-  //         account: 4323,
-  //         debit: 100.00,
-  //         credit: 0.00
-  //       },
-  //       {
-  //         account: 1827,
-  //         debit: 23.00,
-  //         credit: 0.00
-  //       },
-  //     ]
-  //   },
-  //   time: new Date(2017, 4, 27, 12, 32)
-  // };
-
-  public receiptData: ReceiptResponse;
+  public receiptData: ReceiptData;
   public receiptForm: FormGroup;
   public totalAmount: number;
 
@@ -80,7 +52,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   initForm(): void {
     const accounts: FormArray = new FormArray([]);
-    const data = this.receiptData.data;
+    const data = this.receiptData;
 
     this.receiptForm = this.formBuilder.group({
       verificationSerie: [data.verificationSerie, Validators.required],
