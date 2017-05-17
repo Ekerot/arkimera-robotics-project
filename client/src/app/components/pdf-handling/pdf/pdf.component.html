@@ -1,26 +1,31 @@
 <div fxLayout="column">
-  <div fxFlex>
-    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
+
+  <!-- Select file button is not displayed if theer already are a file loaded -->
+  <div fxFlex *ngIf="!pdfSrc">
+    <input type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
-  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
-    <pdf-viewer [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="false"></pdf-viewer>
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="true" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
 
-  <div fxFlex fxFlexAlign="center">
-    <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
+  <!-- ignoring this for now since I cant get the slider to bind to the page property
+  <div fxFlex fxFlexAlign="center" *ngIf="pdfSrc && pdf && pdf.numPages > 1">
+    <md-slider min="1" max="{ pdf.numPages }" step="1" [(value)]="page"></md-slider>
   </div>
+  -->
 
-  <div fxFlex fxFlexAlign="center">
+  <!-- These buttons are not displayed if we are already viewing a file -->
+  <div fxFlex fxFlexAlign="center" *ngIf="!pdfSrc">
     <div fxFlex>
-      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
         <i class="material-icons">file_upload</i>
         Upload
       </button>
     </div>
 
     <div fxFlex>
-      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc || fileUploaded" color="warn">
         <i class="material-icons">cancel</i>
         Cancel
       </button>

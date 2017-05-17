@@ -1,16 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
 
 import { Account, ReceiptData, ReceiptResponse } from 'app/_models';
-
-import 'rxjs/add/operator/debounceTime';
+import { BookkeepService, HttpService } from 'app/_services';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
-export class AccountComponent implements OnInit {
+export class AccountComponent implements OnInit, OnDestroy {
 
   // public receiptData: ReceiptResponse = {
   //   success: true,
@@ -40,15 +41,25 @@ export class AccountComponent implements OnInit {
   //   time: new Date(2017, 4, 27, 12, 32)
   // };
 
-  public receiptData: ReceiptResponse = null;
-
+  public receiptData: ReceiptResponse;
   public receiptForm: FormGroup;
   public totalAmount: number;
 
+  private fileIdSubscription: Subscription;
+  private fileIdToBookkeep: number;
+
   constructor(
+    private bkService: BookkeepService,
     private formBuilder: FormBuilder,
+    private http: HttpService
   ) {
     this.totalAmount = 0;
+
+    this.fileIdSubscription = bkService.bookkeepAnnounced$
+      .subscribe(fileId => {
+        console.debug('GetExtract: ', fileId);
+        this.getExtractedData(fileId);
+      });
   }
 
   ngOnInit() {
@@ -108,4 +119,14 @@ export class AccountComponent implements OnInit {
     const control = <FormArray>this.receiptForm.controls['accounts'];
     control.removeAt(value);
   }
+
+  getExtractedData(fileId: number): void {
+    this.http.getExtractedData(fileId)
+      .subscribe(data => this.receiptData = data);
+  }
+
+  ngOnDestroy(): void {
+    this.fileIdSubscription.unsubscribe();
+  }
+
 }
