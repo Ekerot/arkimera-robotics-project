@@ -55,7 +55,7 @@ router.get('/:companyID/files', (req, res, next) => {
 
   Files.get(data)
     .then(files => res.customSend(true, 200, files))
-    .catch(err => res.status(500).send(next(createError(500, err))));
+    .catch(err => next(createError(500, err)));
 });
 
 /**
@@ -84,7 +84,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     const parsedBody = JSON.parse(body);
     if (response.statusCode !== 202) {
       return fs.unlink(file.path, () => {
-        res.send(next(createError(response.statusCode, parsedBody.data)));
+        next(createError(response.statusCode, parsedBody.data));
       });
     }
 
@@ -114,10 +114,10 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
               parsedBody.data,
             ),
           )
-          .catch(error => res.status(500).send(next(createError(500, error))));
+          .catch(error => next(createError(500, error)));
       })
       .catch((error) => {
-        res.send(next(createError(500, error)));
+        next(createError(500, error));
       });
   });
 });
@@ -135,7 +135,7 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
 
   Files.get(data)
     .then(file => res.customSend(true, 200, file))
-    .catch(error => res.status(500).send(next(createError(500, error))));
+    .catch(error => next(createError(500, error)));
 });
 
 /**
@@ -151,7 +151,7 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
 
   Files.get(data)
     .then(file => res.customSend(true, 200, file))
-    .catch(err => res.status(500).send(next(createError(500, err))));
+    .catch(err => next(createError(500, err)));
 });
 
 /**
@@ -170,7 +170,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       res.customSend(true, response.statusCode, response.body);
     })
     .catch(error =>
-      res.send(next(createError(error.statusCode, error.message))),
+      next(createError(error.statusCode, error.message)),
     );
 });
 
@@ -235,7 +235,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
       .then(() =>
         res.customSend(body.success, response.statusCode, body.data),
       )
-      .catch(error => res.status(500).send(next(createError(500, error))));
+      .catch(error => next(createError(500, error)));
   });
 });
 
