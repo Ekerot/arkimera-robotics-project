@@ -1,12 +1,44 @@
 .container{
+  float: left;
   max-height: 50%;
-  max-width: 90%;
-  display: block;
+  max-width: 100%;
+  flex-basis: 66%;
 }
 
-.pdf-main {
-  overflow:hidden;
-  box-sizing:border-box;
-  height: 200px; 
-  width: 200px; 
+canvas {
+  height: 60vh;
+  width: 55vh;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 20%;
+  position: absolute;
 }
+
+
+.main-pdf {
+    width: 70%;
+    left: float;
+    position: absolute;
+}
+
+.buttons {
+  display: inline;
+  float: right;
+}
+
+md-slider {
+  width: 6px;
+  background: white;
+  margin-left: 5%;
+  float: right;
+}
+
+input {
+  margin-left: 30%;
+}
+
+
+
+
