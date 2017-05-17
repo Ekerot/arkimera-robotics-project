@@ -1,4 +1,4 @@
-<form [formGroup]="receiptForm" class="form" *ngIf="receiptData">
+<form [formGroup]="receiptForm" class="form" *ngIf="receiptData" (ngSubmit)="onSubmitReceipt(receiptForm)">
 
   <div class="">
     <div class="col-sm-3">
@@ -84,7 +84,7 @@
   <div>
     <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Account</button>
     <ng-template #elseBlock></ng-template>
-    <button class="btn btn-default">Sync</button>
+    <button class="btn btn-default" type="submit">Bookkeep</button>
   </div>
 
 </form>
