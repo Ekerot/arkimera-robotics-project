@@ -74,6 +74,18 @@ export class HttpService {
       .catch(this.handleError);
   }
 
+  public postReceiptData(receiptData: ReceiptData, fileId: number): Observable<void> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.put(this.apiUrl + `/companies/1/files/${fileId}/receipts`, receiptData, options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
+
   private extractData(res: Response): ApiResponse {
     const body = res.json();
     return body as ApiResponse;
