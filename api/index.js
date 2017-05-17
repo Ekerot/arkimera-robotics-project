@@ -35,36 +35,6 @@ app.use('/test', (req, res, next) => {
 // -------------------
 app.use(jwtAuth.checkAuth);
 
-app.use((req, res, next) => {
-  res.customSend = (success, statusCode, data) => {
-    if (
-      typeof success !== 'boolean' ||
-      typeof statusCode !== 'number' ||
-      (typeof data !== 'object' && data !== null)
-    ) {
-      throw new TypeError('Incorrect usage of customSend');
-    }
-
-    let message = '';
-
-    if (!success) {
-      message = data[0].message;
-    }
-
-    const payload = {
-      success,
-      data,
-      time: moment().format('YYYY-MM-DD hh:mm:ss'),
-      code: statusCode,
-      message,
-    };
-
-    res.status(statusCode).json(payload);
-  };
-
-  next();
-});
-
 app.set('x-powered-by', false);
 
 //  -- ROUTING -- \\
