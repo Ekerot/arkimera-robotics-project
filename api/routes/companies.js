@@ -22,7 +22,7 @@ const upload = multer({ storage });
  * Get list of companies from AzoraOne
  */
 router.get('/', (req, res, next) => {
-  const url = 'https://azoraone.azure-api.net/student/api/companies/';
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/`;
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
@@ -50,7 +50,6 @@ router.get('/:companyID/files', (req, res, next) => {
 
   if (req.query.status) {
     data.status = req.query.status;
-    console.log(data.status);
   }
 
   Files.get(data)
@@ -73,7 +72,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     File: fs.createReadStream(file.path),
   };
   const companyID = req.params.companyID;
-  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files`;
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
       return fs.unlink(file.path, () => {
@@ -90,7 +89,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
 
     // Temporary polling function to update database after receipt has been extracted.
     // Recommended to replace with webhook and websockets
-    const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+    const pollUrl = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
     functions.poll(pollUrl, fileID);
     // -------
 
@@ -162,7 +161,7 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
 router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
-  const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+  const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
     .extractReceipt(url, fileID)
@@ -183,7 +182,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const companyID = req.params.companyID;
   const fileID = req.params.fileID;
   const data = req.body;
-  // const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+  // const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   // TEST \\
   const url = 'http://localhost:8080/test';

@@ -34,7 +34,6 @@ app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
-    console.log(data);
     // 'typeof x' will give object if null so we must check for it not being null as well
     // if (
     //   typeof success !== 'boolean' ||
@@ -90,7 +89,6 @@ app.use((req, res, next) => {
 // Express error middleware must have 4 args,
 // so do not remove unused parameters even if eslint complains
 app.use((error, req, res, next) => {
-  console.log(error);
   let data;
   if (Object.prototype.hasOwnProperty.call(error, 'payload')) {
     data = error.payload;
