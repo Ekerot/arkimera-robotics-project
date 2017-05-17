@@ -9,6 +9,7 @@ const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
 const functions = require('./functions');
+const Payload = require('../common/Payload');
 
 moment.locale('sv');
 
@@ -29,11 +30,11 @@ router.get('/', (req, res, next) => {
     }
 
     const parsedBody = JSON.parse(body);
-    return res.customSend(
-      parsedBody.success,
-      response.statusCode,
-      parsedBody.data,
-    );
+    return res
+      .status(response.statusCode)
+      .send(
+        new Payload(parsedBody.success, response.statusCode, parsedBody.data),
+      );
   });
 });
 
@@ -53,7 +54,7 @@ router.get('/:companyID/files', (req, res, next) => {
   }
 
   Files.get(data)
-    .then(files => res.customSend(true, 200, files))
+    .then(files => res.status(200).send(new Payload(true, 200, files)))
     .catch(err => next(createError(500, err)));
 });
 
@@ -107,11 +108,15 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
 
         Files.save(data)
           .then(() =>
-            res.customSend(
-              parsedBody.success,
-              response.statusCode,
-              parsedBody.data,
-            ),
+            res
+              .status(response.statusCode)
+              .send(
+                new Payload(
+                  parsedBody.success,
+                  response.statusCode,
+                  parsedBody.data,
+                ),
+              ),
           )
           .catch(error => next(createError(500, error)));
       })
@@ -133,7 +138,7 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
   };
 
   Files.get(data)
-    .then(file => res.customSend(true, 200, file))
+    .then(file => res.status(200).send(new Payload(true, 200, file)))
     .catch(error => next(createError(500, error)));
 });
 
@@ -149,7 +154,7 @@ router.delete('/:companyID/files/:fileID', (req, res, next) => {
   };
 
   Files.get(data)
-    .then(file => res.customSend(true, 200, file))
+    .then(file => res.status(200).send(new Payload(true, 200, file)))
     .catch(err => next(createError(500, err)));
 });
 
@@ -166,11 +171,11 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   functions
     .extractReceipt(url, fileID)
     .then((response) => {
-      res.customSend(true, response.statusCode, response.body);
+      res
+        .status(response.statusCode)
+        .send(new Payload(true, response.statusCode, response.body));
     })
-    .catch(error =>
-      next(createError(error.statusCode, error.message)),
-    );
+    .catch(error => next(createError(error.statusCode, error.message)));
 });
 
 /**
@@ -233,7 +238,9 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 
     Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
       .then(() =>
-        res.customSend(body.success, response.statusCode, body.data),
+        res
+          .status(response.statusCode)
+          .send(new Payload(body.success, response.statusCode, body.data)),
       )
       .catch(error => next(createError(500, error)));
   });
