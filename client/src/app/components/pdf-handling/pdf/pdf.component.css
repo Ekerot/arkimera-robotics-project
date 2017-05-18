@@ -3,6 +3,7 @@
   max-height: 50%;
   max-width: 100%;
   flex-basis: 66%;
+  margin-top: 15%;
 }
 
 canvas {
@@ -11,9 +12,9 @@ canvas {
   margin: auto;
   top: 0;
   left: 0;
-  bottom: 0;
   right: 20%;
-  position: absolute;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 
@@ -23,9 +24,10 @@ canvas {
     position: absolute;
 }
 
-.buttons {
-  display: inline;
-  float: right;
+.btn {
+  margin-right: 5%;
+  float: left;
+  margin-top: 0px;
 }
 
 md-slider {

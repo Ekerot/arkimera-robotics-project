@@ -9,10 +9,6 @@
 
   <div fxFlex *ngIf="pdfOptions.data;">
 
-    <div fxFlex fxFlexAlign="left" class="slider">
-      <md-slider min="1" max="2" step="1" [(ngModel)]="page" class="slider"></md-slider>
-    </div>
-
     <div class="buttons">
       <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
           <i class="material-icons">cancel</i>

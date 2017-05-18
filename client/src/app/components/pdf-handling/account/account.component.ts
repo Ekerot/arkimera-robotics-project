@@ -12,35 +12,35 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AccountComponent implements OnInit {
 
-  // public receiptData: ReceiptResponse = {
-  //   success: true,
-  //   data: {
-  //     verificationSerie: 'A',
-  //     description: 'Hej hej',
-  //     receiptDate: new Date(2017, 4, 2),
-  //     accounts:
-  //     [
-  //       {
-  //         account: 1930,
-  //         debit: 0.00,
-  //         credit: 128.00
-  //       },
-  //       {
-  //         account: 4323,
-  //         debit: 100.00,
-  //         credit: 0.00
-  //       },
-  //       {
-  //         account: 1827,
-  //         debit: 23.00,
-  //         credit: 0.00
-  //       },
-  //     ]
-  //   },
-  //   time: new Date(2017, 4, 27, 12, 32)
-  // };
+   public receiptData: ReceiptResponse = {
+     success: true,
+     data: {
+       verificationSerie: 'A',
+       description: 'Hej hej',
+       receiptDate: new Date(2017, 4, 2),
+     accounts:
+       [
+         {
+           account: 1930,
+          debit: 0.00,
+           credit: 128.00
+       },
+        {
+          account: 4323,
+           debit: 100.00,
+           credit: 0.00
+         },
+         {
+          account: 1827,
+          debit: 23.00,
+         credit: 0.00
+       },
+     ]
+   },
+    time: new Date(2017, 4, 27, 12, 32)
+  };
 
-  public receiptData: ReceiptResponse = null;
+  //public receiptData: ReceiptResponse = null;
 
   public receiptForm: FormGroup;
   public totalAmount: number;
