@@ -138,7 +138,7 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
   };
 
   Files.get(data)
-    .then(file => res.status(200).send(new Payload(true, 200, file)))
+    .then(file => res.status(200).send(new Payload(true, 200, file[0])))
     .catch(error => next(createError(500, error)));
 });
 
