@@ -68,7 +68,7 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + `/companies/1/files/${fileId}`, options)
       .map(response => {
-        const data = response.json().data[0].extractedData as ReceiptData;
+        const data = response.json().data.extractedData as ReceiptData;
         return data;
       })
       .catch(this.handleError);
