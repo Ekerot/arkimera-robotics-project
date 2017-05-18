@@ -198,67 +198,64 @@ export class StatisticsService {
   }
 
 public statsticsCalculation (res: any) {
-    let max = 2;
+    let max = 0;
     let points = 0;
     max += this.maxCalculation(res);
     points = this.pointCalculation(res);
+    console.log(max)
     return points / max
   }
 
   public maxCalculation(res: any) {
     console.log(res)
+    let max = 0;
     let extractAccount = 0;
     let bookedAccount = 0;
     for (const i of Object.keys(res)) {
         extractAccount += res[i].bookedData.accounts.length;
+        if (res[i].bookedData.description) {
+          max++;
+        }
+      if (res[i].bookedData.date) {
+        max++;
+      }
+      if (res[i].extractedData.date) {
+        max++;
+      }
+      if (res[i].extractedData.description) {
+        max++;
+      }
     }
     for (const i of Object.keys(res)) {
         bookedAccount += res[i].bookedData.accounts.length;
       }
 
     if ( extractAccount > bookedAccount) {
-      return extractAccount;
+      return max + extractAccount;
     } else {
-      return bookedAccount;
+      return max + bookedAccount;
     }
 
   }
 
-  public pointCalculation(res: any) {
+  public pointCalculation(res: FileResponse) {
     let points = 0;
-    const date = [];
-    const description = [];
     const credit = [];
     const debit = [];
     const account = [];
-    let counter = 0;
     for (const i of Object.keys(res)) {
-        description[counter] = res[i].bookedData.description;
-        date[counter] = res[i].bookedData.receiptDate;
-          credit[counter] = res[i].bookedData.accounts.credit;
-          debit[counter] = res[i].bookedData.accounts.debit;
-          account[counter] = res[i].bookedData.accounts.account;
-        counter++;
-    }
-    console.log(account)
-    console.log(debit)
-    counter = 0;
-    for (const i of Object.keys(this.booked)) {
-      for (const j of Object.keys(this.booked[i].data)) {
-        if (date[counter] === this.booked[i].data[j].receiptDate) {
+      if (res[i].extractedData.description === res[i].bookedData.description) {
+        points++;
+      }
+      if (res[i].extractedData.receiptDate === res[i].bookedData.receiptDate) {
+        points++;
+      }
+      for (const j of Object.keys(res[i].bookedData.accounts)) {
+        if (res[i].extractedData.accounts[j].account === res[i].bookedData.accounts[j].account &&
+          (res[i].extractedData.accounts[j].credit === res[i].extractedData.accounts[j].credit
+          || res[i].extractedData.accounts[j].debit === res[i].extractedData.accounts[j].debit)) {
           points++;
         }
-        if (description[counter] === this.booked[i].data[j].description) {
-          points++;
-        }
-        for (const k of Object.keys(this.booked[i].data[j].accounts)) {
-          if (account[counter] === this.booked[i].data[j].accounts[k].account &&
-            (credit[counter] === this.booked[i].data[j].accounts[k].credit
-            || debit[counter] === this.booked[i].data[j].accounts[k].debit)) {
-            points++;
-          }
-        }
-        counter++;
       }
     }
     console.log(points)
