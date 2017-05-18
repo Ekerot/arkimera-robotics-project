@@ -37,10 +37,11 @@ export class PdfComponent implements OnInit {
 
     fileReader.onloadend = (e) => {
       this.pdfOptions.data = fileReader.result;
-      console.debug(this.pdfOptions.data)
+      console.debug(this.file);
     };
 
     fileReader.readAsBinaryString(this.file);
+    console.log(this.pdfOptions)
   }
 
   onUpload(): void {

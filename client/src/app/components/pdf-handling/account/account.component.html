@@ -1,33 +1,35 @@
 <form [formGroup]="receiptForm" class="form" *ngIf="receiptData">
   <div class="container-form">
 
-    <!--<div class="first-block">
+    <div class="first-block">
+
+      <div class="verification">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label class="control-label">Verification</label>
+            <input type="text" class="form-control" formControlName="verificationSerie">
+          </div>
+        </div>
+      </div>
+
       <div class="date">
         <div class="col-sm-3">
-          <div class="form-control label-floating date">
+          <div class="form-group">
             <label class="control-label">Reciept Date</label>
             <input type="text" class="form-control" formControlName="receiptDate">
           </div>
         </div>
       </div>
+
     </div>
 
-    <div class="verification">
-      <div class="col-sm-3">
-        <div class="form-control label-floating">
-          <label class="control-label">Verification Serie</label>
-          <input type="text" class="form-control" formControlName="verificationSerie">
-        </div>
-      </div>
-    </div> -->
-
-    <div formArrayName="accounts" class="account-part">
+    <div formArrayName="accounts" class="second-block">
       <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
 
         <div class="col-sm-2 index">
           <div class="form-group">
             <label class="control-label">Id</label>
-            <input type="number" class="form-control" placeholder="# {{i + 1}}">
+            <input type="text" class="form-control" placeholder="# {{i + 1}}">
           </div>
         </div>
 
@@ -36,28 +38,28 @@
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Account</label>
-              <input type="number" class="form-control" formControlName="account">
+              <input type="text" class="form-control" formControlName="account">
             </div>
           </div>
 
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Debit</label>
-              <input type="number" class="form-control" formControlName="debit">
+              <input type="text" class="form-control" formControlName="debit">
             </div>
           </div>
 
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Credit</label>
-              <input type="number" class="form-control" formControlName="credit">
+              <input type="text" class="form-control" formControlName="credit">
             </div>
           </div>
 
-          <div class="col-sm-1">
+          <div class="col-sm-1 last-in-row">
             <div class="form-group">
               <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
-              <i class="material-icons">delete forever</i>
+              <i class="material-icons delete">delete forever</i>
             </span>
 
             </div>
@@ -69,23 +71,26 @@
     <div class="add">
       <a (click)="addAccount()" style="cursor: default">
             <i data-background-color="blue" class="material-icons">add</i>
-          </a>
+      </a>
     </div>
 
-    <div class="description">
-      <label>Description</label>
-      <input type="text" class="form-control" formControlName="description">
-    </div>
+    <div class="third-block">
 
-    <div class="sum">
-      <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
-      <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
-    </div>
+      <div class="description">
+        <label>Description</label>
+        <input type="text" class="form-control" formControlName="description">
+      </div>
 
-    <div class="hidde-buttons">
-      <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Account</button>
-      <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-default">Sync</button>
-      <ng-template #elseBlock></ng-template>
+      <div class="sum">
+        <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
+        <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
+      </div>
+
+      <div class="hidde-buttons">
+        <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Account</button>
+        <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-default">Sync</button>
+        <ng-template #elseBlock></ng-template>
+      </div>
     </div>
   </div>
 </form>

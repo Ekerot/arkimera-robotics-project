@@ -1,53 +1,45 @@
-.buttons-expenses {
-  float: left;
-  right: 0;
-  bottom: 10px;
-}
-
-.id-input {
-  width: 18px;
-}
-
 .container-form {
   position: relative;
-}
-
-.accounts{
-  height: 30px;
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
-.account-container {
-    order: 1;
-    flex-direction: ltr;
-    flex-wrap: wrap;
-    margin-left: 0px;
-    display: block;
+  height: 100%;
 }
 
 .first-block {
-  margin-left: 0px;
-  display: block;
+  page-break-after: always;
+  width: 100%;
+  right:0;
+}
+
+.second-block {
+  width: 100%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.third-block {
+align-self: flex-end; 
 }
 
 .add {
-  display: block;
-  float: left;
 }
 
 .description {
-  display: block;
-  float: left;
+  page-break-after: always;
 }
 
 .sum {
-  float: right;
-  position: absolute;
-  margin-top: 70%;
+  margin-top: auto;
 }
 
 .hidden-buttons {
   display: block;
   float: left;
 }
+
+.last-in-row {
+  page-break-after: always;
+  margin-top: 10%;  
+}
+

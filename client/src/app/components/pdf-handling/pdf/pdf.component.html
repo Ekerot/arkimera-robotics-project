@@ -4,7 +4,7 @@
   </div>
 
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
-    <pdf-viewer [render-text]="false" [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="true" original-size="false"></pdf-viewer>
+    <pdf-viewer [render-text]="false" [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="true"></pdf-viewer>
   </div>
 
   <div fxFlex *ngIf="pdfOptions.data;">
