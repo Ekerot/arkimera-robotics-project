@@ -1,3 +1,5 @@
+const path = require('path');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -11,16 +13,20 @@ const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const companiesRoutes = require('./routes/companies');
+const createFolders = require('./common/createFolders');
 
 const app = express();
 const dbName = 'arkimera';
 mongoose(dbName);
 
+createFolders();
+
 // -- MIDDLEWARE -- \\
+app.use(cors());
+app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(jwtAuth.checkAuth); // checks body so must be after bodyparser
-app.use(cors());
 
 app.use((req, res, next) => {
   res.customSend = (success, statusCode, data) => {
@@ -54,6 +60,8 @@ app.use((req, res, next) => {
 });
 
 app.set('x-powered-by', false); // set so app do not leak implementation details
+
+//  -- STATIC FILES -- \\
 
 //  -- ROUTING -- \\
 app.use('/', pingRoutes);
