@@ -1,3 +1,4 @@
+import { BookkeepService } from '../../../_services/bookkeep.service';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MaterialModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,10 +11,12 @@ import { HttpService } from 'app/_services';
 describe('PdfComponent', () => {
   let component: PdfComponent;
   let fixture: ComponentFixture<PdfComponent>;
+  let bkService: BookkeepService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
+        BookkeepService,
         { provide: HttpService, useValue: { getFilesReadyForExtraction: () => { return Observable.of() } } }
       ],
       declarations: [
@@ -32,6 +35,8 @@ describe('PdfComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PdfComponent);
     component = fixture.componentInstance;
+    bkService = fixture.debugElement.injector.get(BookkeepService);
+    spyOn(bkService, 'bookkeepConfirmed$').and.returnValue({ subscribe: () => { } });
     fixture.detectChanges();
   });
 

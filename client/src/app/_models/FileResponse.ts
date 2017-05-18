@@ -1,3 +1,10 @@
+export interface ReceiptData {
+  verificationSerie: string;
+  description: string;
+  receiptDate: Date;
+  accounts: Account[];
+}
+
 export interface FileResponse {
   _id: string,
   username: string,
@@ -7,5 +14,7 @@ export interface FileResponse {
   status: string,
   FileID: number,
   companyID: number,
-  __v: number
+  __v: number,
+  extractedData: ReceiptData,
+  bookedData: ReceiptData
 }

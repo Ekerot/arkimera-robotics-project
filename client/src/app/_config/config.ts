@@ -1,4 +1,5 @@
 export const config = {
   azoraOneUrl: 'https://azoraone.azure-api.net/{application}/api/companies',
-  replaceText: '{application}'
+  replaceText: '{application}',
+  webAPIBaseUrl: 'http://localhost:8080'
 }
