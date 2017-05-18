@@ -28,11 +28,6 @@ app.use(cors());
 app.use('/files', express.static(path.join(__dirname, 'files')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// TEMPORARY TEST ROUTE
-app.use('/test', (req, res, next) => {
-  console.log(req.body);
-});
-// -------------------
 app.use(jwtAuth.checkAuth);
 
 app.set('x-powered-by', false);
