@@ -2,7 +2,7 @@ import {Component, AfterViewInit} from '@angular/core';
 import {ViewChild, ElementRef} from '@angular/core';
 import {CreateGraph} from '../create-graph';
 import { StatisticsService } from '../../../_services/statistics.service';
-
+import { HttpService } from '../../../_services/http.service';
 
 @Component({
   selector: 'app-expenses-dashboard',
@@ -14,10 +14,9 @@ export class ExpensesDashboardComponent implements AfterViewInit {
 
   @ViewChild('expenseGraph') expensesGraph: ElementRef;
   public totalExpense: number;
-  private expenses: number[];
+  private expenses: any;
   private otherData: {};
-
-  constructor(private createGraph: CreateGraph, private statisticsService: StatisticsService) {
+  constructor(private createGraph: CreateGraph, private statisticsService: StatisticsService, private httpService: HttpService) {
     this.otherData = {
       name: 'Expenses',
       value: true
@@ -25,9 +24,14 @@ export class ExpensesDashboardComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.totalExpense = this.statisticsService.getTotalExpense();
-    this.expenses = this.statisticsService.getExpenses();
-    this.createGraph.createLineGraph(this.expenses, this.expensesGraph, this.otherData);
+    this.httpService.getBookedFiles()
+      .subscribe(res => {
+        this.totalExpense = this.statisticsService.getTotalExpense();
+        this.expenses = this.statisticsService.getExpenses(res);
+        this.createGraph.createLineGraph(this.expenses, this.expensesGraph, this.otherData);
+      }, error => {
+        console.log(error);
+      })
   }
 
 }

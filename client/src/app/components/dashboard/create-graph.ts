@@ -1,10 +1,11 @@
 import { ElementRef } from '@angular/core';
 import Chart from 'chart.js';
+import {GraphRequest} from '../../_models/graphRequest';
 
 export class CreateGraph {
 
   /*Method for creating the line graphs*/
-  public createLineGraph(incomingData: any, element: ElementRef, otherData: any) {
+  public createLineGraph(incomingData: GraphRequest[], element: ElementRef, otherData: any) {
     const canvas = element.nativeElement.getContext('2d');
     const dailyData = this.extractDailyData(incomingData);
     const data = {
@@ -97,14 +98,15 @@ export class CreateGraph {
 
   /*Extract the incoming data and put into arrays, easier to handle and chart.js cant handle decimals.
   * This method removes the decimals as well*/
-  private extractDailyData(incomingData: any) {
-    let dailyData = {
+  private extractDailyData(incomingData: GraphRequest[]) {
+    const dailyData = {
       data: [],
       dates: []
     };
-    for (let j = 0; j < incomingData.length; j++) {
-        dailyData.data[j] = Math.round(incomingData[j].data);
-        dailyData.dates[j] = incomingData[j].date;
+    for (let i = 0; i < incomingData.length; i++) {
+      const date = incomingData[i].date;
+      dailyData.data[i] = Math.round(incomingData[i].data);
+      dailyData.dates[i] = incomingData[i].date;
     }
     return dailyData;
   }
