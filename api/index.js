@@ -8,13 +8,13 @@ const createError = require('http-errors');
 
 const mongoose = require('./config/mongoose');
 const jwtAuth = require('./jwtAuth');
+const createFolders = require('./common/createFolders');
+const Payload = require('./common/Payload');
 // -- IMPORT ROUTES -- \\
 const pingRoutes = require('./routes/ping');
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const companiesRoutes = require('./routes/companies');
-const createFolders = require('./common/createFolders');
-const Payload = require('./common/Payload');
 
 const app = express();
 const dbName = 'arkimera';
