@@ -86,7 +86,7 @@
         <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
       </div>
 
-      <div class="hidde-buttons">
+      <div class="hidden-buttons">
         <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Account</button>
         <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-default">Sync</button>
         <ng-template #elseBlock></ng-template>

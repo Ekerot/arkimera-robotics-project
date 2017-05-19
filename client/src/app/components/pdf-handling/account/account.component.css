@@ -35,7 +35,8 @@ align-self: flex-end;
 
 .hidden-buttons {
   display: block;
-  float: left;
+  float: right;
+  margin-top: 0px;
 }
 
 .last-in-row {

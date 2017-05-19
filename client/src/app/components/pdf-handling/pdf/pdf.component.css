@@ -7,6 +7,8 @@
 }
 
 canvas {
+  max-height: inherit;
+  max-width: inherit;
   height: 60vh;
   width: 55vh;
   margin: auto;
@@ -25,21 +27,14 @@ canvas {
 }
 
 .btn {
-  margin-right: 5%;
-  float: left;
+  float: right;
   margin-top: 0px;
 }
 
 .buttons {
-  
+
 }
 
-md-slider {
-  width: 6px;
-  background: white;
-  margin-left: 5%;
-  float: right;
-}
 
 input {
   margin-left: 30%;
