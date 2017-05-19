@@ -12,7 +12,7 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AccountComponent implements OnInit {
 
-   public receiptData: ReceiptResponse = {
+   /* public receiptData: ReceiptResponse = {
      success: true,
      data: {
        verificationSerie: 'A',
@@ -38,9 +38,9 @@ export class AccountComponent implements OnInit {
      ]
    },
     time: new Date(2017, 4, 27, 12, 32)
-  };
+  }; */
 
-  //public receiptData: ReceiptResponse = null;
+  public receiptData: ReceiptResponse = null;
 
   public receiptForm: FormGroup;
   public totalAmount: number;
