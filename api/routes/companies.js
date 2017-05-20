@@ -8,6 +8,7 @@ const createError = require('http-errors');
 const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
+const functions = require('./functions');
 
 moment.locale('sv');
 
@@ -15,27 +16,16 @@ moment.locale('sv');
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
 
-function standardErrorHandling(res, error, next) {
-  if (error.response) {
-    // The request was made and the server responded with a status code
-    // that falls out of the range of 2xx
-    next(
-      createError(error.response.status, { payload: error.response.data.data }),
-    );
-  } else if (error.request) {
-    // The request was made but no response was received
-    next(createError(500, 'No response from downstream API'));
-  } else {
-    // Something happened in setting up the request that triggered an Error
-    next(createError(500, 'Error setting upp request to downstream API'));
-  }
-}
-
+/**
+ * GET /companies
+ *
+ * Get list of companies from AzoraOne
+ */
 router.get('/', (req, res, next) => {
   const url = 'https://azoraone.azure-api.net/student/api/companies/';
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
@@ -86,25 +76,50 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files`;
   request.post({ url, formData, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return fs.unlink(file.path, () => {
+        functions.standardErrorHandling(res, err, next);
+      });
     }
 
-    const data = {
-      fileID,
-      file,
-      status: 'uploaded',
-      username: req.decoded.username,
-      companyID,
-    };
+    if (response.statusCode !== 202) {
+      return fs.unlink(file.path, () => {
+        const parsedBody = JSON.parse(body);
+        res.send(next(createError(response.statusCode, parsedBody.data)));
+      });
+    }
 
-    const parsedBody = JSON.parse(body);
-    Files.save(data)
-      .then(() => res.customSend(
-          parsedBody.success,
-          response.statusCode,
-          parsedBody.data,
-        ))
-      .catch(error => res.status(500).send(next(createError(500, error))));
+    // Temporary polling function to update database after receipt has been extracted.
+    // Recommended to replace with webhook and websockets
+    const pollUrl = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
+    functions.poll(pollUrl, fileID);
+    // -------
+
+    Files.move(file.path)
+      .then((newPath) => {
+        file.path = newPath;
+
+        const data = {
+          fileID,
+          file,
+          status: 'uploaded',
+          username: req.decoded.username,
+          companyID,
+        };
+
+        const parsedBody = JSON.parse(body);
+        Files.save(data)
+          .then(() =>
+            res.customSend(
+              parsedBody.success,
+              response.statusCode,
+              parsedBody.data,
+            ),
+          )
+          .catch(error => res.status(500).send(next(createError(500, error))));
+      })
+      .catch((error) => {
+        res.send(next(createError(500, error)));
+      });
   });
 });
 
@@ -151,7 +166,6 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const fileID = req.params.fileID;
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/student/api/companies/${companyID}/files/${fileID}/receipts`;
-
   request.get({ url, headers }, (err, response, body) => {
     if (err) {
       return standardErrorHandling(res, err, next);
@@ -172,6 +186,14 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
       )
       .catch(error => res.status(500).send(next(createError(500, error))));
   });
+  functions
+    .extractReceipt(url, fileID, res, next)
+    .then((response) => {
+      res.customSend(true, response.statusCode, response.body);
+    })
+    .catch(error =>
+      res.send(next(createError(error.statusCode, error.message))),
+    );
 });
 
 router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
@@ -182,7 +204,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
 
   request.post({ url, formData: data, headers }, (err, response, body) => {
     if (err) {
-      return standardErrorHandling(res, err, next);
+      return functions.standardErrorHandling(res, err, next);
     }
 
     const parsedBody = JSON.parse(body);
