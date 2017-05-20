@@ -11,7 +11,9 @@ import { BookkeepService, HttpService } from 'app/_services';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
+
 export class AccountComponent implements OnInit, OnDestroy {
+
 
   public receiptData: ReceiptData;
   public receiptForm: FormGroup;

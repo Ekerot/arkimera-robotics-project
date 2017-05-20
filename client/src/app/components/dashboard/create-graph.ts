@@ -88,6 +88,5 @@ export class CreateGraph {
         }
       );
     }
-
   }
 }

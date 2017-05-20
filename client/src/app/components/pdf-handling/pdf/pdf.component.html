@@ -1,3 +1,20 @@
+
+<div fxLayout="column" fxFlexAlign="left" class="main-pdf">
+  <div fxFlex class="pdf-input">
+    <input *ngIf="!pdfOptions.data" type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
+  </div>
+
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfOptions.data">
+    <pdf-viewer [render-text]="false" [zoom]="zoom" [src]="pdfOptions" [page]="page" show-all="false" original-size="true"></pdf-viewer>
+  </div>
+
+  <div fxFlex *ngIf="pdfOptions.data;">
+
+    <div class="buttons">
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfOptions.data || fileUploaded" color="warn">
+          <i class="material-icons">cancel</i>
+          Cancel
+
 <div fxLayout="column">
 
   <!-- Select file button is not displayed if theer already are a file loaded -->
@@ -17,20 +34,23 @@
 
   <!-- These buttons are not displayed if we are already viewing a file -->
   <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
+    
     <div fxFlex>
-      <button class="btn btn-primary" (click)="onUpload()" [disabled]="!pdfSrc" color="primary">
-        <i class="material-icons">file_upload</i>
-        Upload
+      <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfOptions.data || fileUploaded" color="primary">
+          <i class="material-icons">file_upload</i>
+          Upload
       </button>
     </div>
-
+      
     <div fxFlex>
       <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc" color="warn">
         <i class="material-icons">cancel</i>
         Cancel
       </button>
     </div>
+      
   </div>
 </div>
+
 
 <div *ngIf="loading" class="loading">Loading&#8230;</div>

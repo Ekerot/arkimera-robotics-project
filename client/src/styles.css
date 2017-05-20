@@ -6,10 +6,17 @@
 @import '/assets/css/material-dashboard.css';
 @import '/assets/css/custom.css';
 
+html {
+  min-height: 1366px;
+  min-width: 766px;
+}
+
 body {
-  margin: 0;
+  margin: 0px;
   min-height: 100vh;
   font-family: Roboto;
+  min-height: 1366px;
+  min-width: 766px;
 }
 
 .spacer {
@@ -23,11 +30,29 @@ body {
 }
 
 .logout{
-    margin: 5%;
+    margin: 8%;
 }
 
 .sidebar-wrapper{
-  width: 100px;
+  width: 20%;
+}
+
+.main-content{
+  height: 100vh;
+}
+
+.main-panel .main-content {
+  margin-top: 15px;
+}
+
+canvas {
+  height: 60vh;
+  width: 55vh;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 /* Absolute Center Spinner */
