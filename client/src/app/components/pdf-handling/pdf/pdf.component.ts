@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs/Rx';
 
-import { FileResponse } from 'app/_models';
-import { HttpService, BookkeepService } from 'app/_services/';
+import { FileResponse, Message } from 'app/_models';
+import { HttpService, BookkeepService, WebSocketService } from 'app/_services/';
 import { config } from 'app/_config/config';
 
 @Component({
@@ -9,8 +10,7 @@ import { config } from 'app/_config/config';
   templateUrl: './pdf.component.html',
   styleUrls: ['./pdf.component.css']
 })
-export class PdfComponent implements OnInit {
-
+export class PdfComponent implements OnInit, OnDestroy {
 
   public zoom = '0.6'; // Starting zoom value
   public page = 1; // Starting page
@@ -19,10 +19,14 @@ export class PdfComponent implements OnInit {
   public file: File;
   public loading: boolean;
   public filesToBookkeep: FileResponse[];
+  public messages: Message[];
+
+  private socket: Subscription;
 
   constructor(
     private httpService: HttpService,
-    private bkService: BookkeepService
+    private bkService: BookkeepService,
+    private wsService: WebSocketService
   ) {
     this.loading = false;
   }
@@ -36,6 +40,10 @@ export class PdfComponent implements OnInit {
         this.resetCurrentStatus();
         this.getFilesReadyForExtraction();
       });
+
+    this.socket = this.wsService.getMessages().subscribe((message: Message) => {
+      console.debug('MESSAGE: ', message);
+    })
   }
 
   /**
@@ -126,5 +134,9 @@ export class PdfComponent implements OnInit {
    */
   afterLoadComplete(pdf: PDFDocumentProxy): void {
     this.pdf = pdf;
+  }
+
+  ngOnDestroy(): void {
+    this.socket.unsubscribe();
   }
 }
