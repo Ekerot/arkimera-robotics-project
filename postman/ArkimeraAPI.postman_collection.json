@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "ArkimeraAPI",
-		"_postman_id": "eb97c03c-8513-1b70-bf15-747ffcf88192",
+		"_postman_id": "d62b102c-ceeb-3709-202c-12d52561b958",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -266,12 +266,11 @@
 							"key": "File",
 							"type": "file",
 							"enabled": true,
-							"src": "20160331S1ica1.pdf",
-							"value": ""
+							"src": "20160331S1ica1.pdf"
 						}
 					]
 				},
-				"description": ""
+				"description": "Test must be run in postman native app. Postman via chrome dont have access to file paths so file wont be prefilled.\nhttps://github.com/postmanlabs/postman-app-support/issues/1113"
 			},
 			"response": []
 		},
