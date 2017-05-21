@@ -101,4 +101,14 @@ module.exports = {
         resolve(newPath);
       });
     }),
+  remove: (path) => {
+    return new Promise((resolve, reject) => {
+      fs.unlink(path, (err) => {
+        if (err) {
+          reject();
+        }
+        resolve();
+      });
+    });
+  },
 };
