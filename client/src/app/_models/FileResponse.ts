@@ -1,4 +1,16 @@
-import { ReceiptData } from './';
+export interface Account {
+  account: number,
+  debit: number,
+  credit: number
+}
+
+export interface ReceiptData {
+  verificationSerie: string;
+  description: string;
+  receiptDate: Date;
+  accounts: Account[];
+}
+
 
 export interface FileResponse {
   _id: string,

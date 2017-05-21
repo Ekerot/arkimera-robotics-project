@@ -2,13 +2,25 @@
 	"variables": [],
 	"info": {
 		"name": "ArkimeraAPI",
-		"_postman_id": "4444dbd0-a418-232b-4b4f-185128ec54b7",
+		"_postman_id": "d62b102c-ceeb-3709-202c-12d52561b958",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
 			"name": "Ping",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"tests[\"Answers pong\"] = jsonData.data.answer === \"pong\";"
+						]
+					}
+				}
+			],
 			"request": {
 				"url": "http://localhost:8080/ping",
 				"method": "GET",
@@ -29,7 +41,71 @@
 			"response": []
 		},
 		{
-			"name": "Auth",
+			"name": "Register user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/users/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testuser\",\n\t\"password\": \"testpassword\",\n\t\"subscriptionKey\": \"12345678901234567890123456789012\",\n\t\"clientKey\": \"1234567890123456789012\",\n\t\"appUrl\": \"testurl\"\n}"
+				},
+				"description": "Requirement:\nhttps://github.com/Ekerot/arkimera-robotics-project/issues/72"
+			},
+			"response": []
+		},
+		{
+			"name": "Register existing user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"",
+							"tests[\"Success is false\"] = jsonData.success === false;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/users/",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"testuser\",\n\t\"password\": \"testpassword\",\n\t\"subscriptionKey\": \"12345678901234567890123456789012\",\n\t\"clientKey\": \"1234567890123456789012\",\n\t\"appUrl\": \"testurl\"\n}"
+				},
+				"description": "Requirement:\nhttps://github.com/Ekerot/arkimera-robotics-project/issues/72"
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
 			"event": [
 				{
 					"listen": "test",
@@ -39,7 +115,7 @@
 							"tests[\"Status code is 200\"] = responseCode.code === 200;",
 							"",
 							"var jsonData = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"token\", jsonData.data.token);"
+							"postman.setGlobalVariable(\"token\", jsonData.data.token);"
 						]
 					}
 				}
@@ -71,12 +147,12 @@
 						}
 					]
 				},
-				"description": "POST /users/auth"
+				"description": "Requirement:\nhttps://github.com/Ekerot/arkimera-robotics-project/issues/71"
 			},
 			"response": []
 		},
 		{
-			"name": "Failed Auth",
+			"name": "Failed login",
 			"event": [
 				{
 					"listen": "test",
@@ -112,16 +188,10 @@
 							"value": "wrong",
 							"type": "text",
 							"enabled": true
-						},
-						{
-							"key": "apiKey",
-							"value": "test123",
-							"type": "text",
-							"enabled": false
 						}
 					]
 				},
-				"description": "POST /users/auth with wrong password"
+				"description": "Requirement:\nhttps://github.com/Ekerot/arkimera-robotics-project/issues/71"
 			},
 			"response": []
 		},
@@ -159,29 +229,7 @@
 						}
 					]
 				},
-				"description": "GET /companies"
-			},
-			"response": []
-		},
-		{
-			"name": "Bookkeep a receipt",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "http://localhost:8080/companies/1/files/2/receipts",
-				"method": "PUT",
-				"header": [],
-				"body": {},
-				"description": "PUT /companies/{companyID}/files/{fileID}/receipts"
+				"description": ""
 			},
 			"response": []
 		},
@@ -196,7 +244,7 @@
 							"tests[\"Status code is 202\"] = responseCode.code === 202;",
 							"",
 							"var jsonData = JSON.parse(responseBody);",
-							"postman.setEnvironmentVariable(\"fileID\", jsonData.data.fileID);"
+							"postman.setGlobalVariable(\"fileID\", jsonData.data.fileID);"
 						]
 					}
 				}
@@ -218,11 +266,47 @@
 							"key": "File",
 							"type": "file",
 							"enabled": true,
-							"src": "kvitto.pdf"
+							"src": "20160331S1ica1.pdf"
 						}
 					]
 				},
-				"description": ""
+				"description": "Test must be run in postman native app. Postman via chrome dont have access to file paths so file wont be prefilled.\nhttps://github.com/postmanlabs/postman-app-support/issues/1113"
+			},
+			"response": []
+		},
+		{
+			"name": "Bookkeep a receipt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies/1/files/{{fileID}}/receipts",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"description": ""
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"verificationSerie\": \"A\",\n    \"description\": \"Maxi ICA Stormarknad\",\n    \"receiptDate\": \"2016-06-03\",\n    \"accounts\": [\n      {\n        \"account\": \"1930\",\n        \"debit\": \"0.00\",\n        \"credit\": \"272.18\"\n      },\n      {\n        \"account\": \"7600\",\n        \"debit\": \"241.24\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"2641\",\n        \"debit\": \"28.94\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"6100\",\n        \"debit\": \"1.60\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"2641\",\n        \"debit\": \"0.40\",\n        \"credit\": \"0.00\"\n      }\n    ]\n}"
+				},
+				"description": "PUT /companies/{companyID}/files/{fileID}/receipts"
 			},
 			"response": []
 		},
@@ -249,7 +333,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -277,7 +364,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -305,7 +395,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -333,7 +426,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -361,7 +457,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -389,7 +488,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -417,7 +519,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []

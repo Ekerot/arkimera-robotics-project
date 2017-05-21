@@ -93,7 +93,6 @@ export class CreateGraph {
         }
       );
     }
-
   }
 
   /*Extract the incoming data and put into arrays, easier to handle and chart.js cant handle decimals.
