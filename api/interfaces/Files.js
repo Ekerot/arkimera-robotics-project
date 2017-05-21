@@ -32,11 +32,11 @@ module.exports = {
     new Promise((resolve, reject) => {
       Files.findOne({ FileID: data.fileID }).exec((err, file) => {
         if (err) {
-          reject(err);
+          return reject(err);
         }
 
         if (!file) {
-          reject('File not found!');
+          return reject('File not found!');
         }
 
         const updatedFile = file;
