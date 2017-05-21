@@ -39,8 +39,6 @@ module.exports = {
           return reject('File not found!');
         }
 
-        console.log(file);
-
         const updatedFile = file;
         updatedFile.status = data.status;
 
