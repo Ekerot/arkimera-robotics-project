@@ -69,7 +69,7 @@ const functions = {
             console.log(`Timer was ${timeout}`);
             timeout += 1000;
             console.log(`Next timer set to: ${timeout}`);
-            functions.poll(url, fileID, timeout);
+            functions.poll(url, fileID, user, timeout);
         });
     }, timeout);
   },
