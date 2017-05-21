@@ -289,7 +289,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/companies/1/files/2/receipts",
+				"url": "http://localhost:8080/companies/1/files/{{fileID}}/receipts",
 				"method": "PUT",
 				"header": [
 					{
