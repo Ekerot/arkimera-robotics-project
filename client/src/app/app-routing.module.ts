@@ -13,19 +13,13 @@ import { RegisterComponent } from 'app/components/login/register/register.compon
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: DashboardComponent
-      },
-      {
-        path: 'expenses',
-        component: ExpensesComponent
-      }
-
-    ]
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'expenses',
+    component: ExpensesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
