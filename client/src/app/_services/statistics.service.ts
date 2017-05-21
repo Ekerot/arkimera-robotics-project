@@ -11,99 +11,8 @@ export class StatisticsService {
   private profit = 0;
   private totalExpenses = 0;
   private totalIncome = 0;
-  private fileBool = true;
   private files: FileResponse[];
-  /*private files =  [{
-   _id: 'hej',
-   username: 'admin',
-   path: 'string',
-   originalname: 'string',
-   filename: 'string',
-   status: 'string',
-   FileID: 'number',
-   companyID: 'number',
-   __v: 'number',
-   extractedData: {
-   success: true,
-   data: [{
-   verificationSerie: 'A',
-   description: 'Maxi ICA Stormarknad',
-   receiptDate: '2017-06-03',
-   accounts: [
-   {
-   account: 1930,
-   debit: 20.00,
-   credit: 242.18
-   },
-   ]
-   }],
-   time: '2017-03-28 11:41:02'
-   },
-   bookedData: {
-   success: true,
-   data: [{
-   verificationSerie: 'A',
-   description: 'Maxi ICA Stormarknad',
-   receiptDate: '2017-06-03',
-   accounts: [
-   {
-   account: 1930,
-   debit: 20.00,
-   credit: 242.18
-   },
-   ]
-   }],
-   time: '2017-03-28 11:41:02'
-   },
-   }];
-   */
-  private extracted =  [{
-    success: true,
-    data: [{
-      verificationSerie: 'A',
-      description: 'Maxi ICA Stormarknad',
-      receiptDate: '2017-06-03',
-      accounts: [
-        {
-          account: 1930,
-          debit: 20.00,
-          credit: 242.18
-        }, {
-          account: 1930,
-          debit: 20.00,
-          credit: 242.18
-        }, {
-          account: 1930,
-          debit: 20.00,
-          credit: 242.18
-        }
-      ]
-    }],
-    time: '2017-03-28 11:41:02'
-  }];
-  private booked =  [{
-    success: true,
-    data: [{
-      verificationSerie: 'A',
-      description: 'Maxi ICA Stormarknad',
-      receiptDate: '2017-06-03',
-      accounts: [
-        {
-          account: 1930,
-          debit: 20.00,
-          credit: 242.18
-        }, {
-          account: 1930,
-          debit: 20.00,
-          credit: 242.18
-        }
-      ]
-    }],
-    time: '2017-03-28 11:41:02'
-  }];
-
   constructor(private httpService: HttpService) {
-
   }
 
   public getFiles () {
@@ -202,12 +111,10 @@ public statsticsCalculation (res: any) {
     let points = 0;
     max += this.maxCalculation(res);
     points = this.pointCalculation(res);
-    console.log(max)
     return points / max
   }
 
   public maxCalculation(res: any) {
-    console.log(res)
     let max = 0;
     let extractAccount = 0;
     let bookedAccount = 0;
@@ -258,7 +165,6 @@ public statsticsCalculation (res: any) {
         }
       }
     }
-    console.log(points)
     return points;
   }
 }

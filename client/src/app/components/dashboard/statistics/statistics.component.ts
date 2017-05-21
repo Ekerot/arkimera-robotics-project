@@ -15,7 +15,6 @@ export class StatisticsComponent implements OnInit {
     this.httpService.getBookedFiles()
       .subscribe(res => {
     this.hitRate = this.statisticsService.statsticsCalculation(res);
-    console.log(Math.round(this.hitRate * 100) + '%');
       }, error => {
         console.log(error);
       })
