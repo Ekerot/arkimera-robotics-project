@@ -27,7 +27,6 @@ module.exports = {
       });
     }),
 
-  // updateStatus: (fileID, status) =>
   updateStatus: data =>
     new Promise((resolve, reject) => {
       Files.findOne({ FileID: data.fileID }).exec((err, file) => {
@@ -51,9 +50,8 @@ module.exports = {
         updatedFile.save((error) => {
           if (error) {
             return reject(error);
-          } else {
-            return resolve();
           }
+          return resolve();
         });
       });
     }),
@@ -77,12 +75,8 @@ module.exports = {
             const rs = fs.createReadStream(oldPath);
             const ws = fs.createWriteStream(newPath);
 
-            rs.on('error', (error) => {
-              return reject(error);
-            });
-            ws.on('error', (error) => {
-              return reject(error);
-            });
+            rs.on('error', error => reject(error));
+            ws.on('error', error => reject(error));
 
             rs.on('close', () => {
               fs.unlink(oldPath, (error) => {
@@ -101,14 +95,13 @@ module.exports = {
         return resolve(newPath);
       });
     }),
-  remove: (path) => {
-    return new Promise((resolve, reject) => {
-      fs.unlink(path, (err) => {
-        if (err) {
-          return reject();
-        }
-        return resolve();
-      });
+
+  remove: path => new Promise((resolve, reject) => {
+    fs.unlink(path, (err) => {
+      if (err) {
+        return reject();
+      }
+      return resolve();
     });
-  },
+  }),
 };
