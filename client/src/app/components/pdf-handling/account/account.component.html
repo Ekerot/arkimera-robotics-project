@@ -26,7 +26,7 @@
         <div class="col-sm-2 index">
           <div class="form-group">
             <label class="control-label">Id</label>
-            <input type="text" class="form-control" placeholder="# {{i + 1}}">
+            <input type="number" class="form-control" placeholder="# {{i + 1}}">
           </div>
         </div>
 
@@ -80,8 +80,8 @@
 
 
       <div class="sum">
-        <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
-        <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
+        <label *ngIf="totalAmount!==0;" data-background-color="red"> Sum: {{totalAmount}} kr</label>
+        <label *ngIf="totalAmount===0;" data-background-color="green"> Sum: {{totalAmount}} kr</label>
       </div>
 
 

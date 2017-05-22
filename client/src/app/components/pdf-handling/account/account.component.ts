@@ -27,6 +27,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private http: HttpService
   ) {
+
     this.totalAmount = 0;
 
     this.fileIdSubscription = bkService.bookkeepAnnounced$
@@ -45,10 +46,18 @@ export class AccountComponent implements OnInit, OnDestroy {
         .subscribe((formData: ReceiptData) => {
           this.totalAmount = 0;
 
-          formData.accounts.forEach((account: Account) => {
-            this.totalAmount += Number(account.debit);
-            this.totalAmount -= Number(account.credit);
+          this.receiptData.accounts.forEach((account: Account) => {
+
+            let debit: string = String(account.debit)
+            let credit: string = String(account.credit)
+
+            this.totalAmount += +(debit.replace(',', '.'));
+            this.totalAmount -= +(credit.replace(',', '.'));
+
           })
+
+          this.totalAmount = Number(this.totalAmount.toFixed(2));
+
         });
     }
   }
@@ -65,11 +74,19 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
 
     data.accounts.forEach((account: Account) => {
-      this.totalAmount += Number(account.debit);
-      this.totalAmount -= Number(account.credit);
+
+      let debit: string = String(account.debit)
+      let credit: string = String(account.credit)
+
+      this.totalAmount += Number(debit.replace(',', '.'));
+      this.totalAmount -= Number(credit.replace(',', '.'));
 
       this.addAccount(account);
+
     });
+    
+    this.totalAmount = Number(this.totalAmount.toFixed(2));
+
   }
 
   initAccount(account?: Account): FormGroup {
@@ -84,13 +101,13 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
   }
 
-    /**
-   * Adds new bookkeeping row
-   *
-   * @param {account} Account
-   *
-   * @memberof AccountComponent
-   */
+  /**
+ * Adds new bookkeeping row
+ *
+ * @param {account} Account
+ *
+ * @memberof AccountComponent
+ */
 
   addAccount(account?: Account): void {
     const control = <FormArray>this.receiptForm.controls['accounts'];
@@ -138,13 +155,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       });
   }
 
-    /**
-   * Reset all values 
-   *
-   * @param 
-   *
-   * @memberof AccountComponent
-   */
+  /**
+ * Reset all values 
+ *
+ * @param 
+ *
+ * @memberof AccountComponent
+ */
 
   private resetCurrentStatus(): void {
     this.receiptData = null;
