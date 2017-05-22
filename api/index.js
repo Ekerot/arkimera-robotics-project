@@ -3,7 +3,6 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const moment = require('moment');
 const createError = require('http-errors');
 
 const mongoose = require('./config/mongoose');
