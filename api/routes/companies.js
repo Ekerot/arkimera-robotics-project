@@ -2,7 +2,6 @@ const fs = require('fs');
 const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
-const moment = require('moment');
 const createError = require('http-errors');
 
 const headers = require('../common/headers');

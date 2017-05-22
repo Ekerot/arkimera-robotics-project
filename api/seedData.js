@@ -37,3 +37,11 @@ db.connection.collections.users.drop((error) => {
       });
   }
 });
+
+db.connection.collection.files.drop((error) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('collection dropped');
+  }
+});
