@@ -7,7 +7,6 @@ module.exports = {
     io = new SocketIO(api);
   },
   emit: (event, data, user) => {
-    console.log(`emits event: ${event} to ${user}`);
     io
     .of(`/sockets/${user}`)
     .on('connection', (socket) => {
