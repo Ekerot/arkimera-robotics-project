@@ -10,8 +10,6 @@ const Files = require('../interfaces/Files');
 const functions = require('./functions');
 const Payload = require('../common/Payload');
 
-moment.locale('sv');
-
 // CONFIG disk storage for multer file upload
 const storage = multer.diskStorage(diskStorage);
 const upload = multer({ storage });
