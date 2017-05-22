@@ -13,10 +13,7 @@ html {
 
 body {
   margin: 0px;
-  min-height: 100vh;
   font-family: Roboto;
-  min-height: 1366px;
-  min-width: 766px;
 }
 
 .spacer {
@@ -38,7 +35,7 @@ body {
 }
 
 .main-content{
-  height: 100vh;
+  height: 100%;
 }
 
 .main-panel .main-content {

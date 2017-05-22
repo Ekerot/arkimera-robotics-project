@@ -65,8 +65,8 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
 
     data.accounts.forEach((account: Account) => {
-      this.totalAmount += account.debit;
-      this.totalAmount -= account.credit;
+      this.totalAmount += Number(account.debit);
+      this.totalAmount -= Number(account.credit);
 
       this.addAccount(account);
     });
@@ -84,16 +84,41 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
   }
 
+    /**
+   * Adds new bookkeeping row
+   *
+   * @param {account} Account
+   *
+   * @memberof AccountComponent
+   */
+
   addAccount(account?: Account): void {
     const control = <FormArray>this.receiptForm.controls['accounts'];
     const accountCtrl = this.initAccount(account);
     control.push(accountCtrl);
   }
 
+  /**
+   * Delete account depending on value input
+   * Value = index
+   *
+   * @param {value} number
+   *
+   * @memberof AccountComponent
+   */
+
   deleteAccount(value: number): void {
     const control = <FormArray>this.receiptForm.controls['accounts'];
     control.removeAt(value);
   }
+
+  /**
+   * Get extracted data from receipt
+   *
+   * @param {fileID} number
+   *
+   * @memberof AccountComponent
+   */
 
   getExtractedData(fileId: number): void {
     this.http.getExtractedData(fileId)
@@ -112,6 +137,14 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.resetCurrentStatus();
       });
   }
+
+    /**
+   * Reset all values 
+   *
+   * @param 
+   *
+   * @memberof AccountComponent
+   */
 
   private resetCurrentStatus(): void {
     this.receiptData = null;

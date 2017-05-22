@@ -16,7 +16,7 @@
   -->
 
   <!-- These buttons are not displayed if we are already viewing a file -->
-  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
+  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 5">
     
     <div fxFlex>
       <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
