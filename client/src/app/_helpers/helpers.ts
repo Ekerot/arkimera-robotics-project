@@ -5,8 +5,3 @@ export const buildAzoraOneUrl = (application: string): string => {
   result = result.replace(config.replaceText, application);
   return result;
 }
-
-export const buildWebsocketUrl = (username: string): string => {
-  const result = config.webAPISocketUrl + '/sockets/' + username;
-  return result;
-}

@@ -2,24 +2,31 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import * as io from 'socket.io-client';
 
-import * as helpers from 'app/_helpers/helpers';
+import { config } from 'app/_config/config';
 
 export class WebSocketService {
 
-  // TODO: Change hardcoded 'admin' to actual current username. Will probably need decoding of jwt for this...
-  private url = helpers.buildWebsocketUrl('admin');
-  private socket;
+  private url = config.webAPISocketUrl;
+  private socket: SocketIOClient.Socket;
 
   getMessages() {
     const observable = new Observable(observer => {
+      // Open up a new websocket
       this.socket = io(this.url);
-      this.socket.on('message', (data) => {
+
+      // Connect to channel
+      this.socket.emit('open channel', 'admin');
+
+      // Listen for extracted events
+      this.socket.on('extracted', (data) => {
         observer.next(data);
       });
+
       return () => {
         this.socket.disconnect();
       }
-    })
+    });
+
     return observable;
   }
 }
