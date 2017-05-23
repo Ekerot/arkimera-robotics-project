@@ -22,7 +22,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   ) {
     this.username = this.auth.getLoggedInUsername();
     this.socket = this.wsService.getMessages(this.username).subscribe((message: Message) => {
-      console.debug('MESSAGE: ', message);
+      console.log('MESSAGE: ', message);
     });
   }
 
