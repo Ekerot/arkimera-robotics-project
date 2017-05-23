@@ -17,7 +17,6 @@ import { AuthService, BookkeepService, HttpService, WebSocketService } from 'app
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ExpensesComponent } from './components/pdf-handling/expenses/expenses.component';
@@ -40,7 +39,6 @@ import { Md2Module } from 'md2';
     AppComponent,
     NavbarComponent,
     DashboardComponent,
-    HomeComponent,
     PageNotFoundComponent,
     SidenavComponent,
     ExpensesComponent,

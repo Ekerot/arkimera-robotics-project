@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
   ) {
     this.loading = false;
 
-    if (this.auth.isLoggedIn) {
+    if (this.auth.isUserLoggedIn()) {
       this.router.navigate(['/dashboard']);
     }
   }
