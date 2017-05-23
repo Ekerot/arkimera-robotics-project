@@ -15,7 +15,7 @@ Nicklas Björkendal
 IDE: [Visual Studio Code](https://code.visualstudio.com/) called vs code below  
 Framework: [Angular](https://angular.io/)  
 Scaffolding: [Angular CLI](https://cli.angular.io/)  
-Styling/GUI components: [Angular Material](https://material.angularjs.org/latest/)  
+Styling/GUI components: [Angular Material](https://material.angularjs.org/latest/) / [Bootstrap](http://getbootstrap.com/) 
 
 ## Usage
 Clone or download [this](https://github.com/Ekerot/arkimera-robotics-project) project and open the subfolder **client** in vs code or any other editor/IDE.

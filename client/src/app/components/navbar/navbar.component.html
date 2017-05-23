@@ -1,20 +1,13 @@
-<md-toolbar color="primary">
-
-  <button md-icon-button (click)="sidenav.toggle()"><md-icon>menu</md-icon></button>
-
-  <span class="spacer"></span>
-
-  <button md-icon-button [mdMenuTriggerFor]="menu">
-    <md-icon>more_vert</md-icon>
-  </button>
-
-  <md-menu #menu="mdMenu">
-
-    <button md-menu-item (click)="onLogout()">
-      <md-icon>power_settings_new</md-icon>
-      <span>Logout</span>
-    </button>
-
-  </md-menu>
-
-</md-toolbar>
+<nav class="navbar navbar-transparent navbar-absolute">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <div>
+                        <i class="material-icons logout" (click)="onLogout()">power_settings_new</i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

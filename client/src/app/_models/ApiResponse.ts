@@ -1,10 +1,7 @@
-export class ApiResponse {
-
-  constructor(
-    public status: string,
-    public message: string,
-    public data: {
-      token: string
-    }
-  ) { }
+export interface ApiResponse {
+  success: boolean,
+  data: any,
+  time: Date,
+  code: number,
+  message: string,
 }

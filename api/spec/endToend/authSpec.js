@@ -1,7 +1,11 @@
 const jwt = require('jsonwebtoken');
 
 const app = require('../../index.js');
-const setupRequestAndExpectsRunner = require('../helpers/e2eHelpers').setupRequestAndExpectsRunner;
+const e2eHelpers = require('../helpers/e2eHelpers');
+
+
+const setupRequestAndExpectsRunner = e2eHelpers.setupRequestAndExpectsRunner;
+const responseFormatAsserts = e2eHelpers.responseFormatAsserts;
 
 
 describe('testing /users/auth route', () => {
@@ -23,37 +27,21 @@ describe('testing /users/auth route', () => {
 
   const requestAndExpectsRunner = setupRequestAndExpectsRunner(options);
 
-  function simpleExpects(expectedResult) {
-    return (res, body) => {
-      expect(res.statusCode).toBe(expectedResult.statusCode);
-      expect(body).toEqual(expectedResult.body);
-    };
-  }
-
   describe('Fail due to missing info ', () => {
     const expectedResult = {
-      statusCode: 401,
-      body: {
-        success: false,
-        message: 'Missing username and/or password',
-      },
+      success: false,
+      message: '',
+      code: 400,
     };
-    const missingInfoExpects = simpleExpects(expectedResult);
-
-    it('empty username&pw = fail & missing info msg', (done) => {
-      const data = {
-        username: '',
-        password: '',
-      };
-
-      requestAndExpectsRunner(data, done, missingInfoExpects);
-    });
 
     it('empty pw = fail & missing info msg', (done) => {
       const data = {
         username: 'admin',
         password: '',
       };
+
+      expectedResult.message = 'Missing password';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
@@ -62,6 +50,9 @@ describe('testing /users/auth route', () => {
         username: '',
         password: 'admin',
       };
+
+      expectedResult.message = 'Missing username';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
 
@@ -69,19 +60,20 @@ describe('testing /users/auth route', () => {
       const data = {
 
       };
+
+      expectedResult.message = 'Missing username';
+      const missingInfoExpects = responseFormatAsserts(expectedResult);
       requestAndExpectsRunner(data, done, missingInfoExpects);
     });
   });
 
   describe('Fail due to incorrect login info, Unauthorized', () => {
     const expectedResult = {
-      statusCode: 401,
-      body: {
-        success: false,
-        message: 'Unauthorized',
-      },
+      success: false,
+      message: 'Unauthorized',
+      code: 401,
     };
-    const unauthorizedExpects = simpleExpects(expectedResult);
+    const unauthorizedExpects = responseFormatAsserts(expectedResult);
 
     it('incorrect username = fail', (done) => {
       const data = {
@@ -102,11 +94,9 @@ describe('testing /users/auth route', () => {
 
   describe('Successfully logged in', () => {
     const expectedResult = {
-      statusCode: 200,
-      body: {
-        success: true,
-        message: 'Successfully logged in',
-      },
+      success: true,
+      message: '',
+      code: 200,
     };
 
     it('correct username&pw = success  & jsonwebtoken', (done) => {
@@ -114,13 +104,14 @@ describe('testing /users/auth route', () => {
         username: 'admin',
         password: 'admin',
       };
+
       requestAndExpectsRunner(data, done, (res, body) => {
-        expect(res.statusCode).toBe(expectedResult.statusCode);
-        expect(body.message).toBe(expectedResult.body.message);
-        expect(typeof body.data).toBe('object');
-        expect(typeof body.data.token).toBe('string');
-        const decoded = jwt.decode(body.data.token);
-        expect(decoded.username).toBe(data.username);
+        responseFormatAsserts(expectedResult, () => {
+          expect(typeof body.data).toBe('object');
+          expect(typeof body.data.token).toBe('string');
+          const decoded = jwt.decode(body.data.token);
+          expect(decoded.username).toBe(data.username);
+        });
       });
     });
   });

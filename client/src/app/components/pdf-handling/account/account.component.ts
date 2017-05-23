@@ -1,65 +1,127 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
+import 'rxjs/add/operator/debounceTime';
+
+import { Account, ReceiptData } from 'app/_models';
+import { BookkeepService, HttpService } from 'app/_services';
 
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
-export class AccountComponent implements OnInit {
 
-  public selectedValue: string;
-  public myForm: FormGroup;
-  public invoiceItemsData: object[] = [{}];
+export class AccountComponent implements OnInit, OnDestroy {
+
+
+  public receiptData: ReceiptData;
+  public receiptForm: FormGroup;
   public totalAmount: number;
-  public accounts = [
-    { value: '', viewValue: '' },
-    { value: '1910', viewValue: 'Kassa' },
-    { value: '1920', viewValue: 'Plusgiro' },
-    { value: '1930', viewValue: 'Bankkonto' },
-    { value: '2641', viewValue: 'Ingående moms' },
-    { value: '3740', viewValue: 'Öresutjämning' },
-    { value: '5611', viewValue: 'Drivmedel personbilar' },
-    { value: '5890', viewValue: 'Övriga resekostnader' },
-    { value: '6071', viewValue: 'Representation, avdragsgill' },
-    { value: '6072', viewValue: 'Representation, ej avdragsgill' },
-    { value: '6110', viewValue: 'Kontorsmaterial' },
-  ];
-  public date: Date;
-  public memo: string;
 
-  constructor(private formBuilder: FormBuilder) { }
+  private fileIdSubscription: Subscription;
+  private fileIdToBookkeep: number;
 
-  ngOnInit() { }
-
-  addNewRow() {
-    this.invoiceItemsData.push({});
-  }
-
-  deleteRow(value: number) {
-
-    const index: number = value;
-
-    if (index !== -1) {
-      this.invoiceItemsData.splice(index, 1);
-    }
-  }
-
-  update() {
-
-    const val: number[] = [3740, 1910, 1920, 1930, 3740];
+  constructor(
+    private bkService: BookkeepService,
+    private formBuilder: FormBuilder,
+    private http: HttpService
+  ) {
     this.totalAmount = 0;
 
-    for (const item of this.invoiceItemsData) {
+    this.fileIdSubscription = bkService.bookkeepAnnounced$
+      .subscribe(fileId => {
+        this.fileIdToBookkeep = fileId;
+        this.getExtractedData(fileId);
+      });
+  }
 
-      if (item['amount'] != null) {
-        if (val.indexOf(parseInt(item['selectedValue'], 10)) > -1) {
-          this.totalAmount -= item['amount'];
-        } else {
-          this.totalAmount += item['amount'];
-        }
-      }
+  ngOnInit() {
+    if (this.receiptData) {
+      this.initForm();
+
+      this.receiptForm.valueChanges
+        .debounceTime(200)
+        .subscribe((formData: ReceiptData) => {
+          this.totalAmount = 0;
+
+          formData.accounts.forEach((account: Account) => {
+            this.totalAmount += Number(account.debit);
+            this.totalAmount -= Number(account.credit);
+          })
+        });
     }
   }
-}
 
+  initForm(): void {
+    const accounts: FormArray = new FormArray([]);
+    const data = this.receiptData;
+
+    this.receiptForm = this.formBuilder.group({
+      verificationSerie: [data.verificationSerie, Validators.required],
+      description: [data.description],
+      receiptDate: [data.receiptDate, Validators.required],
+      accounts: accounts
+    });
+
+    data.accounts.forEach((account: Account) => {
+      this.totalAmount += account.debit;
+      this.totalAmount -= account.credit;
+
+      this.addAccount(account);
+    });
+  }
+
+  initAccount(account?: Account): FormGroup {
+    const accountNum = account ? account.account : '';
+    const debit = account ? account.debit : 0;
+    const credit = account ? account.credit : 0;
+
+    return this.formBuilder.group({
+      account: [accountNum, Validators.required],
+      debit: [debit],
+      credit: [credit]
+    });
+  }
+
+  addAccount(account?: Account): void {
+    const control = <FormArray>this.receiptForm.controls['accounts'];
+    const accountCtrl = this.initAccount(account);
+    control.push(accountCtrl);
+  }
+
+  deleteAccount(value: number): void {
+    const control = <FormArray>this.receiptForm.controls['accounts'];
+    control.removeAt(value);
+  }
+
+  getExtractedData(fileId: number): void {
+    this.http.getExtractedData(fileId)
+      .subscribe(data => {
+        this.receiptData = data;
+        this.initForm();
+      });
+  }
+
+  onSubmitReceipt(receiptForm: FormGroup): void {
+    const receiptData = receiptForm.value as ReceiptData;
+
+    this.http.postReceiptData(receiptData, this.fileIdToBookkeep)
+      .subscribe(data => {
+        this.bkService.confirmBookkeep(this.fileIdToBookkeep);
+        this.resetCurrentStatus();
+      });
+  }
+
+  private resetCurrentStatus(): void {
+    this.receiptData = null;
+    this.receiptForm = null;
+    this.totalAmount = 0;
+    this.fileIdToBookkeep = null;
+  }
+
+  ngOnDestroy(): void {
+    this.fileIdSubscription.unsubscribe();
+  }
+
+}

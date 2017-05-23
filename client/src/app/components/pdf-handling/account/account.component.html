@@ -1,45 +1,101 @@
-<div>
-  <h3>Expenses</h3>
-  <md-divider></md-divider>
-  <label>Payment Date:</label>
-  <md2-datepicker [(ngModel)]="date"></md2-datepicker>
-</div>
+<form [formGroup]="receiptForm" class="form" *ngIf="receiptData" (ngSubmit)="onSubmitReceipt(receiptForm)">
+  <div class="container-form">
 
-<div *ngFor="let row of invoiceItemsData; let i = index" #ival class="table" id="{{i}}">
+    <div class="first-block">
 
-  <div *ngIf="i<6" class="form-group">
-    <label class="id-input"># {{i +1}}</label>
+      <div class="verification">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label class="control-label">Verification</label>
+            <input type="text" class="form-control" formControlName="verificationSerie">
+          </div>
+        </div>
+      </div>
 
-    <md-select placeholder="Accounts" [(ngModel)]="row.selectedValue" class="form-control" name="selectedValue">
-      <md-option *ngFor="let accounts of accounts" [value]="accounts.value">
-        {{accounts.value + " " + accounts.viewValue}}
-      </md-option>
-    </md-select>
+      <div class="date">
+        <div class="col-sm-3">
+          <div class="form-group">
+            <label class="control-label">Reciept Date</label>
+            <input type="text" class="form-control" formControlName="receiptDate">
+          </div>
+        </div>
+      </div>
 
-    <md-input-container><input mdInput type="text" class="form-control" required [(ngModel)]="row.description" value="{{row.description}}" name="description"
-        placeholder="Description"></md-input-container>
+    </div>
 
-    <md-input-container><input mdInput (change)="update()" type="number" class="form-control" required [(ngModel)]="row.amount" value="{{row.amount}}"
-        name="amount" placeholder="Amount"></md-input-container>
+    <div formArrayName="accounts" class="second-block">
+      <div *ngFor="let account of receiptForm.controls.accounts.controls; let i=index">
 
-    <a class="btn btn-primary" (click)="deleteRow(ival.id)">
-      <md-icon>delete</md-icon>
-    </a>
+        <div class="col-sm-2 index">
+          <div class="form-group">
+            <label class="control-label">Id</label>
+            <input type="text" class="form-control" placeholder="# {{i + 1}}">
+          </div>
+        </div>
+
+        <div [formGroupName]="i" class="accounts">
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label class="control-label">Account</label>
+              <input type="text" class="form-control" formControlName="account">
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label class="control-label">Debit</label>
+              <input type="text" class="form-control" formControlName="debit">
+            </div>
+          </div>
+
+          <div class="col-sm-3">
+            <div class="form-group">
+              <label class="control-label">Credit</label>
+              <input type="text" class="form-control" formControlName="credit">
+            </div>
+          </div>
+
+          <div class="col-sm-1 last-in-row">
+            <div class="form-group">
+              <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
+              <i class="material-icons delete">delete forever</i>
+            </span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add">
+      <a (click)="addAccount()" style="cursor: default">
+            <i data-background-color="blue" class="material-icons">add</i>
+      </a>
+    </div>
+
+    <div class="third-block">
+
+      <div class="description">
+        <label>Description</label>
+        <input type="text" class="form-control" formControlName="description">
+      </div>
+
+
+      <div class="sum">
+        <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
+        <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
+      </div>
+
+
+      <div class="hidden-buttons">
+        <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-success">Bookkeep</button>
+        <button *ngIf="totalAmount===0; else elseBlock" class="btn btn-default">Sync</button>
+        <ng-template #elseBlock></ng-template>
+      </div>
+
+    </div>
 
   </div>
-</div>
 
-<a class="btn btn-primary" (click)="addNewRow()">Add line</a>
-
-<div>
-  <md-input-container class="input-field message">
-    <textarea mdInput md-autosize minRows="3" placeholder="Memo" name="memo" [(ngModel)]="memo" class="form-control"></textarea>
-  </md-input-container>
-</div>
-
-<p> Total: {{totalAmount}} kr </p>
-
-<div class="buttons-expenses">
-  <button md-button>Extract</button>
-  <button md-button>Account</button>
-</div>
+</form>

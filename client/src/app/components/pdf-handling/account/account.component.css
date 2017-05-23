@@ -1,10 +1,46 @@
-.buttons-expenses{
-  position:absolute;
-   right:0;
-   bottom:10px;
+.container-form {
+  position: relative;
+  height: 100%;
 }
 
-.id-input{
-  width: 18px;
+.first-block {
+  page-break-after: always;
+  width: 100%;
+  right:0;
+}
+
+.second-block {
+  width: 100%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.third-block {
+align-self: flex-end; 
+}
+
+.add {
+}
+
+.description {
+  page-break-after: always;
+}
+
+.sum {
+  margin-top: auto;
+}
+
+.hidden-buttons {
+  display: block;
+  float: right;
+  margin-top: 0px;
+}
+
+.last-in-row {
+  page-break-after: always;
+  margin-top: 10%;  
 }
 

@@ -1,6 +1,8 @@
 const router = require('express').Router();
+const Payload = require('../common/Payload');
+
 const createToken = require('../jwtAuth').createToken;
-const createError = require('http-errors');
+const User = require('../interfaces/User.js');
 
 router.post('/users/auth', (req, res, next) => {
   const user = {
@@ -8,14 +10,14 @@ router.post('/users/auth', (req, res, next) => {
     password: req.body.password,
   };
 
-  if (!user.username || !user.password) {
-    next(createError(401, 'Missing username and/or password'));
-  } else if (user.username === 'admin' && user.password === 'admin') {
-    const jwt = createToken(user.username);
-    res.customSend(true, 200, { token: jwt });
-  } else {
-    next(createError(401, 'Unauthorized'));
-  }
+  User.verifyPassword(user)
+    .then((result) => {
+      const jwt = createToken(result);
+      res.status(200).send(new Payload(true, 200, { token: jwt }));
+    })
+    .catch((error) => {
+      next(error);
+    });
 });
 
 module.exports = router;

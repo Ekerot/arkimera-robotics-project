@@ -4,36 +4,29 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'app/_guards/auth.guard';
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { PdfHandlingComponent } from 'app/components/pdf-handling/pdf-handling.component';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from 'app/components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { ExpensesComponent } from 'app/components/pdf-handling/expenses/expenses.component';
+import { RegisterComponent } from 'app/components/login/register/register.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: 'dashboard',
-        component: DashboardComponent
-      },
-      {
-        path: 'upload',
-        component: PdfHandlingComponent,
-      },
-      {
-        path: 'upload/expenses',
-        component: ExpensesComponent
-      }
-
-    ]
+    component: DashboardComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'expenses',
+    component: ExpensesComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+  },
+  {
+    path: 'login/register',
+    component: RegisterComponent
   },
   {
     path: '**',

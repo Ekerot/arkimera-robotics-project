@@ -1,21 +1,45 @@
-.inline-block {
-  display: inline-block;
+.container{
+  float: left;
+  max-height: 50%;
+  max-width: 100%;
+  flex-basis: 66%;
+  margin-top: 15%;
 }
 
-.container {
-  overflow: hidden;
-  height: 80%;
-  width: 90%;
-  margin-top: 10%;
-  margin-right: 3%;
-  border-style: solid;
-  border-width: thin;
-  border-color: black;
+canvas {
+  max-height: inherit;
+  max-width: inherit;
+  height: 60vh;
+  width: 55vh;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 20%;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 
 
-.input-pdf{
-    background-repeat: no-repeat;
-    text-indent: 20px;
+.main-pdf {
+    width: 70%;
+    left: float;
+    position: absolute;
 }
+
+.btn {
+  float: right;
+  margin-top: 0px;
+}
+
+.buttons {
+
+}
+
+
+input {
+  margin-left: 30%;
+}
+
+
+
 

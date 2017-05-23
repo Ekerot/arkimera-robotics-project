@@ -1,13 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 @import '~https://fonts.googleapis.com/icon?family=Material+Icons';
 @import '~https://fonts.googleapis.com/icon?family=Roboto';
+@import '/assets/css/bootstrap.min.css';
+@import '/assets/css/material-dashboard.css';
+@import '/assets/css/custom.css';
+
+html {
+  min-height: 1366px;
+  min-width: 766px;
+}
 
 body {
-  margin: 0;
+  margin: 0px;
   min-height: 100vh;
   font-family: Roboto;
+  min-height: 1366px;
+  min-width: 766px;
 }
 
 .spacer {
@@ -16,20 +25,34 @@ body {
     flex: 1 1 auto;
 }
 
-.mat-sidenav {
-  width: 165px;
+.logotype{
+  width: 10%;
 }
 
-.main-content {
-  padding-left: 20px;
+.logout{
+    margin: 8%;
 }
 
-.mat-sidenav .mat-toolbar {
-  padding: 0;
+.sidebar-wrapper{
+  width: 20%;
 }
 
-.logo {
-  width: 155px;
+.main-content{
+  height: 100vh;
+}
+
+.main-panel .main-content {
+  margin-top: 15px;
+}
+
+canvas {
+  height: 60vh;
+  width: 55vh;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 /* Absolute Center Spinner */

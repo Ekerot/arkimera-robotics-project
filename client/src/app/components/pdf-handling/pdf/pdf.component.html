@@ -1,21 +1,38 @@
-<div class="container">
-  
-  <div class="choose-pdf-container">
-    <input *ngIf="pdfOptions.data==false" class="input-pdf" type="file" name="files" title="Load File" accept=".pdf" (change)="onFileChanged($event)"
-    />
+<div fxLayout="column" fxFlexAlign="left" class="main-pdf">
+
+  <!-- Select file button is not displayed if there already is a file loaded -->
+  <div fxFlex *ngIf="!pdfSrc">
+    <input type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
   </div>
 
-  <div class="inline-block">
-    <pdf-viewer *ngIf="pdfOptions.data" zoom={{value}} [src]="pdfOptions" [page]="page" [show-all]="false" [original-size]="true"
-      style="display: block;"></pdf-viewer>
+  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="true" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
 
+  <!-- ignoring this for now since I cant get the slider to bind to the page property
+  <div fxFlex fxFlexAlign="center" *ngIf="pdfSrc && pdf && pdf.numPages > 1">
+    <md-slider min="1" max="{ pdf.numPages }" step="1" [(value)]="page"></md-slider>
+  </div>
+  -->
+
+  <!-- These buttons are not displayed if we are already viewing a file -->
+  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
+    
+    <div fxFlex>
+      <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
+          <i class="material-icons">file_upload</i>
+          Upload
+      </button>
+    </div>
+
+    <div fxFlex>
+      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc" color="warn">
+        <i class="material-icons">cancel</i>
+        Cancel
+      </button>
+    </div>
+
+  </div>
 </div>
 
-<div>
-  <md-slider min="1" max="2" step="1" [(ngModel)]="page"></md-slider>
-</div>
-
-<div>
-  <button md-button (click)="onExtractData()">Extract</button>
-</div>
+<div *ngIf="loading" class="loading">Loading&#8230;</div>

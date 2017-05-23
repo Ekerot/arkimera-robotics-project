@@ -12,5 +12,5 @@ export function MockComponent(options: Component): Component {
     inputs: options.inputs,
     outputs: options.outputs
   };
-  return Component(metadata)(class _ { });
+  return Component(metadata)(class C { });
 }
