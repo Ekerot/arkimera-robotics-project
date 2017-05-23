@@ -9,13 +9,13 @@ export class WebSocketService {
   private url = config.webAPISocketUrl;
   private socket: SocketIOClient.Socket;
 
-  getMessages() {
+  getMessages(username: string) {
     const observable = new Observable(observer => {
       // Open up a new websocket
       this.socket = io(this.url);
 
       // Connect to channel
-      this.socket.emit('open channel', 'admin');
+      this.socket.emit('open channel', username);
 
       // Listen for extracted events
       this.socket.on('extracted', (data) => {

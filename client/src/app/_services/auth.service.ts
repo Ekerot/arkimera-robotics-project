@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { tokenNotExpired } from 'angular2-jwt';
+import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 
 import { HttpService } from 'app/_services/http.service';
 
@@ -25,6 +25,16 @@ export class AuthService {
     }
   }
 
+  getLoggedInUsername(): string {
+    const decodedToken = this.decodeToken();
+
+    if (decodedToken) {
+      return decodedToken.username;
+    }
+
+    return '';
+  }
+
   login(user: User): Observable<ApiResponse> {
     return this.http.authenticate(user)
       .map(res => {
@@ -36,5 +46,16 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token');
     this.router.navigate(['/login']);
+  }
+
+  private decodeToken(): User {
+    const token = localStorage.getItem('token');
+    const jwtHelper = new JwtHelper();
+
+    if (token && tokenNotExpired()) {
+      return jwtHelper.decodeToken(token) as User;
+    } else {
+      return null;
+    }
   }
 }
