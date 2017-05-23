@@ -31,9 +31,7 @@ const functions = {
           .then(() =>
             resolve({ statusCode: response.statusCode, body: parsedBody }),
           )
-          .catch((error) => {
-            reject({ statusCode: 500, message: error });
-          });
+          .catch(error => reject({ statusCode: 500, message: error }));
       });
     }),
 
@@ -65,11 +63,8 @@ const functions = {
           socket.emit('extracted', fileID, user);
         })
         .catch((error) => {
-            console.log('One more round on the merry go round');
-            console.log(`Timer was ${timeout}`);
-            timeout += 1000;
-            console.log(`Next timer set to: ${timeout}`);
-            functions.poll(url, fileID, user, timeout);
+          timeout += 1000;
+          functions.poll(url, fileID, user, timeout);
         });
     }, timeout);
   },

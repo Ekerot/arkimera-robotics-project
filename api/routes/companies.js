@@ -2,7 +2,6 @@ const fs = require('fs');
 const router = require('express').Router();
 const multer = require('multer');
 const request = require('request');
-const moment = require('moment');
 const createError = require('http-errors');
 
 const headers = require('../common/headers');
@@ -10,8 +9,6 @@ const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
 const functions = require('./functions');
 const Payload = require('../common/Payload');
-
-moment.locale('sv');
 
 // CONFIG disk storage for multer file upload
 const storage = multer.diskStorage(diskStorage);
