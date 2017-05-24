@@ -165,7 +165,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
-    .extractReceipt(url, fileID)
+    .extractReceipt(url, fileID, req)
     .then((response) => {
       res
         .status(response.statusCode)

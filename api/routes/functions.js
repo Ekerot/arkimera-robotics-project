@@ -1,16 +1,15 @@
 const request = require('request');
 const createError = require('http-errors');
 
-const headers = require('../common/headers');
 const socket = require('../common/socket');
 const Files = require('../interfaces/Files');
 
 let loop;
 
 const functions = {
-  extractReceipt: (url, fileID) =>
+  extractReceipt: (url, fileID, req) =>
     new Promise((resolve, reject) => {
-      request.get({ url, headers }, (err, response, body) => {
+      request.get({ url, headers: req.decoded.headers }, (err, response, body) => {
         if (err) {
           return reject({ statusCode: 500, message: err });
         }
