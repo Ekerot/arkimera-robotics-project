@@ -24,10 +24,7 @@ function checkAuth(req, res, next) {
     next();
   }
 }
-module.exports = {
-  // TODO: Rewrite to get from req.decoded or database
 
-};
 function requireAuth(req, res, next) {
   if (req.decoded) {
     return next();
