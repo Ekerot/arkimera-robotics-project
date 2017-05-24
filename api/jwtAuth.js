@@ -12,13 +12,22 @@ function checkAuth(req, res, next) {
         return next(createError(401, 'Provided token was not valid'));
       }
       req.decoded = decoded;
+
+      req.decoded.headers = {
+        'Client-Key': req.decoded.clientKey,
+        'Ocp-Apim-Subscription-Key': req.decoded.subscriptionKey,
+      };
+
       next();
     });
   } else {
     next();
   }
 }
+module.exports = {
+  // TODO: Rewrite to get from req.decoded or database
 
+};
 function requireAuth(req, res, next) {
   if (req.decoded) {
     return next();
