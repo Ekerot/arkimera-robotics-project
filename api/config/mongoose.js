@@ -1,16 +1,22 @@
 const mongoose = require('mongoose');
 
-function mongoDB(dbName) {
+function mongoDB(dbName, callback) {
   const connectionString = `mongodb://localhost/${dbName || 'arkimera'}`;
   const db = mongoose.connect(connectionString);
   mongoose.Promise = global.Promise;
 
   db.connection.on('connected', () => {
+    if (callback) {
+      callback();
+    }
     console.log('mongoDB connection open.');
   });
 
   db.connection.on('error', (err) => {
     console.error('mongoDB connection error: ', err);
+    if (callback) {
+      callback(err);
+    }
   });
 
   db.connection.on('disconnected', () => {

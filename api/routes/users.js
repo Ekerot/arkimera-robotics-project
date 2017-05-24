@@ -13,6 +13,8 @@ router.post('/users', (req, res, next) => {
     appUrl: req.body.appUrl,
   };
 
+  console.log(user);
+
   User.addNew(user)
     .then((result) => {
       const jwt = createToken(result);
