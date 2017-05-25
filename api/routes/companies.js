@@ -4,7 +4,6 @@ const multer = require('multer');
 const request = require('request');
 const createError = require('http-errors');
 
-const headers = require('../common/headers');
 const diskStorage = require('../common/diskStorage');
 const Files = require('../interfaces/Files');
 const functions = require('./functions');
@@ -21,7 +20,7 @@ const upload = multer({ storage });
  */
 router.get('/', (req, res, next) => {
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/`;
-  request.get({ url, headers }, (err, response, body) => {
+  request.get({ url, headers: req.decoded.headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }
@@ -71,7 +70,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   };
   const companyID = req.params.companyID;
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files`;
-  request.post({ url, formData, headers }, (err, response, body) => {
+  request.post({ url, formData, headers: req.decoded.headers }, (err, response, body) => {
     if (err) {
       return Files.remove(file.path, () => {
         functions.standardErrorHandling(res, err, next);
@@ -88,7 +87,7 @@ router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
     // Temporary polling function to update database after receipt has been extracted.
     // Recommended to replace with webhook and websockets
     const pollUrl = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
-    functions.poll(pollUrl, fileID, req.decoded.username);
+    functions.poll(pollUrl, fileID, req.decoded);
     // -------
 
     Files.move(file.path)
@@ -166,7 +165,7 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
-    .extractReceipt(url, fileID)
+    .extractReceipt(url, fileID, req.decoded)
     .then((response) => {
       res
         .status(response.statusCode)
@@ -186,7 +185,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const data = req.body;
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
-  request.put({ url, json: data, headers }, (err, response, body) => {
+  request.put({ url, json: data, headers: req.decoded.headers }, (err, response, body) => {
     if (err) {
       return functions.standardErrorHandling(res, err, next);
     }

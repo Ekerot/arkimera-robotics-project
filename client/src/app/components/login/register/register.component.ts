@@ -54,7 +54,7 @@ export class RegisterComponent implements OnInit {
     const passwordRepeat = this.registerForm.get('passwordRepeat').value;
     const subscriptionKey = this.registerForm.get('subscriptionKey').value;
     const clientKey = this.registerForm.get('clientKey').value;
-    const appUrl = helpers.buildAzoraOneUrl(this.registerForm.get('appUrl').value);
+    const appUrl = this.registerForm.get('appUrl').value;
 
     if (password !== passwordRepeat) {
       this.openSnackBar('Passwords does not match!');
