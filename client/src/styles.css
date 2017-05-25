@@ -11,6 +11,11 @@ body {
   background-position: fixed;
   margin: 0;
   font-family: Roboto;
+  background: url('./assets/img/background.jpg');
+  opacity: 0.85;
+  background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100%;
 }
 
 .spacer {
@@ -30,7 +35,7 @@ body {
 }
 
 .logotype{
-  width: 10%;
+  width: 150px;
 }
 
 .logout-button {
