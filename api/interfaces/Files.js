@@ -6,11 +6,11 @@ module.exports = {
     new Promise((resolve, reject) => {
       Files.findOne({ FileID: data.fileID }).exec((err, file) => {
         if (err) {
-          reject(err);
+          return reject(err);
         }
 
         if (file) {
-          reject('File already saved in db');
+          return reject('File already saved in db');
         }
 
         const newFile = new Files({
@@ -27,7 +27,6 @@ module.exports = {
       });
     }),
 
-  // updateStatus: (fileID, status) =>
   updateStatus: data =>
     new Promise((resolve, reject) => {
       Files.findOne({ FileID: data.fileID }).exec((err, file) => {
@@ -50,10 +49,9 @@ module.exports = {
 
         updatedFile.save((error) => {
           if (error) {
-            reject(error);
-          } else {
-            resolve();
+            return reject(error);
           }
+          return resolve();
         });
       });
     }),
@@ -62,9 +60,9 @@ module.exports = {
     new Promise((resolve, reject) => {
       Files.find(data).exec((err, result) => {
         if (err) {
-          reject(err);
+          return reject(err);
         }
-        resolve(result);
+        return resolve(result);
       });
     }),
 
@@ -77,38 +75,33 @@ module.exports = {
             const rs = fs.createReadStream(oldPath);
             const ws = fs.createWriteStream(newPath);
 
-            rs.on('error', (error) => {
-              reject(error);
-            });
-            ws.on('error', (error) => {
-              reject(error);
-            });
+            rs.on('error', error => reject(error));
+            ws.on('error', error => reject(error));
 
             rs.on('close', () => {
               fs.unlink(oldPath, (error) => {
                 if (error) {
-                  reject(error);
+                  return reject(error);
                 }
-                resolve(newPath);
+                return resolve(newPath);
               });
             });
 
             rs.pipe(ws);
           } else {
-            reject(err);
+            return reject(err);
           }
         }
-        resolve(newPath);
+        return resolve(newPath);
       });
     }),
-  remove: (path) => {
-    return new Promise((resolve, reject) => {
-      fs.unlink(path, (err) => {
-        if (err) {
-          reject();
-        }
-        resolve();
-      });
+
+  remove: path => new Promise((resolve, reject) => {
+    fs.unlink(path, (err) => {
+      if (err) {
+        return reject();
+      }
+      return resolve();
     });
-  },
+  }),
 };

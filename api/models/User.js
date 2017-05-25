@@ -13,7 +13,7 @@ const urlMinLength = 2;
 
 // subscriptionKey is Ocp-Apim-Subscription-Key, Found in Profile
 // Client Key, The application's unique key.
-// urlPath is 'student' in this url: https://azoraone.azure-api.net/student/api/companies
+// appUrl is 'student' in this url: https://azoraone.azure-api.net/student/api/companies
 
 const userSchema = new mongoose.Schema({
   username: {

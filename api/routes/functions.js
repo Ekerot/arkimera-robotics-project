@@ -1,16 +1,15 @@
 const request = require('request');
 const createError = require('http-errors');
 
-const headers = require('../common/headers');
 const socket = require('../common/socket');
 const Files = require('../interfaces/Files');
 
 let loop;
 
 const functions = {
-  extractReceipt: (url, fileID) =>
+  extractReceipt: (url, fileID, decoded) =>
     new Promise((resolve, reject) => {
-      request.get({ url, headers }, (err, response, body) => {
+      request.get({ url, headers: decoded.headers }, (err, response, body) => {
         if (err) {
           return reject({ statusCode: 500, message: err });
         }
@@ -31,9 +30,7 @@ const functions = {
           .then(() =>
             resolve({ statusCode: response.statusCode, body: parsedBody }),
           )
-          .catch((error) => {
-            reject({ statusCode: 500, message: error });
-          });
+          .catch(error => reject({ statusCode: 500, message: error }));
       });
     }),
 
@@ -55,21 +52,18 @@ const functions = {
    * Polling function.
    * Recommended to replace with webhook functionality and websocket event emitter.
    */
-  poll: (url, fileID, user, time) => {
+  poll: (url, fileID, decoded, time) => {
     let timeout = time || 1000;
     loop = setTimeout(() => {
       functions
-        .extractReceipt(url, fileID)
+        .extractReceipt(url, fileID, decoded)
         .then((response) => {
           clearTimeout(loop);
-          socket.emit('extracted', fileID, user);
+          socket.emit('extracted', fileID, decoded.username);
         })
         .catch((error) => {
-            console.log('One more round on the merry go round');
-            console.log(`Timer was ${timeout}`);
-            timeout += 1000;
-            console.log(`Next timer set to: ${timeout}`);
-            functions.poll(url, fileID, user, timeout);
+          timeout += 1000;
+          functions.poll(url, fileID, decoded, timeout);
         });
     }, timeout);
   },
