@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { MdSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 
@@ -26,7 +27,8 @@ export class AccountComponent implements OnInit, OnDestroy {
   constructor(
     private bkService: BookkeepService,
     private formBuilder: FormBuilder,
-    private http: HttpService
+    private http: HttpService,
+    public snackBar: MdSnackBar
   ) {
     this.totalAmount = 0;
     this.loading = false;
@@ -114,6 +116,7 @@ export class AccountComponent implements OnInit, OnDestroy {
         this.bkService.confirmBookkeep(this.fileIdToBookkeep);
         this.resetCurrentStatus();
         this.loading = false;
+        this.openSnackBar('Receipt successfully bookkeeped');
       });
   }
 
@@ -127,6 +130,12 @@ export class AccountComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.fileIdSubscription.unsubscribe();
     this.formChangeSubscription.unsubscribe();
+  }
+
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
   }
 
 }
