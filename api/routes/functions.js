@@ -59,12 +59,10 @@ const functions = {
         .extractReceipt(url, fileID, decoded)
         .then((response) => {
           clearTimeout(loop);
-          console.log('extracted');
           socket.emit('extracted', fileID, decoded.username);
         })
         .catch((error) => {
           timeout += 1000;
-          console.log('not extracted'+ timeout);
           functions.poll(url, fileID, decoded, timeout);
         });
     }, timeout);

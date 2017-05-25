@@ -9,7 +9,6 @@ const db = mongoose();
  *
  * This script will drop the users collection from the db and add an admin user with hardcoded admin password.
  */
-
 db.connection.collections.users.drop((error) => {
   if (error) {
     console.log(error);
