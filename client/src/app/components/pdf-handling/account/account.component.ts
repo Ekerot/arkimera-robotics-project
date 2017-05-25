@@ -14,10 +14,10 @@ import { BookkeepService, HttpService } from 'app/_services';
 
 export class AccountComponent implements OnInit, OnDestroy {
 
-
   public receiptData: ReceiptData;
   public receiptForm: FormGroup;
   public totalAmount: number;
+  public loading: boolean;
 
   private fileIdSubscription: Subscription;
   private fileIdToBookkeep: number;
@@ -28,6 +28,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private http: HttpService
   ) {
     this.totalAmount = 0;
+    this.loading = false;
 
     this.fileIdSubscription = bkService.bookkeepAnnounced$
       .subscribe(fileId => {
@@ -51,11 +52,25 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
 
     data.accounts.forEach((account: Account) => {
-      this.totalAmount = Number(this.totalAmount) + Math.round(Number(account.debit.toString().replace(',', '.')) * 100) / 100;
-      this.totalAmount = Number(this.totalAmount) - Math.round(Number(account.credit.toString().replace(',', '.')) * 100) / 100;
-      this.totalAmount = Math.round(this.totalAmount * 100) / 100;
+      this.updateTotalAmount(account);
       this.addAccount(account);
     });
+
+    this.receiptForm.valueChanges
+      .debounceTime(200)
+      .subscribe((formData: ReceiptData) => {
+        this.totalAmount = 0;
+
+        formData.accounts.forEach((account: Account) => {
+          this.updateTotalAmount(account);
+        })
+      });
+  }
+
+  private updateTotalAmount(account: Account): void {
+    this.totalAmount = Number(this.totalAmount) + Math.round(Number(account.debit.toString().replace(',', '.')) * 100) / 100;
+    this.totalAmount = Number(this.totalAmount) - Math.round(Number(account.credit.toString().replace(',', '.')) * 100) / 100;
+    this.totalAmount = Math.round(this.totalAmount * 100) / 100;
   }
 
   initAccount(account?: Account): FormGroup {
@@ -90,12 +105,14 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   onSubmitReceipt(receiptForm: FormGroup): void {
+    this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
 
     this.http.postReceiptData(receiptData, this.fileIdToBookkeep)
       .subscribe(data => {
         this.bkService.confirmBookkeep(this.fileIdToBookkeep);
         this.resetCurrentStatus();
+        this.loading = false;
       });
   }
 

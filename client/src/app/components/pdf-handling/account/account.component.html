@@ -83,8 +83,8 @@
 
 
       <div class="sum">
-        <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount}} kr</label>
-        <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount}} kr</label></ng-template>
+        <label *ngIf="totalAmount!==0; else elseBlock" data-background-color="red"> Sum: {{totalAmount.toFixed(2)}} kr</label>
+        <ng-template #elseBlock><label data-background-color="green"> Sum: {{totalAmount.toFixed(2)}} kr</label></ng-template>
       </div>
 
 
@@ -99,3 +99,5 @@
   </div>
 
 </form>
+
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
