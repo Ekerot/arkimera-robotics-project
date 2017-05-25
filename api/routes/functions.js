@@ -7,9 +7,9 @@ const Files = require('../interfaces/Files');
 let loop;
 
 const functions = {
-  extractReceipt: (url, fileID, req) =>
+  extractReceipt: (url, fileID, decoded) =>
     new Promise((resolve, reject) => {
-      request.get({ url, headers: req.decoded.headers }, (err, response, body) => {
+      request.get({ url, headers: decoded.headers }, (err, response, body) => {
         if (err) {
           return reject({ statusCode: 500, message: err });
         }
@@ -52,18 +52,18 @@ const functions = {
    * Polling function.
    * Recommended to replace with webhook functionality and websocket event emitter.
    */
-  poll: (url, fileID, user, time) => {
+  poll: (url, fileID, decoded, time) => {
     let timeout = time || 1000;
     loop = setTimeout(() => {
       functions
-        .extractReceipt(url, fileID)
+        .extractReceipt(url, fileID, decoded)
         .then((response) => {
           clearTimeout(loop);
-          socket.emit('extracted', fileID, user);
+          socket.emit('extracted', fileID, decoded.username);
         })
         .catch((error) => {
           timeout += 1000;
-          functions.poll(url, fileID, user, timeout);
+          functions.poll(url, fileID, decoded, timeout);
         });
     }, timeout);
   },
