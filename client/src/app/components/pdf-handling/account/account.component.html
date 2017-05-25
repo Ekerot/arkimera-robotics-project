@@ -17,7 +17,6 @@
           </div>
         </div>
 
-
     </div>
 
     <div formArrayName="accounts" class="second-block">
@@ -67,7 +66,7 @@
 
     <div class="add">
       <a (click)="addAccount()" style="cursor: default">
-            <i data-background-color="blue" class="material-icons">add</i>
+        <i data-background-color="blue" class="material-icons">add</i>
       </a>
     </div>
 
@@ -80,8 +79,8 @@
 
 
       <div class="sum">
-        <label *ngIf="totalAmount!==0;" data-background-color="red"> Sum: {{totalAmount}} kr</label>
-        <label *ngIf="totalAmount===0;" data-background-color="green"> Sum: {{totalAmount}} kr</label>
+        <label *ngIf="totalAmount!==0;" data-background-color="red"> Sum: {{totalAmount.toFixed(2)}} kr</label>
+        <label *ngIf="totalAmount===0;" data-background-color="green"> Sum: {{totalAmount.toFixed(2)}} kr</label>
       </div>
 
 
@@ -96,3 +95,5 @@
   </div>
 
 </form>
+
+<div *ngIf="loading" class="loading">Loading&#8230;</div>
