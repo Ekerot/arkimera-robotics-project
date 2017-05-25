@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 
 import { ApiResponse, User, FileResponse, ReceiptData } from 'app/_models';
 
+
 @Injectable()
 export class HttpService {
 
@@ -56,6 +57,17 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + '/companies/1/files?status=extracted', options)
       .map(response => response.json().data as FileResponse[])
+      .catch(this.handleError);
+  }
+  public getBookedFiles(): Observable<FileResponse[]> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({ headers: headers });
+
+    return this.http.get(this.apiUrl + '/companies/1/files?status=booked', options)
+      .map(response => response.json().data as FileResponse)
       .catch(this.handleError);
   }
 

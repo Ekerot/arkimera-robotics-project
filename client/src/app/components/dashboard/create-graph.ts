@@ -1,12 +1,15 @@
 import { ElementRef } from '@angular/core';
 import Chart from 'chart.js';
+import {GraphRequest} from '../../_models/graphRequest';
 
 export class CreateGraph {
 
-  public createLineGraph(incomingData: number[], element: ElementRef, otherData: any) {
+  /*Method for creating the line graphs*/
+  public createLineGraph(incomingData: GraphRequest[], element: ElementRef, otherData: any) {
     const canvas = element.nativeElement.getContext('2d');
-    const data = {                                                                      // Testing with week but monthly might be better
-      labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    const dailyData = this.extractDailyData(incomingData);
+    const data = {
+      labels: dailyData.dates,
       datasets: [
         {
           label: otherData.name,
@@ -15,14 +18,15 @@ export class CreateGraph {
           backgroundColor: '#79E195',
           borderColor: '#79E195',
           pointBorderColor: '#79E195',
+          pointBackgroundColor: '#79E195',
           pointBorderWidth: 1,
-          pointHoverRadius: 5,
-          pointHoverBackgroundColor: '#79E195',
-          pointHoverBorderColor: '#64AC78',
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: '79E195',
+          pointHoverBorderColor: '#79E195',
           pointHoverBorderWidth: 2,
-          pointRadius: 1,
+          pointRadius: 4,
           pointHitRadius: 10,
-          data: incomingData,
+          data: dailyData.data,
         }
       ]
     };
@@ -32,6 +36,7 @@ export class CreateGraph {
     });
   }
 
+  /*Method for creating the doughnut graph*/
   public createDoughnutGraph(income: number, expense: number, element: ElementRef) {
     const canvas = element.nativeElement.getContext('2d');
     const data = {
@@ -89,4 +94,20 @@ export class CreateGraph {
       );
     }
   }
+
+  /*Extract the incoming data and put into arrays, easier to handle and chart.js cant handle decimals.
+  * This method removes the decimals as well*/
+  private extractDailyData(incomingData: GraphRequest[]) {
+    const dailyData = {
+      data: [],
+      dates: []
+    };
+    for (let i = 0; i < incomingData.length; i++) {
+      const date = incomingData[i].date;
+      dailyData.data[i] = Math.round(incomingData[i].data);
+      dailyData.dates[i] = incomingData[i].date;
+    }
+    return dailyData;
+  }
+
 }
