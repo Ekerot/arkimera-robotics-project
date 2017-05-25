@@ -30,6 +30,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     private http: HttpService,
     public snackBar: MdSnackBar
   ) {
+
     this.totalAmount = 0;
     this.loading = false;
 
@@ -57,6 +58,7 @@ export class AccountComponent implements OnInit, OnDestroy {
     data.accounts.forEach((account: Account) => {
       this.updateTotalAmount(account);
       this.addAccount(account);
+
     });
 
     this.formChangeSubscription = this.receiptForm.valueChanges
@@ -88,17 +90,39 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Adds new bookkeeping row
+   *
+   * @param {account} Account
+   *
+   * @memberof AccountComponent
+   */
   addAccount(account?: Account): void {
     const control = <FormArray>this.receiptForm.controls['accounts'];
     const accountCtrl = this.initAccount(account);
     control.push(accountCtrl);
   }
 
+  /**
+   * Delete account depending on value input
+   * Value = index
+   *
+   * @param {value} number
+   *
+   * @memberof AccountComponent
+   */
   deleteAccount(value: number): void {
     const control = <FormArray>this.receiptForm.controls['accounts'];
     control.removeAt(value);
   }
 
+  /**
+   * Get extracted data from receipt
+   *
+   * @param {fileID} number
+   *
+   * @memberof AccountComponent
+   */
   getExtractedData(fileId: number): void {
     this.http.getExtractedData(fileId)
       .subscribe(data => {
@@ -120,6 +144,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       });
   }
 
+ /**
+ * Reset all values 
+ *
+ * @param 
+ *
+ * @memberof AccountComponent
+ */
   private resetCurrentStatus(): void {
     this.receiptData = null;
     this.receiptForm = null;
