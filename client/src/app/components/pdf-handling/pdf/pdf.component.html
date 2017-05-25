@@ -16,8 +16,8 @@
   -->
 
   <!-- These buttons are not displayed if we are already viewing a file -->
-  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
-    
+  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 5">
+
     <div fxFlex>
       <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc" color="primary">
           <i class="material-icons">file_upload</i>
@@ -35,4 +35,10 @@
   </div>
 </div>
 
-<div *ngIf="loading" class="loading">Loading&#8230;</div>
+<div *ngIf="loading" class="loading">
+  <div class="loader">
+    <svg class="circular" viewBox="25 25 50 50">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+    </svg>
+  </div>
+</div>
