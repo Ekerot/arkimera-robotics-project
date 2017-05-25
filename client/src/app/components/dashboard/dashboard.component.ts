@@ -8,10 +8,7 @@ import {Component, OnInit} from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  company: String;
-
   constructor() {
-    this.company = 'Arkimera Robotics AB';  // TODO Get company from API and login
   }
   ngOnInit() {}
 
