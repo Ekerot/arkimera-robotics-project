@@ -12,6 +12,7 @@ import { AppRoutingModule } from 'app/app-routing.module';
 import { AuthGuard } from 'app/_guards/auth.guard';
 import { SidenavModule } from './components/sidenav/sidenav.module';
 
+import { StatisticsService } from 'app/_services/statistics.service';
 import { AuthService, BookkeepService, HttpService, WebSocketService } from 'app/_services';
 
 import { AppComponent } from './app.component';
@@ -69,6 +70,7 @@ import { Md2Module } from 'md2';
     BookkeepService,
     CreateGraph,
     HttpService,
+    StatisticsService,
     WebSocketService
   ],
   bootstrap: [AppComponent]

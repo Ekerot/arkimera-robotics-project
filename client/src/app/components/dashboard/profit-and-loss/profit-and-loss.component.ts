@@ -1,6 +1,8 @@
 import { Component, AfterViewInit } from '@angular/core';
-import {ViewChild, ElementRef} from '@angular/core';
-import {CreateGraph} from '../create-graph';
+import { ViewChild, ElementRef} from '@angular/core';
+import { CreateGraph } from '../create-graph';
+import { HttpService } from '../../../_services/http.service';
+import { StatisticsService } from '../../../_services/statistics.service';
 
 @Component({
   selector: 'app-profit-and-loss',
@@ -11,20 +13,21 @@ export class ProfitAndLossComponent implements AfterViewInit {
 
   @ViewChild('doughnut') doughnut: ElementRef;
   @ViewChild('container') container: ElementRef;
-
-  private income: number;
-  private expense: number;
   public profit: number;
+  public expenses = [];
 
-  constructor(public createGraph: CreateGraph) {
-    this.income = 68;    // TODO Test data, get data from statistics or database?
-    this.expense = 98;
-    this.profit = this.income - this.expense;
+  constructor(public createGraph: CreateGraph, private statisticsService: StatisticsService, private httpService: HttpService) {
   }
 
   ngAfterViewInit() {
-    this.createGraph.createDoughnutGraph(this.income, this.expense, this.doughnut); // TODO Does not resize, can´t find any solution for it.
+    this.httpService.getBookedFiles()
+      .subscribe(res => {
+        this.profit = this.statisticsService.getTotalProfit(res);
+        this.createGraph.createDoughnutGraph(this.statisticsService.getTotalIncome(),
+          this.statisticsService.getTotalExpense(), this.doughnut);
+      }, error => {
+        console.log(error);
+      })
+
   }
-
-
 }

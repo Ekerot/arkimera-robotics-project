@@ -6,8 +6,6 @@
 }
 
 .container{
-  max-height: 50%;
-  max-width: 90%;
   position: relative;
 }
 
@@ -18,3 +16,8 @@
   z-index: 500 !important;
   position: relative;
 }
+
+.card-content {
+  height: 100%;
+}
+
