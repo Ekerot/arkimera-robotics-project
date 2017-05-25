@@ -37,20 +37,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.receiptData) {
-      this.initForm();
-
-      this.receiptForm.valueChanges
-        .debounceTime(200)
-        .subscribe((formData: ReceiptData) => {
-          this.totalAmount = 0;
-
-          formData.accounts.forEach((account: Account) => {
-            this.totalAmount += Number(account.debit);
-            this.totalAmount -= Number(account.credit);
-          })
-        });
-    }
   }
 
   initForm(): void {
@@ -65,9 +51,9 @@ export class AccountComponent implements OnInit, OnDestroy {
     });
 
     data.accounts.forEach((account: Account) => {
-      this.totalAmount += account.debit;
-      this.totalAmount -= account.credit;
-
+      this.totalAmount = Number(this.totalAmount) + Math.round(Number(account.debit.toString().replace(',', '.')) * 100) / 100;
+      this.totalAmount = Number(this.totalAmount) - Math.round(Number(account.credit.toString().replace(',', '.')) * 100) / 100;
+      this.totalAmount = Math.round(this.totalAmount * 100) / 100;
       this.addAccount(account);
     });
   }
