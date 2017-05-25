@@ -19,20 +19,32 @@ body {
     flex: 1 1 auto;
 }
 
+.header {
+  position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+    padding: 20px 50px 20px 30px;
+ 
+}
+
 .logotype{
   width: 10%;
 }
 
-.logout{
-    margin: 8%;
+.logout-button {
+
 }
 
 .sidebar-wrapper{
   width: 20%;
+  padding-top: 85px;
+  height: 100%;
 }
 
 .main-panel .main-content {
-  margin-top: 15px;
+  padding-right: 40px;
 }
 
 /* Absolute Center Spinner */
@@ -113,17 +125,9 @@ body {
 
 @-moz-keyframes spinner {
   0% {
-    -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);
-    -ms-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
-    -ms-transform: rotate(360deg);
-    -o-transform: rotate(360deg);
     transform: rotate(360deg);
   }
 }
