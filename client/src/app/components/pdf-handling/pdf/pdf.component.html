@@ -1,10 +1,5 @@
 <div fxLayout="column" fxFlexAlign="left" class="main-pdf">
 
-  <!-- Select file button is not displayed if there already is a file loaded -->
-  <div fxFlex *ngIf="!pdfSrc">
-    <input type="file" title="Load File" accept=".pdf" (change)="onFileChanged($event)" />
-  </div>
-
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
     <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="true" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
@@ -14,26 +9,6 @@
     <md-slider min="1" max="{ pdf.numPages }" step="1" [(value)]="page"></md-slider>
   </div>
   -->
-
-  <!-- These buttons are not displayed if we are already viewing a file -->
-  <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 5">
-
-    <div fxFlex>
-      <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc" color="primary">
-          <i class="material-icons">file_upload</i>
-          Upload
-      </button>
-    </div>
-
-    <div fxFlex>
-      <button class="btn btn-danger" (click)="onCancel()" [disabled]="!pdfSrc" color="warn">
-        <i class="material-icons">cancel</i>
-        Cancel
-      </button>
-    </div>
-
-  </div>
-</div>
 
 <div *ngIf="loading" class="loading">
   <div class="loader">
