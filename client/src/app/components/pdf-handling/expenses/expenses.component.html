@@ -1,3 +1,24 @@
+<div fxFlexLayout="row" fxLayoutAlign="space-between">
+
+  <div fxFlex>
+    <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
+      <i class="material-icons">file_upload</i>
+      Upload Receipts
+    </button>
+    <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
+  </div>
+
+  <div fxFlex>
+    <select class="form-control" title="Select Receipe">
+      <option>Select receipe</option>
+      <option>File1</option>
+      <option>File1</option>
+      <option>File1</option>
+    </select>
+  </div>
+
+</div>
+
 <div class="row">
 
   <div class="col-sm-6">
@@ -25,11 +46,19 @@
       </div>
 
       <div class="card-content">
-        <app-pdf></app-pdf>
+        <app-pdf [pdf]="pdf" [pdfSrc]="pdfSrc"></app-pdf>
       </div>
 
     </div>
 
   </div>
 
+</div>
+
+<div *ngIf="loading" class="loading">
+  <div class="loader">
+    <svg class="circular" viewBox="25 25 50 50">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+    </svg>
+  </div>
 </div>

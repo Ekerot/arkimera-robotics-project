@@ -30,6 +30,19 @@ export class HttpService {
       .catch(this.handleError);
   }
 
+  public uploadFiles(files: File[]): Observable<ApiResponse[]> {
+    const fileObservables = files.map((file: File, fileIndex: number) => {
+      return this.uploadFile(file)
+        .map(apiRes => apiRes as ApiResponse)
+        .catch((error: any) => {
+          console.error('Failed to upload file: ', file.name);
+          return Observable.of(null);
+        });
+    });
+
+    return Observable.forkJoin(fileObservables);
+  }
+
   public authenticate(user: User): Observable<ApiResponse> {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers });
