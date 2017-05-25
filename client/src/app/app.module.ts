@@ -15,7 +15,6 @@ import { SidenavModule } from './components/sidenav/sidenav.module';
 import { AuthService, BookkeepService, HttpService, WebSocketService } from 'app/_services';
 
 import { AppComponent } from './app.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
@@ -37,7 +36,6 @@ import { Md2Module } from 'md2';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     DashboardComponent,
     PageNotFoundComponent,
     SidenavComponent,
