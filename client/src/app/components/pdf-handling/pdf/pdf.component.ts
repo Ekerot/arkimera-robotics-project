@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable, Subscription } from 'rxjs/Rx';
 
 import { FileResponse } from 'app/_models';
 import { HttpService, BookkeepService } from 'app/_services/';
@@ -10,7 +11,6 @@ import { config } from 'app/_config/config';
   styleUrls: ['./pdf.component.css']
 })
 export class PdfComponent implements OnInit {
-
 
   public zoom = '0.6'; // Starting zoom value
   public page = 1; // Starting page
@@ -32,7 +32,6 @@ export class PdfComponent implements OnInit {
 
     this.bkService.bookkeepConfirmed$
       .subscribe(fileId => {
-        console.debug('GOT READY CONFIRMATION');
         this.resetCurrentStatus();
         this.getFilesReadyForExtraction();
       });
@@ -127,4 +126,5 @@ export class PdfComponent implements OnInit {
   afterLoadComplete(pdf: PDFDocumentProxy): void {
     this.pdf = pdf;
   }
+
 }

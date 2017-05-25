@@ -19,7 +19,7 @@
   <div fxFlex fxFlexAlign="center" *ngIf="filesToBookkeep && filesToBookkeep.length < 1">
     
     <div fxFlex>
-      <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc || fileUploaded" color="primary">
+      <button class="btn btn-primary upload" (click)="onUpload()" [disabled]="!pdfSrc" color="primary">
           <i class="material-icons">file_upload</i>
           Upload
       </button>
