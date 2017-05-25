@@ -21,6 +21,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   private fileIdSubscription: Subscription;
   private fileIdToBookkeep: number;
+  private formChangeSubscription: Subscription;
 
   constructor(
     private bkService: BookkeepService,
@@ -56,7 +57,7 @@ export class AccountComponent implements OnInit, OnDestroy {
       this.addAccount(account);
     });
 
-    this.receiptForm.valueChanges
+    this.formChangeSubscription = this.receiptForm.valueChanges
       .debounceTime(200)
       .subscribe((formData: ReceiptData) => {
         this.totalAmount = 0;
@@ -125,6 +126,7 @@ export class AccountComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.fileIdSubscription.unsubscribe();
+    this.formChangeSubscription.unsubscribe();
   }
 
 }
