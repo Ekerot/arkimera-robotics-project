@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MdSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 
-import { Account, ReceiptData } from 'app/_models';
+import { Account, ReceiptData, FileResponse } from 'app/_models';
 import { BookkeepService, HttpService } from 'app/_services';
 
 @Component({
@@ -12,8 +12,9 @@ import { BookkeepService, HttpService } from 'app/_services';
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
+export class AccountComponent implements OnInit, OnDestroy, OnChanges {
 
-export class AccountComponent implements OnInit, OnDestroy {
+  @Input() selectedFile: FileResponse;
 
   public receiptData: ReceiptData;
   public receiptForm: FormGroup;
@@ -30,18 +31,18 @@ export class AccountComponent implements OnInit, OnDestroy {
     private http: HttpService,
     public snackBar: MdSnackBar
   ) {
-
     this.totalAmount = 0;
     this.loading = false;
-
-    this.fileIdSubscription = bkService.bookkeepAnnounced$
-      .subscribe(fileId => {
-        this.fileIdToBookkeep = fileId;
-        this.getExtractedData(fileId);
-      });
   }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    // console.debug('FILE: ', this.selectedFile);
+    if (this.selectedFile && changes['selectedFile']) {
+      this.receiptData = this.selectedFile.extractedData;
+      this.initForm();
+    }
   }
 
   initForm(): void {
@@ -116,21 +117,6 @@ export class AccountComponent implements OnInit, OnDestroy {
     control.removeAt(value);
   }
 
-  /**
-   * Get extracted data from receipt
-   *
-   * @param {fileID} number
-   *
-   * @memberof AccountComponent
-   */
-  getExtractedData(fileId: number): void {
-    this.http.getExtractedData(fileId)
-      .subscribe(data => {
-        this.receiptData = data;
-        this.initForm();
-      });
-  }
-
   onSubmitReceipt(receiptForm: FormGroup): void {
     this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
@@ -144,13 +130,13 @@ export class AccountComponent implements OnInit, OnDestroy {
       });
   }
 
- /**
- * Reset all values 
- *
- * @param 
- *
- * @memberof AccountComponent
- */
+  /**
+  * Reset all values
+  *
+  * @param
+  *
+  * @memberof AccountComponent
+  */
   private resetCurrentStatus(): void {
     this.receiptData = null;
     this.receiptForm = null;
@@ -159,7 +145,6 @@ export class AccountComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.fileIdSubscription.unsubscribe();
     this.formChangeSubscription.unsubscribe();
   }
 
