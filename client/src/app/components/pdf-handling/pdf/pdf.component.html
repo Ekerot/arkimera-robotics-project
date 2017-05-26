@@ -1,7 +1,8 @@
 <div fxLayout="column" fxFlexAlign="left" class="main-pdf">
 
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
-    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="false" (after-load-complete)="afterLoadComplete($event)" style="display: block;"></pdf-viewer>
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="false" (after-load-complete)="afterLoadComplete($event)"
+      style="display: block;"></pdf-viewer>
   </div>
 
   <!-- ignoring this for now since I cant get the slider to bind to the page property
@@ -10,10 +11,4 @@
   </div>
   -->
 
-<div *ngIf="loading" class="loading">
-  <div class="loader">
-    <svg class="circular" viewBox="25 25 50 50">
-      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
-    </svg>
-  </div>
 </div>
