@@ -1,7 +1,7 @@
 <div fxLayout="column" fxFlexAlign="left" class="main-pdf">
 
   <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
-    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="true" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="false" (after-load-complete)="afterLoadComplete($event)" style="display: block;"></pdf-viewer>
   </div>
 
   <!-- ignoring this for now since I cant get the slider to bind to the page property

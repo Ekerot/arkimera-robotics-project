@@ -1,4 +1,4 @@
-<div class="logo">
+<div class="header">
   <a href="http://www.arkimera.se" class="simple-text">  
     <img class="logotype" src="/assets/img/Logo_Arkimera_Robotics.png" alt="logo Arkimera"> 
   </a>
@@ -11,6 +11,12 @@
         <a [routerLink]="[menuItem.path]">
           <i class="material-icons">{{menuItem.icon}}</i>
           <p>{{menuItem.title}}</p>
+        </a>
+      </li>
+      <li class="logout-button">
+        <a (click)="onLogout()">
+          <i class="material-icons">power_off</i>
+          <p>Logout</p>
         </a>
       </li>
     </ul>
