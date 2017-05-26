@@ -101,7 +101,7 @@ export class HttpService {
       .catch(this.handleError);
   }
 
-  public getExtractedData(fileId: number): Observable<ReceiptData> {
+  public getExtractedData(fileId: number): Observable<FileResponse> {
     const headers = new Headers({
       'Content-Type': 'application/json',
       'x-access-token': localStorage.getItem('token') || ''
@@ -110,7 +110,7 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + `/companies/1/files/${fileId}`, options)
       .map(response => {
-        const data = response.json().data.extractedData as ReceiptData;
+        const data = response.json().data as FileResponse;
         return data;
       })
       .catch(this.handleError);
