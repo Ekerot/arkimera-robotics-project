@@ -4,16 +4,17 @@
     <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
       <i class="material-icons">file_upload</i>
       Upload Receipts
+      <md-spinner *ngIf="filesUploading" style="display: inline-block;" color="primary"></md-spinner>
     </button>
     <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
   </div>
 
   <div fxFlex>
-    <select class="form-control" title="Select Receipe">
-      <option>Select receipe</option>
-      <option>File1</option>
-      <option>File1</option>
-      <option>File1</option>
+    <select class="form-control" title="Select Receipe" [(ngModel)]="selectedFile" (change)="onChangeSelectedFile()">
+      <option *ngIf="!selectedFile" disabled selected>Select a receipe to bookkeep</option>
+      <option *ngFor="let file of filesToBookkeep" [ngValue]="file">
+        {{file.filename}} - {{file.extractedData.receiptDate}} - {{file.extractedData.description}}
+      </option>
     </select>
   </div>
 
@@ -29,7 +30,7 @@
       </div>
 
       <div class="card-content">
-        <app-account></app-account>
+        <app-account [selectedFile]="selectedFile"></app-account>
       </div>
 
     </div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Subscription, Subject } from 'rxjs/Rx';
 
-import { Message, FileResponse } from 'app/_models';
+import { FileResponse, Message } from 'app/_models';
 import { WebSocketService, AuthService, HttpService } from 'app/_services';
 
 import { config } from 'app/_config/config';
@@ -15,13 +15,15 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
   @ViewChild('fileInput') fileInput: ElementRef;
 
-  private messages: Subject<Message>;
+  // Websocket properties
   private socket: Subscription;
   private username: string
 
+  // Component specific properties
   public loading: boolean;
+  public filesUploading: boolean;
   public pdfSrc: string;
-  public currentFile: File;
+  public selectedFile: FileResponse;
   public filesToBookkeep: FileResponse[];
 
   constructor(
@@ -30,10 +32,17 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     private wsService: WebSocketService
   ) {
     this.loading = false;
+    this.filesUploading = false;
     this.username = this.auth.getLoggedInUsername();
+    this.filesToBookkeep = [];
+
     this.socket = this.wsService.getMessages(this.username)
       .subscribe((message: Message) => {
-        console.log('MESSAGE: ', message);
+        this.httpService.getExtractedData(message.fileId)
+          .subscribe((file: FileResponse) => {
+            this.filesToBookkeep.push(file);
+            this.setSelectedFile(file);
+          })
       });
   }
 
@@ -45,18 +54,19 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     this.socket.unsubscribe();
   }
 
-  private onFileChanged($event: Event): void {
-    this.loading = true;
+  onFileChanged($event: Event): void {
+    this.filesUploading = true;
     const files: File[] = [].slice.call((<HTMLInputElement>$event.target).files);
 
-    this.httpService.uploadFiles(files)
-      .subscribe(response => {
-        console.debug('Files uploaded: ', response);
-        this.loading = false;
-      });
+    if (files && files.length > 0) {
+      this.httpService.uploadFiles(files)
+        .subscribe(response => {
+          this.filesUploading = false;
+        });
+    }
   }
 
-  private onUpload(): void {
+  onUpload(): void {
     this.fileInput.nativeElement.click();
   }
 
@@ -71,29 +81,34 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     this.httpService
       .getFilesReadyForExtraction()
       .subscribe(files => {
-        this.filesToBookkeep = files;
-        this.setCurrentFileData();
+        if (files && files.length > 0) {
+          this.filesToBookkeep = files;
+          this.setSelectedFile(this.filesToBookkeep[0]);
+        }
         this.loading = false;
       });
   }
 
   /**
-   * Can be called anywhere to set current/working file to item 0 in "filesToBookkeep"
+   * Can be called anywhere to set selected file
    *
    * @memberof PdfComponent
    */
-  setCurrentFileData(fileIndex?: number): void {
-    if (this.filesToBookkeep.length > 0) {
-      const file: FileResponse = this.filesToBookkeep[fileIndex || 0];
+  setSelectedFile(file: FileResponse): void {
+    if (!this.selectedFile) {
+      this.selectedFile = file;
       this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
-      // this.bkService.announceBookkeep(file.FileID);
     }
   }
 
-  private resetCurrentStatus(): void {
-    this.currentFile = null;
+  resetCurrentStatus(): void {
+    this.selectedFile = null;
     this.filesToBookkeep = null;
     this.pdfSrc = null;
+  }
+
+  onChangeSelectedFile(): void {
+    this.pdfSrc = config.webAPIBaseUrl + '/' + this.selectedFile.path;
   }
 
 }
