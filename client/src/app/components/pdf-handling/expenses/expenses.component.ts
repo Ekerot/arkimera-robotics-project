@@ -17,13 +17,11 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
   private messages: Subject<Message>;
   private socket: Subscription;
-  private url: string;
   private username: string
 
   public loading: boolean;
-  public pdf: PDFDocumentProxy;
   public pdfSrc: string;
-  public file: File;
+  public currentFile: File;
   public filesToBookkeep: FileResponse[];
 
   constructor(
@@ -33,9 +31,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   ) {
     this.loading = false;
     this.username = this.auth.getLoggedInUsername();
-    this.socket = this.wsService.getMessages(this.username).subscribe((message: Message) => {
-      console.log('MESSAGE: ', message);
-    });
+    this.socket = this.wsService.getMessages(this.username)
+      .subscribe((message: Message) => {
+        console.log('MESSAGE: ', message);
+      });
   }
 
   ngOnInit() {
@@ -51,10 +50,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     const files: File[] = [].slice.call((<HTMLInputElement>$event.target).files);
 
     this.httpService.uploadFiles(files)
-    .subscribe(response => {
-      console.debug('Files uploaded: ', response);
-      this.loading = false;
-    });
+      .subscribe(response => {
+        console.debug('Files uploaded: ', response);
+        this.loading = false;
+      });
   }
 
   private onUpload(): void {
@@ -63,7 +62,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
   /**
    * Get files ready for extraction from webAPI
-   * Also sets current file to item 0 in "extractableFilesArray"
+   * Also sets current file to item 0 in "filesToBookkeep"
    *
    * @memberof PdfComponent
    */
@@ -79,36 +78,22 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Can be called anywhere to set current/working file to item 0 in "extractableFilesArray"
+   * Can be called anywhere to set current/working file to item 0 in "filesToBookkeep"
    *
    * @memberof PdfComponent
    */
-  setCurrentFileData(): void {
+  setCurrentFileData(fileIndex?: number): void {
     if (this.filesToBookkeep.length > 0) {
-      const file: FileResponse = this.filesToBookkeep[0];
+      const file: FileResponse = this.filesToBookkeep[fileIndex || 0];
       this.pdfSrc = config.webAPIBaseUrl + '/' + file.path;
       // this.bkService.announceBookkeep(file.FileID);
     }
   }
 
   private resetCurrentStatus(): void {
-    this.file = null;
+    this.currentFile = null;
     this.filesToBookkeep = null;
-    this.pdf = null;
     this.pdfSrc = null;
-  }
-
-  /**
-   * Get pdf information after it's loaded
-   *
-   * You can get numPages from this.pdf.numPages
-   *
-   * @param {PDFDocumentProxy} pdf
-   *
-   * @memberof PdfComponent
-   */
-  afterLoadComplete(pdf: PDFDocumentProxy): void {
-    this.pdf = pdf;
   }
 
 }
