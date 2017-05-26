@@ -15,6 +15,14 @@ export class HttpService {
 
   constructor(private http: Http) { }
 
+  /**
+   * Upload a single File
+   *
+   * @param {File} file
+   * @returns {Observable<ApiResponse>}
+   *
+   * @memberof HttpService
+   */
   public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
       'enctype': 'multipart/form-data',
@@ -30,12 +38,21 @@ export class HttpService {
       .catch(this.handleError);
   }
 
+  /**
+   * Upload an array of Files
+   *
+   * @param {File[]} files
+   * @returns {Observable<ApiResponse[]>}
+   *
+   * @memberof HttpService
+   */
   public uploadFiles(files: File[]): Observable<ApiResponse[]> {
     const fileObservables = files.map((file: File, fileIndex: number) => {
       return this.uploadFile(file)
         .map(apiRes => apiRes as ApiResponse)
         .catch((error: any) => {
           console.error('Failed to upload file: ', file.name);
+          // If error occurs when uploading a file response will be [..., ApiResponse, null, ApiResponse, ...]
           return Observable.of(null);
         });
     });
