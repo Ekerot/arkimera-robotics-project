@@ -12,7 +12,7 @@ import { config } from 'app/_config/config';
 })
 export class PdfComponent implements OnInit {
 
-  public zoom = '0.6'; // Starting zoom value
+  public zoom = '0.70'; // Starting zoom value
   public page = 1; // Starting page
   public pdf: PDFDocumentProxy;
   public pdfSrc: string;
