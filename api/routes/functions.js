@@ -1,32 +1,38 @@
 const request = require('request');
 const createError = require('http-errors');
 
-const headers = require('../common/headers');
+const socket = require('../common/socket');
 const Files = require('../interfaces/Files');
 
+let loop;
+
 const functions = {
-  extractReceipt: (url, fileID) =>
+  extractReceipt: (url, fileID, decoded) =>
     new Promise((resolve, reject) => {
-      request.get({ url, headers }, (err, response, body) => {
+      const now = Date.now(); // Timer for the execution time
+      request.get({ url, headers: decoded.headers }, (err, response, body) => {
         if (err) {
-          reject({ statusCode: 500, message: err });
+          return reject({ statusCode: 500, message: err });
         }
 
         const parsedBody = JSON.parse(body);
         if (response.statusCode === 412) {
-          reject({
+          return reject({
             statusCode: response.statusCode,
             message: parsedBody.data[0].message,
           });
         }
-
-        Files.updateStatus(fileID, 'extracted')
+        Files.updateTime(fileID, Date.now() - now); // Stop timer and update the database
+        console.log('Time elapsed:', Date.now() - now, 'ms');
+        Files.updateStatus({
+          fileID,
+          status: 'extracted',
+          extractedData: parsedBody.data,
+        })
           .then(() =>
             resolve({ statusCode: response.statusCode, body: parsedBody }),
           )
-          .catch((error) => {
-            reject({ statusCode: 500, message: error });
-          });
+          .catch(error => reject({ statusCode: 500, message: error }));
       });
     }),
 
@@ -48,24 +54,20 @@ const functions = {
    * Polling function.
    * Recommended to replace with webhook functionality and websocket event emitter.
    */
-  poll: (url, fileID, time) => {
+  poll: (url, fileID, decoded, time) => {
     let timeout = time || 1000;
-    let loop;
-    functions
-      .extractReceipt(url, fileID)
-      .then((response) => {
-        console.log('Finally got it!');
-        clearTimeout(loop);
-      })
-      .catch((error) => {
-        loop = setTimeout(() => {
-          console.log('One more round on the merry go round');
-          console.log(`Timer was ${timeout}`);
+    loop = setTimeout(() => {
+      functions
+        .extractReceipt(url, fileID, decoded)
+        .then((response) => {
+          clearTimeout(loop);
+          socket.emit('extracted', fileID, decoded.username);
+        })
+        .catch((error) => {
           timeout += 1000;
-          console.log(`Next timer set to: ${timeout}`);
-          functions.poll(url, fileID, timeout);
-        }, timeout);
-      });
+          functions.poll(url, fileID, decoded, timeout);
+        });
+    }, timeout);
   },
 };
 

@@ -1,0 +1,26 @@
+.row {
+  display: -ms-flex;
+	display: -webkit-flex;
+	display: flex;
+  height: 90%;
+}
+
+.column {
+}
+
+.container{
+  position: relative;
+}
+
+.card-header {
+  overflow: hidden;
+  visibility: visible;
+  display: block;
+  z-index: 500 !important;
+  position: relative;
+}
+
+.card-content {
+  height: 100%;
+}
+

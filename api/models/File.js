@@ -29,9 +29,21 @@ const FileSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+
   extractionTime: {
     type: Number,
     required: false,
+  },
+  extractedData: {
+    type: Object,
+    required: false,
+    default: {},
+  },
+  bookedData: {
+    type: Object,
+    required: false,
+    default: {},
+
   },
 });
 

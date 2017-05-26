@@ -1,9 +1,71 @@
-.buttons-expenses {
-  position: absolute;
-  right: 0;
-  bottom: 10px;
+.container-form {
+  position: relative;
+  height: 100%;
+  padding-left: 10%;
 }
 
-.id-input {
-  width: 18px;
+.first-block {
+  padding-right: 25%;
+  page-break-after: always;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
+
+.second-block {
+  width: 100%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.third-block {
+align-self: flex-end; 
+padding-right: 27%;
+margin-top: 10%;
+}
+
+div [class*="col-"] {
+    padding-right: 6%;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 0px;
+    width: 20%
+}
+
+.verification {
+  width: 22%;
+  margin-left: auto;
+  padding-right: 6%;
+}
+
+.date {
+  width: 22%;
+}
+
+.description {
+  page-break-after: always;
+}
+
+.add {
+  padding-left: 2%;
+  float: left;
+}
+
+.sum {
+  margin-top: auto;
+}
+
+.hidden-buttons {
+  display: block;
+  float: right;
+  margin-top: 0px;
+}
+
+.last-in-row {
+  page-break-after: always;
+  margin-top: 10%;  
+}
+

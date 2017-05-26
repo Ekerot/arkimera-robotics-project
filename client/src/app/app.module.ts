@@ -12,13 +12,12 @@ import { AppRoutingModule } from 'app/app-routing.module';
 import { AuthGuard } from 'app/_guards/auth.guard';
 import { SidenavModule } from './components/sidenav/sidenav.module';
 
-import { AuthService } from 'app/_services/auth.service';
-import { HttpService } from 'app/_services/http.service';
+import { StatisticsService } from 'app/_services/statistics.service';
+import { AuthService, BookkeepService, HttpService, WebSocketService } from 'app/_services';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ExpensesComponent } from './components/pdf-handling/expenses/expenses.component';
@@ -41,7 +40,6 @@ import { Md2Module } from 'md2';
     AppComponent,
     NavbarComponent,
     DashboardComponent,
-    HomeComponent,
     PageNotFoundComponent,
     SidenavComponent,
     ExpensesComponent,
@@ -71,8 +69,11 @@ import { Md2Module } from 'md2';
   providers: [
     AuthGuard,
     AuthService,
+    BookkeepService,
     CreateGraph,
-    HttpService
+    HttpService,
+    StatisticsService,
+    WebSocketService
   ],
   bootstrap: [AppComponent]
 })
