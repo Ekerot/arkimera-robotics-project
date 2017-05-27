@@ -1,11 +1,9 @@
-import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { MdSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/debounceTime';
 
 import { Account, ReceiptData, FileResponse } from 'app/_models';
-import { BookkeepService, HttpService } from 'app/_services';
 
 @Component({
   selector: 'app-account',
@@ -15,20 +13,17 @@ import { BookkeepService, HttpService } from 'app/_services';
 export class AccountComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() selectedFile: FileResponse;
+  @Output() performBookkeep = new EventEmitter()
 
   public receiptData: ReceiptData;
   public receiptForm: FormGroup;
   public totalAmount: number;
   public loading: boolean;
 
-  private fileIdSubscription: Subscription;
   private formChangeSubscription: Subscription;
 
   constructor(
-    private bkService: BookkeepService,
-    private formBuilder: FormBuilder,
-    private http: HttpService,
-    public snackBar: MdSnackBar
+    private formBuilder: FormBuilder
   ) {
     this.totalAmount = 0;
     this.loading = false;
@@ -124,21 +119,16 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   onSubmitReceipt(receiptForm: FormGroup): void {
-    this.loading = true;
+    // this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
+    this.performBookkeep.emit(receiptData);
 
-    this.http.postReceiptData(receiptData, this.selectedFile.FileID)
-      .subscribe(data => {
-        this.bkService.confirmBookkeep(this.selectedFile.FileID);
-        this.loading = false;
-        this.openSnackBar('Receipt successfully bookkeeped');
-      });
-  }
-
-  openSnackBar(message: string): void {
-    this.snackBar.open(message, 'Close', {
-      duration: 5000,
-    });
+    // this.http.postReceiptData(receiptData, this.selectedFile.FileID)
+    //   .subscribe(data => {
+    //     this.bkService.confirmBookkeep(this.selectedFile.FileID);
+    //     this.loading = false;
+    //     this.openSnackBar('Receipt successfully bookkeeped');
+    //   });
   }
 
 }

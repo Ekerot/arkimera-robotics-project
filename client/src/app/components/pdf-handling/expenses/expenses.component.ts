@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { MdSnackBar } from '@angular/material';
 import { Subscription, Subject } from 'rxjs/Rx';
 
-import { FileResponse, Message } from 'app/_models';
+import { FileResponse, Message, ReceiptData } from 'app/_models';
 import { WebSocketService, AuthService, HttpService } from 'app/_services';
 
 import { config } from 'app/_config/config';
@@ -28,8 +29,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService,
-    private httpService: HttpService,
-    private wsService: WebSocketService
+    private http: HttpService,
+    private wsService: WebSocketService,
+    public snackBar: MdSnackBar
   ) {
     this.loading = false;
     this.filesUploading = false;
@@ -38,7 +40,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     this.socket = this.wsService.getMessages(this.username)
       .subscribe((message: Message) => {
-        this.httpService.getExtractedData(message.fileId)
+        this.http.getExtractedData(message.fileId)
           .subscribe((file: FileResponse) => {
             this.filesToBookkeep.push(file);
             this.setSelectedFile(file);
@@ -56,12 +58,25 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
   }
 
+  onPerformBookkeep($event: ReceiptData): void {
+    this.loading = true;
+    const receiptData = $event;
+
+    this.http.postReceiptData(receiptData, this.selectedFile.FileID)
+      .subscribe(data => {
+        this.resetCurrentStatus();
+        this.getFilesReadyForExtraction();
+        this.loading = false;
+        this.openSnackBar('Receipt successfully bookkeeped');
+      });
+  }
+
   onFileChanged($event: Event): void {
     this.filesUploading = true;
     const files: File[] = [].slice.call((<HTMLInputElement>$event.target).files);
 
     if (files && files.length > 0) {
-      this.httpService.uploadFiles(files)
+      this.http.uploadFiles(files)
         .subscribe(response => {
           this.filesUploading = false;
         });
@@ -80,8 +95,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
    */
   getFilesReadyForExtraction(): void {
     this.loading = true;
-    this.httpService
-      .getFilesReadyForExtraction()
+    this.http.getFilesReadyForExtraction()
       .subscribe(files => {
         if (files && files.length > 0) {
           this.filesToBookkeep = files;
@@ -105,7 +119,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
   resetCurrentStatus(): void {
     this.selectedFile = null;
-    this.filesToBookkeep = null;
+    this.filesToBookkeep = [];
     this.pdfSrc = null;
   }
 
@@ -113,4 +127,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     this.pdfSrc = config.webAPIBaseUrl + '/' + this.selectedFile.path;
   }
 
+  openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
+  }
 }
