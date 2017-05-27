@@ -29,6 +29,11 @@ const FileSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+
+  extractionTime: {
+    type: Number,
+    required: false,
+  },
   extractedData: {
     type: Object,
     required: false,
@@ -38,6 +43,7 @@ const FileSchema = new mongoose.Schema({
     type: Object,
     required: false,
     default: {},
+
   },
 });
 

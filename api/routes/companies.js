@@ -165,13 +165,13 @@ router.get('/:companyID/files/:fileID/receipts', (req, res, next) => {
   const url = `https://azoraone.azure-api.net/${req.decoded.appUrl}/api/companies/${companyID}/files/${fileID}/receipts`;
 
   functions
-    .extractReceipt(url, fileID, req.decoded)
-    .then((response) => {
-      res
-        .status(response.statusCode)
-        .send(new Payload(true, response.statusCode, response.body));
-    })
-    .catch(error => next(createError(error.statusCode, error.message)));
+        .extractReceipt(url, fileID, req.decoded)
+        .then((response) => {
+          res
+                .status(response.statusCode)
+                .send(new Payload(true, response.statusCode, response.body));
+        })
+        .catch(error => next(createError(error.statusCode, error.message)));
 });
 
 /**
