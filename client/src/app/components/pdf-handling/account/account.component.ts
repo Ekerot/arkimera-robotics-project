@@ -145,7 +145,9 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    this.formChangeSubscription.unsubscribe();
+    if (this.formChangeSubscription) {
+      this.formChangeSubscription.unsubscribe();
+    }
   }
 
   openSnackBar(message: string): void {
