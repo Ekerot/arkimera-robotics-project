@@ -56,6 +56,29 @@ module.exports = {
       });
     }),
 
+  updateTime: (fileID, extractionTime) => new Promise((resolve, reject) => {
+    Files.findOne({ FileID: fileID }).exec((err, file) => {
+      if (err) {
+        reject(err);
+      }
+
+      if (!file) {
+        reject('File not found!');
+      }
+
+      const updatedFile = file;
+      updatedFile.extractionTime = extractionTime;
+
+      updatedFile.save((error) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }),
+
   get: data =>
     new Promise((resolve, reject) => {
       Files.find(data).exec((err, result) => {

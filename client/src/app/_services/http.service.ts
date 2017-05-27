@@ -98,6 +98,17 @@ export class HttpService {
       .catch(this.handleError);
   }
 
+  public getAllFiles(): Observable<ApiResponse> {
+    const headers = new Headers({
+      'Content-Type': 'application/json',
+      'x-access-token': localStorage.getItem('token') || ''
+    });
+    const options = new RequestOptions({headers: headers});
+
+    return this.http.get(this.apiUrl + '/companies/1/files', options)
+      .map(this.extractData)
+      .catch(this.handleError);
+  }
   private extractData(res: Response): ApiResponse {
     const body = res.json();
     return body as ApiResponse;
