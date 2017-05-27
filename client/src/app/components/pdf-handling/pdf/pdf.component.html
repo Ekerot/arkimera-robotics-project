@@ -1,14 +1,19 @@
-<div fxLayout="column" fxFlexAlign="left" class="main-pdf">
+<div *ngIf="pdfSrc">
 
-  <div fxFlex fxFlexAlign="center" class="container" *ngIf="pdfSrc">
-    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" [show-all]="true" [original-size]="false" (after-load-complete)="afterLoadComplete($event)"
-      style="display: block;"></pdf-viewer>
-  </div>
-
-  <!-- ignoring this for now since I cant get the slider to bind to the page property
-  <div fxFlex fxFlexAlign="center" *ngIf="pdfSrc && pdf && pdf.numPages > 1">
-    <md-slider min="1" max="{ pdf.numPages }" step="1" [(value)]="page"></md-slider>
+  <!-- Not sure why this does not work. pdf-viewer always shows all pages
+  <div *ngIf="pdf && pdf.numPages > 1">
+    <p>Select page:</p>
+    <md-slider min="1" max="{{ pdf.numPages }}" step="1" [(ngModel)]="page"></md-slider>
   </div>
   -->
+
+  <div>
+    <p>Adjust zoom:</p>
+    <md-slider min="0.2" max="2" step="0.1" [(ngModel)]="zoom"></md-slider>
+  </div>
+
+  <div>
+    <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" show-all="false" original-size="false" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
+  </div>
 
 </div>

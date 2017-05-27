@@ -11,7 +11,7 @@ export class PdfComponent implements OnInit {
 
   public pdf: PDFDocumentProxy;
 
-  public zoom = '0.70'; // Starting zoom value
+  public zoom = '0.5'; // Starting zoom value
   public page = 1; // Starting page
 
   constructor() { }
