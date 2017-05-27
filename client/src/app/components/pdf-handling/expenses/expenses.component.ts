@@ -51,7 +51,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.socket.unsubscribe();
+    if (this.socket) {
+      this.socket.unsubscribe();
+    }
   }
 
   onFileChanged($event: Event): void {
