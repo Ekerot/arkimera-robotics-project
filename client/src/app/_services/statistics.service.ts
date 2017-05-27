@@ -28,8 +28,12 @@ export class StatisticsService {
   public getTotalProfit (res: any) {
     for (const i of Object.keys(res)) {
       for (const j of Object.keys(res[i].bookedData.accounts)) {
-        this.totalExpenses += Number(res[i].bookedData.accounts[j].debit);
-        this.totalIncome += Number(res[i].bookedData.accounts[j].credit);
+        if (res[i].bookedData.accounts[j].debit !== '') {
+          this.totalExpenses += parseFloat(res[i].bookedData.accounts[j].debit);
+        }
+        if (res[i].bookedData.accounts[j].credit !== '') {
+          this.totalIncome += parseFloat(res[i].bookedData.accounts[j].credit);
+        }
       }
     }
     this.profit = this.totalIncome - this.totalExpenses;
@@ -51,7 +55,9 @@ export class StatisticsService {
     let totalCredit = 0;
     for (const i of Object.keys(res)) {
       for (const j of Object.keys(res[i].bookedData.accounts)) {
-        totalCredit += Number(res[i].bookedData.accounts[j].credit);
+        if (res[i].bookedData.accounts[j].credit !== '') {
+          totalCredit += parseFloat(res[i].bookedData.accounts[j].credit);
+        }
       }
       incomes.push(new GraphRequest(totalCredit, res[i].bookedData.receiptDate));
       totalCredit = 0;
@@ -67,7 +73,9 @@ export class StatisticsService {
     let totalDebit = 0;
     for (const i of Object.keys(res)) {
       for (const j of Object.keys(res[i].bookedData.accounts)) {
-        totalDebit += Number(res[i].bookedData.accounts[j].debit);
+        if (res[i].bookedData.accounts[j].debit !== '') {
+          totalDebit += parseFloat(res[i].bookedData.accounts[j].debit);
+        }
       }
       expenses.push(new GraphRequest(totalDebit, res[i].bookedData.receiptDate));
       totalDebit = 0;
