@@ -27,3 +27,7 @@
   display: inline-block;
   margin-left: 12px;
 }
+
+select option:disabled {
+	color: #808080;
+}

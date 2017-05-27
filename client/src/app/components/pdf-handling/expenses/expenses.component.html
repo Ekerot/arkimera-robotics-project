@@ -4,14 +4,15 @@
     <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
       <i class="material-icons">file_upload</i>
       Upload Receipts
-      <md-spinner *ngIf="filesUploading" style="display: inline-block;" color="primary"></md-spinner>
+      <md-spinner *ngIf="filesUploading" color="primary"></md-spinner>
     </button>
     <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
   </div>
 
   <div fxFlex>
     <select class="form-control" title="Select Receipe" [(ngModel)]="selectedFile" (change)="onChangeSelectedFile()">
-      <option *ngIf="!selectedFile" disabled selected>Select a receipe to bookkeep</option>
+      <option *ngIf="!selectedFile && filesToBookkeep.length > 0" disabled [ngValue]="file" style="display: none;">Select a receipe to bookkeep</option>
+      <option *ngIf="!selectedFile && filesToBookkeep.length === 0" disabled [ngValue]="file" style="display: none;">No recipes to bookkeep, please upload some to start</option>
       <option *ngFor="let file of filesToBookkeep" [ngValue]="file">
         {{file.filename}} - {{file.extractedData.receiptDate}} - {{file.extractedData.description}}
       </option>
