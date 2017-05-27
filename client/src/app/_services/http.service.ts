@@ -15,6 +15,14 @@ export class HttpService {
 
   constructor(private http: Http) { }
 
+  /**
+   * Upload a single File
+   *
+   * @param {File} file
+   * @returns {Observable<ApiResponse>}
+   *
+   * @memberof HttpService
+   */
   public uploadFile(file: File): Observable<ApiResponse> {
     const headers = new Headers({
       'enctype': 'multipart/form-data',
@@ -28,6 +36,28 @@ export class HttpService {
     return this.http.post(this.apiUrl + '/companies/1/files', formData, options)
       .map(this.extractData)
       .catch(this.handleError);
+  }
+
+  /**
+   * Upload an array of Files
+   *
+   * @param {File[]} files
+   * @returns {Observable<ApiResponse[]>}
+   *
+   * @memberof HttpService
+   */
+  public uploadFiles(files: File[]): Observable<ApiResponse[]> {
+    const fileObservables = files.map((file: File, fileIndex: number) => {
+      return this.uploadFile(file)
+        .map(apiRes => apiRes as ApiResponse)
+        .catch((error: any) => {
+          console.error('Failed to upload file: ', file.name);
+          // If error occurs when uploading a file response will be [..., ApiResponse, null, ApiResponse, ...]
+          return Observable.of(null);
+        });
+    });
+
+    return Observable.forkJoin(fileObservables);
   }
 
   public authenticate(user: User): Observable<ApiResponse> {
@@ -71,7 +101,7 @@ export class HttpService {
       .catch(this.handleError);
   }
 
-  public getExtractedData(fileId: number): Observable<ReceiptData> {
+  public getExtractedData(fileId: number): Observable<FileResponse> {
     const headers = new Headers({
       'Content-Type': 'application/json',
       'x-access-token': localStorage.getItem('token') || ''
@@ -80,7 +110,7 @@ export class HttpService {
 
     return this.http.get(this.apiUrl + `/companies/1/files/${fileId}`, options)
       .map(response => {
-        const data = response.json().data.extractedData as ReceiptData;
+        const data = response.json().data as FileResponse;
         return data;
       })
       .catch(this.handleError);

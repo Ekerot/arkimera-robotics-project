@@ -11,7 +11,6 @@ export interface ReceiptData {
   accounts: Account[];
 }
 
-
 export interface FileResponse {
   _id: string,
   username: string,
@@ -25,4 +24,3 @@ export interface FileResponse {
   extractedData: ReceiptData,
   bookedData: ReceiptData
 }
-

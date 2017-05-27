@@ -1,7 +1,29 @@
+<div fxFlexLayout="row" fxLayoutAlign="space-between">
+
+  <div fxFlex>
+    <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
+      <i class="material-icons">file_upload</i>
+      Upload Receipts
+      <md-spinner *ngIf="filesUploading" color="primary"></md-spinner>
+    </button>
+    <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
+  </div>
+
+  <div fxFlex>
+    <select class="form-control" title="Select Receipe" [(ngModel)]="selectedFile" (change)="onChangeSelectedFile()">
+      <option *ngIf="!selectedFile && filesToBookkeep.length > 0" disabled [ngValue]="file" style="display: none;">Select a receipe to bookkeep</option>
+      <option *ngIf="!selectedFile && filesToBookkeep.length === 0" disabled [ngValue]="file" style="display: none;">No recipes to bookkeep, please upload some to start</option>
+      <option *ngFor="let file of filesToBookkeep" [ngValue]="file">
+        {{file.filename}} - {{file.extractedData.receiptDate}} - {{file.extractedData.description}}
+      </option>
+    </select>
+  </div>
+
+</div>
+
 <div class="row">
 
   <div class="col-sm-6">
-
     <div class="card card-stats column">
 
       <div class="card-header" data-background-color="blue">
@@ -9,15 +31,13 @@
       </div>
 
       <div class="card-content">
-        <app-account></app-account>
+        <app-account [selectedFile]="selectedFile" (performBookkeep)="onPerformBookkeep($event)"></app-account>
       </div>
 
     </div>
-
   </div>
 
   <div class="col-sm-6">
-
     <div class="card card-stats column">
 
       <div class="card-header" data-background-color="red">
@@ -25,11 +45,18 @@
       </div>
 
       <div class="card-content">
-        <app-pdf></app-pdf>
+        <app-pdf [pdfSrc]="pdfSrc"></app-pdf>
       </div>
 
     </div>
-
   </div>
 
+</div>
+
+<div *ngIf="loading" class="loading">
+  <div class="loader">
+    <svg class="circular" viewBox="25 25 50 50">
+      <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+    </svg>
+  </div>
 </div>
