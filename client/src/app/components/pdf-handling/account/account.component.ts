@@ -22,7 +22,6 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
   public loading: boolean;
 
   private fileIdSubscription: Subscription;
-  private fileIdToBookkeep: number;
   private formChangeSubscription: Subscription;
 
   constructor(
@@ -45,9 +44,17 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.formChangeSubscription) {
+      this.formChangeSubscription.unsubscribe();
+    }
+  }
+
   initForm(): void {
     const accounts: FormArray = new FormArray([]);
     const data = this.receiptData;
+
+    this.totalAmount = 0;
 
     this.receiptForm = this.formBuilder.group({
       verificationSerie: [data.verificationSerie, Validators.required],
@@ -59,7 +66,6 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     data.accounts.forEach((account: Account) => {
       this.updateTotalAmount(account);
       this.addAccount(account);
-
     });
 
     this.formChangeSubscription = this.receiptForm.valueChanges
@@ -121,33 +127,12 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
 
-    this.http.postReceiptData(receiptData, this.fileIdToBookkeep)
+    this.http.postReceiptData(receiptData, this.selectedFile.FileID)
       .subscribe(data => {
-        this.bkService.confirmBookkeep(this.fileIdToBookkeep);
-        this.resetCurrentStatus();
+        this.bkService.confirmBookkeep(this.selectedFile.FileID);
         this.loading = false;
         this.openSnackBar('Receipt successfully bookkeeped');
       });
-  }
-
-  /**
-  * Reset all values
-  *
-  * @param
-  *
-  * @memberof AccountComponent
-  */
-  private resetCurrentStatus(): void {
-    this.receiptData = null;
-    this.receiptForm = null;
-    this.totalAmount = 0;
-    this.fileIdToBookkeep = null;
-  }
-
-  ngOnDestroy(): void {
-    if (this.formChangeSubscription) {
-      this.formChangeSubscription.unsubscribe();
-    }
   }
 
   openSnackBar(message: string): void {
