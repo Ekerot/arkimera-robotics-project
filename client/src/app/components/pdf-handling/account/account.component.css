@@ -39,6 +39,10 @@ div [class*="col-"] {
   padding-right: 10%;
 }
 
+div.form-group {
+  margin-top: 0px;
+}
+
 .date {
   width: 30%;
 
