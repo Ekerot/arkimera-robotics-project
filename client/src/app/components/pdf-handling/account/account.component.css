@@ -36,11 +36,12 @@ div [class*="col-"] {
 .verification {
   width: 22%;
   margin-left: auto;
-  padding-right: 6%;
+  padding-right: 10%;
 }
 
 .date {
-  width: 25%;
+  width: 30%;
+
 }
 
 .description {
@@ -60,4 +61,8 @@ div [class*="col-"] {
   display: block;
   float: right;
   margin-top: 0px;
+}
+
+input { 
+    text-align: right; 
 }
