@@ -4,7 +4,6 @@
 @import '~https://fonts.googleapis.com/icon?family=Roboto';
 @import '/assets/css/bootstrap.min.css';
 @import '/assets/css/material-dashboard.css';
-@import '/assets/css/custom.css';
 
 body {
   background-position: fixed;
@@ -14,7 +13,7 @@ body {
   opacity: 0.85;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 100%;
+  background-size: cover;
 }
 
 .spacer {
