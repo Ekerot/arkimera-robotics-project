@@ -4,8 +4,6 @@ const createError = require('http-errors');
 const socket = require('../common/socket');
 const Files = require('../interfaces/Files');
 
-let loop;
-
 const functions = {
   extractReceipt: (url, fileID, decoded) =>
     new Promise((resolve, reject) => {
@@ -56,11 +54,10 @@ const functions = {
    */
   poll: (url, fileID, decoded, time) => {
     let timeout = time || 1000;
-    loop = setTimeout(() => {
+    setTimeout(() => {
       functions
         .extractReceipt(url, fileID, decoded)
         .then((response) => {
-          clearTimeout(loop);
           socket.emit('extracted', fileID, decoded.username);
         })
         .catch((error) => {
