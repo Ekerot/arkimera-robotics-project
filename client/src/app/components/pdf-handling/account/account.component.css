@@ -1,15 +1,15 @@
 .container-form {
   position: relative;
   height: 100%;
-  padding-left: 10%;
+  padding-right: 5%;
 }
 
 .first-block {
-  padding-right: 25%;
   page-break-after: always;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
+  padding-right: 10%;
 }
 
 .second-block {
@@ -23,16 +23,14 @@
 
 .third-block {
 align-self: flex-end; 
-padding-right: 27%;
 margin-top: 10%;
+padding-right: 10%;
 }
 
 div [class*="col-"] {
-    padding-right: 6%;
     padding-top: 0px;
     padding-bottom: 0px;
     margin-top: 0px;
-    width: 20%
 }
 
 .verification {
@@ -42,7 +40,7 @@ div [class*="col-"] {
 }
 
 .date {
-  width: 22%;
+  width: 25%;
 }
 
 .description {
@@ -63,9 +61,3 @@ div [class*="col-"] {
   float: right;
   margin-top: 0px;
 }
-
-.last-in-row {
-  page-break-after: always;
-  margin-top: 10%;  
-}
-
