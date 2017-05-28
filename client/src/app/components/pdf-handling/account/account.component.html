@@ -25,7 +25,7 @@
         <div class="col-sm-2 index">
           <div class="form-group">
             <label class="control-label">Id</label>
-            <input type="number" class="form-control" placeholder="# {{i + 1}}">
+            <input type="number" class="form-control" placeholder="# {{i + 1}}" readonly>
           </div>
         </div>
 
@@ -53,7 +53,7 @@
           </div>
 
           <div class="col-sm-1 last-in-row">
-            <div class="form-group">
+            <div class="form-group delete">
               <span *ngIf="receiptForm.controls.accounts.controls.length > 1" (click)="deleteAccount(i)" style="cursor: default">
               <i class="material-icons delete">delete forever</i>
             </span>
