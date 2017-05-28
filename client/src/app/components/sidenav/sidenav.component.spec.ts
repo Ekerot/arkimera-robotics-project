@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { SidenavComponent } from './sidenav.component';
+import { AuthService } from 'app/_services';
 
 describe('SidenavComponent', () => {
   let component: SidenavComponent;
@@ -19,6 +20,9 @@ describe('SidenavComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule
+      ],
+      providers: [
+        { provide: AuthService, useValue: { isUserLoggedIn: () => { return true; } } }
       ]
     })
       .compileComponents();
