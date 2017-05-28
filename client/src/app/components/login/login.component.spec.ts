@@ -14,7 +14,7 @@ describe('LoginComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useValue: { isLoggedIn: true }}
+        { provide: AuthService, useValue: { isUserLoggedIn: () => { return true; } } }
       ],
       declarations: [
         LoginComponent

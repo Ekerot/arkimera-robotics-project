@@ -14,7 +14,7 @@ describe('RegisterComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: AuthService, useValue: { isLoggedIn: true } },
+        { provide: AuthService, useValue: { isUserLoggedIn: () => { return true; } } },
         { provide: HttpService, useValue: {} }
       ],
       declarations: [
