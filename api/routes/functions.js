@@ -58,6 +58,7 @@ const functions = {
       functions
         .extractReceipt(url, fileID, decoded)
         .then((response) => {
+          console.log(response);
           socket.emit('extracted', fileID, decoded.username);
         })
         .catch((error) => {
