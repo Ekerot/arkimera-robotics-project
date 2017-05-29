@@ -12,7 +12,7 @@
     <md-slider min="0.2" max="2" step="0.1" [(ngModel)]="zoom"></md-slider>
   </div>
 
-  <div>
+  <div class="pdf-viewer-div">
     <pdf-viewer [zoom]="zoom" [src]="pdfSrc" [page]="page" show-all="false" original-size="false" (after-load-complete)="afterLoadComplete($event)"></pdf-viewer>
   </div>
 
