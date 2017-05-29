@@ -5,6 +5,8 @@ import 'rxjs/add/operator/debounceTime';
 
 import { Account, ReceiptData, FileResponse } from 'app/_models';
 
+import { MdSnackBar } from '@angular/material';
+
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
@@ -23,7 +25,8 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
   private formChangeSubscription: Subscription;
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    public snackBar: MdSnackBar
   ) {
     this.totalAmount = 0;
     this.loading = false;
@@ -118,6 +121,17 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     control.removeAt(value);
   }
 
+  numberValidation(event: any) {
+    const pattern = /[0-9\,\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      this.openSnackBar('You can only enter digits and ,!');
+      event.preventDefault();
+    }
+  }
+
   onSubmitReceipt(receiptForm: FormGroup): void {
     // this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
@@ -129,6 +143,12 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     //     this.loading = false;
     //     this.openSnackBar('Receipt successfully bookkeeped');
     //   });
+  }
+
+    openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 5000,
+    });
   }
 
 }

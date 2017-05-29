@@ -1,28 +1,34 @@
 <div fxFlexLayout="row" fxLayoutAlign="space-between">
+  <div class="card card-stats column">
 
-  <div fxFlex="40" fxFlexAlign="center">
-    <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
-      <i class="material-icons">file_upload</i>
-      Upload Receipts
-      <md-spinner *ngIf="filesUploading" color="primary"></md-spinner>
-    </button>
-    <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
-  </div>
+    <div class="card-header" data-background-color="purple">
+      <i class="material-icons icon">file_upload</i>
+    </div>
 
-  <div fxFlexAlign="center">
-    Files:&nbsp;<span class="badge">{{ filesToBookkeep.length || 0}}</span>
-  </div>
+    <div class="card-content">
 
-  <div fxFlex="50" fxFlexAlign="top">
-    <select class="form-control" title="Select Receipe" [(ngModel)]="selectedFile" (change)="onChangeSelectedFile()">
+      <div class="upload-button" fxFlex="20" fxFlexAlign="center">
+        <button class="btn btn-primary upload" (click)="onUpload()" color="primary">
+            Upload Receipts
+            <md-spinner *ngIf="filesUploading" color="primary"></md-spinner>
+        </button>
+        <input #fileInput type="file" accept=".pdf" multiple style="display: none;" (change)="onFileChanged($event)" />
+      </div>
+
+      <div fxFlex="40" fxFlexAlign="top" class="receipt-select">
+        <select class="form-control" title="Select Receipe" [(ngModel)]="selectedFile" (change)="onChangeSelectedFile()">
       <option *ngIf="!selectedFile && filesToBookkeep.length > 0" disabled  [ngValue]="selectedFile">Select a receipe to bookkeep</option>
       <option *ngIf="!selectedFile && filesToBookkeep.length === 0" disabled [ngValue]="selectedFile">No recipes to bookkeep, please upload some to start</option>
       <option *ngFor="let file of filesToBookkeep" [ngValue]="file">
         {{file.filename}} - {{file.extractedData.receiptDate}} - {{file.extractedData.description}}
       </option>
     </select>
+      </div>
+      <div fxFlexAlign="center">
+        Uploaded:&nbsp;<span class="badge">{{ filesToBookkeep.length || 0}}</span>
+      </div>
+    </div>
   </div>
-
 </div>
 
 <div class="row">

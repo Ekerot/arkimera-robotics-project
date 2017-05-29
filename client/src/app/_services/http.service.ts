@@ -148,14 +148,16 @@ export class HttpService {
     let errMsg: string;
 
     if (error instanceof Response) {
+      console.log(error)
       const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
+      const err = body.message;
+      errMsg = `${err}`;
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
 
-    console.error(errMsg);
+    console.log(errMsg);
+
     return Observable.throw(errMsg);
   }
 }

@@ -21,6 +21,16 @@
   height: 100%;
 }
 
+.upload-button {
+  margin-left: 23%;
+  margin-right: 4%;
+}
+
+.receipt-select {
+  margin-left: 0%;
+  margin-right: 2%;
+}
+
 .mat-spinner {
   width: 12px;
   height: 12px;

@@ -25,6 +25,7 @@
 align-self: flex-end; 
 margin-top: 10%;
 padding-right: 10%;
+padding-left: 4%;
 }
 
 div [class*="col-"] {

@@ -34,21 +34,21 @@
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Account</label>
-              <input type="text" class="form-control" formControlName="account">
+              <input type="text" class="form-control" maxlength="4" formControlName="account" (keypress)="numberValidation($event)">
             </div>
           </div>
 
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Debit</label>
-              <input type="text" class="form-control" formControlName="debit">
+              <input type="text" class="form-control" formControlName="debit" (keypress)="numberValidation($event)">
             </div>
           </div>
 
           <div class="col-sm-3">
             <div class="form-group">
               <label class="control-label">Credit</label>
-              <input type="text" class="form-control" formControlName="credit">
+              <input type="text" class="form-control" formControlName="credit" (keypress)="numberValidation($event)">
             </div>
           </div>
 
