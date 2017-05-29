@@ -118,6 +118,16 @@ export class AccountComponent implements OnInit, OnDestroy, OnChanges {
     control.removeAt(value);
   }
 
+  numberValidation(event: any) {
+    const pattern = /[0-9\,\ ]/;
+    let inputChar = String.fromCharCode(event.charCode);
+
+    if (!pattern.test(inputChar)) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+  }
+
   onSubmitReceipt(receiptForm: FormGroup): void {
     // this.loading = true;
     const receiptData = receiptForm.value as ReceiptData;
