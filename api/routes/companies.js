@@ -139,22 +139,6 @@ router.get('/:companyID/files/:fileID', (req, res, next) => {
 });
 
 /**
- * DELETE /companies/{companyID}/files/{fileID}
- *
- * Deletes a single file
- */
-router.delete('/:companyID/files/:fileID', (req, res, next) => {
-  const fileID = req.params.fileID;
-  const data = {
-    fileID,
-  };
-
-  Files.get(data)
-    .then(file => res.status(200).send(new Payload(true, 200, file)))
-    .catch(err => next(createError(500, err)));
-});
-
-/**
  * GET /companies/{companyID}/files/{fileID}/receipts
  *
  * Extract data from uploaded receipt
