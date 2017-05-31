@@ -11,22 +11,27 @@
 
       <md-input-container class="full-width">
         <input formControlName="password" mdInput placeholder="Password" type="password">
+        <md-hint *ngIf="registerForm.controls.password.errors && registerForm.controls.password.dirty" [ngStyle]="{'color': 'red'}" align="start">Password must be at least 5 characters</md-hint>
       </md-input-container>
 
       <md-input-container class="full-width">
         <input formControlName="passwordRepeat" mdInput placeholder="Password repeat" type="password">
+        <md-hint *ngIf="registerForm.controls.passwordRepeat.errors && registerForm.controls.passwordRepeat.dirty" [ngStyle]="{'color': 'red'}" align="start">Password must be at least 5 characters</md-hint>
       </md-input-container>
 
       <md-input-container class="full-width">
         <input formControlName="subscriptionKey" mdInput placeholder="Subscription Key" type="text">
+        <md-hint *ngIf="registerForm.controls.subscriptionKey.errors && registerForm.controls.subscriptionKey.dirty" [ngStyle]="{'color': 'red'}" align="start">Subscription key must be 32 characters</md-hint>
       </md-input-container>
 
       <md-input-container class="full-width">
         <input formControlName="clientKey" mdInput placeholder="Client Key" type="text">
+        <md-hint *ngIf="registerForm.controls.clientKey.errors && registerForm.controls.clientKey.dirty" [ngStyle]="{'color': 'red'}" align="start">Client key must be 22 characters</md-hint>
       </md-input-container>
 
       <md-input-container class="full-width">
         <input formControlName="appUrl" mdInput placeholder="Application Name" type="text">
+        <md-hint *ngIf="registerForm.controls.appUrl.errors && registerForm.controls.appUrl.dirty" [ngStyle]="{'color': 'red'}" align="start">Application name must be at least 2 characters</md-hint>
       </md-input-container>
 
       <button md-button type="submit" [disabled]="loading || registerForm.invalid">Login</button>

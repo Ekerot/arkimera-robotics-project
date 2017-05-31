@@ -70,7 +70,7 @@ export class RegisterComponent implements OnInit {
       subscriptionKey,
       clientKey,
       appUrl
-    };
+    }; 
 
     this.http.registerNewUser(user)
       .subscribe(res => {
@@ -81,9 +81,9 @@ export class RegisterComponent implements OnInit {
         this.loading = false;
         this.registerForm.enable();
         this.registerForm.patchValue({ password: '' });
-
         // TODO: Different messages depending on error type
-        this.openSnackBar('Unable to register user!');
+        this.openSnackBar(error);
+
       });
   }
 
