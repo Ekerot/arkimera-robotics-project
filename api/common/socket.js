@@ -16,7 +16,6 @@ module.exports = {
     });
   },
   emit: (event, data, user) => {
-    console.log(`emits event ${event} to ${user}`);
     io.sockets.in(user).emit(event, data);
   },
 
