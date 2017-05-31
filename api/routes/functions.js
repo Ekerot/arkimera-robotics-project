@@ -7,7 +7,7 @@ const Files = require('../interfaces/Files');
 const functions = {
   extractReceipt: (url, fileID, decoded) =>
     new Promise((resolve, reject) => {
-      const now = Date.now(); // Timer for the execution time
+      const startTime = Date.now(); // Timer for the execution time
       request.get({ url, headers: decoded.headers }, (err, response, body) => {
         if (err) {
           return reject({ statusCode: 500, message: err });
@@ -20,12 +20,12 @@ const functions = {
             message: parsedBody.data[0].message,
           });
         }
-        Files.updateTime(fileID, Date.now() - now); // Stop timer and update the database
-        console.log('Time elapsed:', Date.now() - now, 'ms');
-        Files.updateStatus({
+
+        Files.update({
           fileID,
           status: 'extracted',
           extractedData: parsedBody.data,
+          extractionTime: Date.now() - startTime,
         })
           .then(() =>
             resolve({ statusCode: response.statusCode, body: parsedBody }),

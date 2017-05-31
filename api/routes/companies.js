@@ -194,7 +194,7 @@ router.put('/:companyID/files/:fileID/receipts', (req, res, next) => {
       return next(createError(response.statusCode, body));
     }
 
-    Files.updateStatus({ fileID, bookedData: data, status: 'booked' })
+    Files.update({ fileID, bookedData: data, status: 'booked' })
       .then(() =>
         res
           .status(response.statusCode)
