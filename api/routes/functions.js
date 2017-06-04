@@ -57,11 +57,10 @@ const functions = {
     setTimeout(() => {
       functions
         .extractReceipt(url, fileID, decoded)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           socket.emit('extracted', fileID, decoded.username);
         })
-        .catch((error) => {
+        .catch(() => {
           timeout += 1000;
           functions.poll(url, fileID, decoded, timeout);
         });
