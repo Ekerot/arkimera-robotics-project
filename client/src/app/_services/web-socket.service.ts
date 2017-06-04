@@ -20,7 +20,6 @@ export class WebSocketService {
 
       // Listen for extracted events
       this.socket.on('extracted', (data) => {
-        console.log(data);
         const message: Message = {
           fileId: data
         }
