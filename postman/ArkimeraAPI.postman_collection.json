@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "ArkimeraAPI",
-		"_postman_id": "d62b102c-ceeb-3709-202c-12d52561b958",
+		"_postman_id": "4c6ee131-a140-a370-4e09-9ccb80171bb1",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -48,7 +48,7 @@
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+							"tests[\"Status code is 201\"] = responseCode.code === 201;"
 						]
 					}
 				}
@@ -266,11 +266,43 @@
 							"key": "File",
 							"type": "file",
 							"enabled": true,
-							"src": "20160331S1ica1.pdf"
+							"src": "20160331S1ica1.pdf",
+							"value": ""
 						}
 					]
 				},
 				"description": "Test must be run in postman native app. Postman via chrome dont have access to file paths so file wont be prefilled.\nhttps://github.com/postmanlabs/postman-app-support/issues/1113"
+			},
+			"response": []
+		},
+		{
+			"name": "Get receipt info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "http://localhost:8080/companies/1/files/{{fileID}}/receipts",
+				"method": "GET",
+				"header": [
+					{
+						"key": "x-access-token",
+						"value": "{{token}}",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -307,37 +339,6 @@
 					"raw": "{\n    \"verificationSerie\": \"A\",\n    \"description\": \"Maxi ICA Stormarknad\",\n    \"receiptDate\": \"2016-06-03\",\n    \"accounts\": [\n      {\n        \"account\": \"1930\",\n        \"debit\": \"0.00\",\n        \"credit\": \"272.18\"\n      },\n      {\n        \"account\": \"7600\",\n        \"debit\": \"241.24\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"2641\",\n        \"debit\": \"28.94\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"6100\",\n        \"debit\": \"1.60\",\n        \"credit\": \"0.00\"\n      },\n      {\n        \"account\": \"2641\",\n        \"debit\": \"0.40\",\n        \"credit\": \"0.00\"\n      }\n    ]\n}"
 				},
 				"description": "PUT /companies/{companyID}/files/{fileID}/receipts"
-			},
-			"response": []
-		},
-		{
-			"name": "Get receipt info",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"tests[\"Status code is 200\"] = responseCode.code === 200;"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "http://localhost:8080/companies/1/files/{{fileID}}/receipts",
-				"method": "GET",
-				"header": [
-					{
-						"key": "x-access-token",
-						"value": "{{token}}",
-						"description": ""
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
 			},
 			"response": []
 		},
@@ -448,7 +449,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/companies/1/files?statusID=2",
+				"url": "http://localhost:8080/companies/1/files?status=booked",
 				"method": "GET",
 				"header": [
 					{
@@ -479,7 +480,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/companies/1/files?statusID=0",
+				"url": "http://localhost:8080/companies/1/files?status=uploaded",
 				"method": "GET",
 				"header": [
 					{
@@ -510,7 +511,7 @@
 				}
 			],
 			"request": {
-				"url": "http://localhost:8080/companies/1/files?statusID=1",
+				"url": "http://localhost:8080/companies/1/files?status=extracted",
 				"method": "GET",
 				"header": [
 					{
