@@ -62,8 +62,7 @@ router.get('/:companyID/files', (req, res, next) => {
  */
 router.post('/:companyID/files', upload.single('File'), (req, res, next) => {
   const file = req.file;
-  const fileIDWithEncType = req.file.filename.split('-')[1];
-  const fileID = fileIDWithEncType.split('.')[0];
+  const fileID = req.file.filename.split('.')[0];
   const formData = {
     FileID: fileID,
     File: fs.createReadStream(file.path),
