@@ -3,6 +3,6 @@ module.exports = {
     cb(null, 'tmp');
   },
   filename: (req, file, cb) => {
-    cb(null, `${file.fieldname}-${Date.now()}.pdf`);
+    cb(null, `${Date.now()}.pdf`);
   },
 };
