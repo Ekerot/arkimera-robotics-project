@@ -20,7 +20,7 @@
       <option *ngIf="!selectedFile && filesToBookkeep.length > 0" disabled  [ngValue]="selectedFile">Select a receipe to bookkeep</option>
       <option *ngIf="!selectedFile && filesToBookkeep.length === 0" disabled [ngValue]="selectedFile">No recipes to bookkeep, please upload some to start</option>
       <option *ngFor="let file of filesToBookkeep" [ngValue]="file">
-        {{file.filename}} - {{file.extractedData.receiptDate}} - {{file.extractedData.description}}
+        {{file.originalname}}
       </option>
     </select>
       </div>
